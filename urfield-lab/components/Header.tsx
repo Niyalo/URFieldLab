@@ -1,8 +1,8 @@
-
 "use client";
 import Link from "next/link";
-import { Mail, Facebook } from "lucide-react";
+import { Mail, Facebook, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const navLinks = [
   { href: "/", label: "HOME", match: (path: string) => path === "/" },
@@ -15,6 +15,8 @@ const navLinks = [
 
 const Header = () => {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-50">
       <div className="bg-black text-white p-2">
@@ -39,7 +41,7 @@ const Header = () => {
               <span className="text-blue-600">UR</span>FieldLab'19
             </Link>
           </div>
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-6">
             {navLinks.map(({ href, label, match }) => (
               <Link
                 key={href}
@@ -54,7 +56,37 @@ const Header = () => {
               </Link>
             ))}
           </div>
+          <div className="lg:hidden">
+            <button onClick={() => setIsMenuOpen(true)} className="text-gray-600">
+              <Menu size={24} />
+            </button>
+          </div>
         </div>
+        {isMenuOpen && (
+          <div className="lg:hidden absolute top-0 left-0 w-full h-screen bg-white z-50">
+            <div className="flex justify-end p-4">
+                <button onClick={() => setIsMenuOpen(false)}>
+                    <X size={24} />
+                </button>
+            </div>
+            <div className="flex flex-col items-center justify-center h-full -mt-12">
+              {navLinks.map(({ href, label, match }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`py-4 text-2xl ${
+                    match(pathname)
+                      ? "text-blue-500 font-bold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );
