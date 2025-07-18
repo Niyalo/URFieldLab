@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Mail, Facebook, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -19,26 +19,11 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="bg-black text-white p-2">
-        <div className="container mx-auto flex justify-between items-center text-sm">
-          <div className="flex items-center gap-2">
-            <Mail size={16} />
-            <a href="mailto:floodlab2019@co-risk.org">
-              floodlab2019@co-risk.org
-            </a>
-          </div>
-          <div className="flex items-center">
-            <Link href="#" className="text-white">
-              <Facebook size={16} />
-            </Link>
-          </div>
-        </div>
-      </div>
       <nav className="bg-white shadow-md">
         <div className="container mx-auto flex justify-between items-center p-4">
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold">
-              <span className="text-blue-600">UR</span>FieldLab'19
+              <span className="text-blue-600">UR</span>FieldLab&apos;19
             </Link>
           </div>
           <div className="hidden lg:flex items-center space-x-6">
