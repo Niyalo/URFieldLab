@@ -8,14 +8,15 @@ import { notFound } from 'next/navigation';
 export const revalidate = 0;
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 // Function to generate metadata
 export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
-  const workingGroup = await getWorkingGroup(params.slug);
+  const { slug } = await params;
+  const workingGroup = await getWorkingGroup(slug);
 
   if (!workingGroup) {
     return {
@@ -28,7 +29,7 @@ export async function generateMetadata(
     title: `${workingGroup.title} (${workingGroup.year.year}) - URField Lab`,
     description: workingGroup.description || `Learn about the ${workingGroup.title} working group at URField Lab.`,
     alternates: {
-      canonical: `/blogs/${params.slug}`,
+      canonical: `/blogs/${slug}`,
     },
     openGraph: {
       title: `${workingGroup.title} - URField Lab Working Group`,
@@ -69,7 +70,8 @@ function getStatusBadge(status: string) {
 }
 
 export default async function WorkingGroupPage({ params }: Props) {
-  const workingGroup = await getWorkingGroup(params.slug);
+  const { slug } = await params;
+  const workingGroup = await getWorkingGroup(slug);
   
   if (!workingGroup) {
     notFound();

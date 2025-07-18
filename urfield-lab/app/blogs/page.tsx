@@ -6,7 +6,7 @@ import YearSelector from "./YearSelector";
 export const revalidate = 0;
 
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 function getStatusBadge(status: string) {
@@ -24,7 +24,8 @@ function getStatusBadge(status: string) {
 }
 
 export default async function WorkingGroupsPage({ searchParams }: Props) {
-  const selectedYearId = typeof searchParams.year === 'string' ? searchParams.year : undefined;
+  const resolvedSearchParams = await searchParams;
+  const selectedYearId = typeof resolvedSearchParams.year === 'string' ? resolvedSearchParams.year : undefined;
   
   const years = await getYears();
   const workingGroups = await getWorkingGroups(selectedYearId);
