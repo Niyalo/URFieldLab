@@ -1,24 +1,56 @@
-import { client } from "../lib/sanity";
-import { groq } from "next-sanity";
-import imageUrlBuilder from '@sanity/image-url';
+import { createClient, groq } from "next-sanity";
+import imageUrlBuilder from '@sanity/image-url'
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import { PortableTextBlock } from "sanity";
 
-// Image URL builder
+// This is a placeholder. Remember to replace it with your actual client configuration.
+const client = createClient({
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id',
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    apiVersion: "2024-01-01",
+    useCdn: true,
+});
+
 const builder = imageUrlBuilder(client);
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
-// Types
-export interface Post {
+// --- TYPES ---
+
+export interface Year {
+    _id: string;
+    _type: 'year';
+    year: number;
+    title: string;
+}
+
+export interface Author {
+    _id: string;
+    _type: 'author';
+    name: string;
+    email: string;
+    picture?: {
+        asset: {
+            _ref: string;
+            url: string;
+        };
+    };
+    pictureURL?: string;
+    role?: string;
+}
+
+export interface WorkingGroup {
   _id: string;
+  _type: 'workingGroup';
   title: string;
   slug: {
     current: string;
   };
-  excerpt?: string;
-  content: PortableTextBlock[];
+  year: Year;
+  description?: string;
+  content?: PortableTextBlock[];
   mainImage?: {
     asset: {
       _ref: string;
@@ -26,7 +58,29 @@ export interface Post {
     };
   };
   mainImageURL?: string;
-  categories?: Category[];
+  members?: Author[];
+  establishedDate?: string;
+  status: 'active' | 'inactive' | 'on-hold';
+}
+
+export interface Article {
+  _id: string;
+  _type: 'post';
+  title: string;
+  slug: {
+    current: string;
+  };
+  year: Year;
+  excerpt?: string;
+  body: PortableTextBlock[];
+  mainImage?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  mainImageURL?: string;
+  authors?: Author[];
   workingGroups?: WorkingGroup[];
   publishedAt: string;
 }
@@ -40,283 +94,99 @@ export interface Page {
   content: PortableTextBlock[];
 }
 
-export interface Category {
-  _id: string;
-  title: string;
-  slug: {
-    current: string;
-  };
-  description?: string;
+// --- FETCH FUNCTIONS ---
+
+export async function getYears(): Promise<Year[]> {
+    return client.fetch(
+      groq`*[_type == "year"] | order(year desc) {
+        _id,
+        year,
+        title
+      }`
+    );
 }
 
-export interface WorkingGroup {
-  _id: string;
-  title: string;
-  slug: {
-    current: string;
-  };
-  description?: string;
-  content?: PortableTextBlock[];
-  mainImage?: {
-    asset: {
-      _ref: string;
-      url: string;
-    };
-  };
-  mainImageURL?: string;
-  members?: Array<{
-    name: string;
-    role: string;
-    email: string;
-  }>;
-  establishedDate?: string;
-  status: 'active' | 'inactive' | 'on-hold';
-}
+export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
+    const params: { yearId?: string } = {};
+    let query = `*[_type == "workingGroup"`;
 
-export interface PortableTextBlock {
-  _type: string;
-  _key?: string;
-  children?: Array<{
-    _type: string;
-    text: string;
-    marks?: string[];
-  }>;
-  style?: string;
-  markDefs?: Array<{
-    _type: string;
-    _key: string;
-    href?: string;
-  }>;
-}
+    if (yearId) {
+        query += ` && year._ref == $yearId`;
+        params.yearId = yearId;
+    }
 
-// Fetch all posts
-export async function getPosts(): Promise<Post[]> {
-  return client.fetch(
-    groq`*[_type == "post"] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      excerpt,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      categories[]-> {
+    query += `] | order(title asc) {
         _id,
         title,
         slug,
-        description
-      },
-      workingGroups[]-> {
-        _id,
-        title,
-        slug,
-        description
-      },
-      publishedAt
-    }`
-  );
+        "year": year->,
+        description,
+        mainImage { asset-> { _ref, url } },
+        "mainImageURL": mainImage.asset->url,
+        "members": members[]->{ name, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url, role },
+        establishedDate,
+        status
+    }`;
+    
+    return client.fetch(groq`${query}`, params);
 }
 
-// Fetch single post by slug
-export async function getPost(slug: string): Promise<Post | null> {
-  return client.fetch(
-    groq`*[_type == "post" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      excerpt,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      categories[]-> {
-        _id,
-        title,
-        slug,
-        description
-      },
-      workingGroups[]-> {
-        _id,
-        title,
-        slug,
-        description
-      },
-      publishedAt
-    }`,
-    { slug }
-  );
-}
-
-// Fetch all pages
-export async function getPages(): Promise<Page[]> {
-  return client.fetch(
-    groq`*[_type == "page"] | order(title asc) {
-      _id,
-      title,
-      slug,
-      content
-    }`
-  );
-}
-
-// Fetch single page by slug
-export async function getPage(slug: string): Promise<Page | null> {
-  return client.fetch(
-    groq`*[_type == "page" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      content
-    }`,
-    { slug }
-  );
-}
-
-// Fetch all categories
-export async function getCategories(): Promise<Category[]> {
-  return client.fetch(
-    groq`*[_type == "category"] | order(title asc) {
-      _id,
-      title,
-      slug,
-      description
-    }`
-  );
-}
-
-// Fetch single category by slug
-export async function getCategory(slug: string): Promise<Category | null> {
-  return client.fetch(
-    groq`*[_type == "category" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      description
-    }`,
-    { slug }
-  );
-}
-
-// Fetch all working groups
-export async function getWorkingGroups(): Promise<WorkingGroup[]> {
-  return client.fetch(
-    groq`*[_type == "workingGroup"] | order(title asc) {
-      _id,
-      title,
-      slug,
-      description,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      members,
-      establishedDate,
-      status
-    }`
-  );
-}
-
-// Fetch single working group by slug
 export async function getWorkingGroup(slug: string): Promise<WorkingGroup | null> {
-  return client.fetch(
-    groq`*[_type == "workingGroup" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      description,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      members,
-      establishedDate,
-      status
-    }`,
-    { slug }
-  );
+    return client.fetch(
+      groq`*[_type == "workingGroup" && slug.current == $slug][0] {
+        _id,
+        title,
+        slug,
+        "year": year->,
+        description,
+        content,
+        mainImage { asset-> { _ref, url } },
+        "mainImageURL": mainImage.asset->url,
+        "members": members[]->{ name, email, role, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url },
+        establishedDate,
+        status
+      }`,
+      { slug }
+    );
 }
 
-// Fetch posts by category
-export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
-  return client.fetch(
-    groq`*[_type == "post" && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      excerpt,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      categories[]-> {
+export async function getArticles(yearId?: string): Promise<Article[]> {
+    const params: { yearId?: string } = {};
+    let query = `*[_type == "post"`;
+
+    if (yearId) {
+        query += ` && year._ref == $yearId`;
+        params.yearId = yearId;
+    }
+
+    query += `] | order(publishedAt desc) {
         _id,
         title,
         slug,
-        description
-      },
-      workingGroups[]-> {
-        _id,
-        title,
-        slug,
-        description
-      },
-      publishedAt
-    }`,
-    { categorySlug }
-  );
+        "year": year->,
+        mainImage { asset-> { _ref, url } },
+        "mainImageURL": mainImage.asset->url,
+        "authors": authors[]->{ name, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url },
+        publishedAt
+    }`;
+
+    return client.fetch(groq`${query}`, params);
 }
 
-// Fetch posts by working group
-export async function getPostsByWorkingGroup(workingGroupSlug: string): Promise<Post[]> {
-  return client.fetch(
-    groq`*[_type == "post" && references(*[_type == "workingGroup" && slug.current == $workingGroupSlug]._id)] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      excerpt,
-      content,
-      mainImage {
-        asset-> {
-          _ref,
-          url
-        }
-      },
-      "mainImageURL": mainImage.asset->url,
-      categories[]-> {
+export async function getArticle(slug: string): Promise<Article | null> {
+    return client.fetch(
+      groq`*[_type == "post" && slug.current == $slug][0] {
         _id,
         title,
         slug,
-        description
-      },
-      workingGroups[]-> {
-        _id,
-        title,
-        slug,
-        description
-      },
-      publishedAt
-    }`,
-    { workingGroupSlug }
-  );
+        "year": year->,
+        body,
+        mainImage { asset-> { _ref, url } },
+        "mainImageURL": mainImage.asset->url,
+        "authors": authors[]->{ name, email, role, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url },
+        "workingGroups": workingGroups[]->{ title, slug },
+        publishedAt
+      }`,
+      { slug }
+    );
 }

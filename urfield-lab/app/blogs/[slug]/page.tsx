@@ -25,7 +25,7 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${workingGroup.title} - URField Lab Working Group`,
+    title: `${workingGroup.title} (${workingGroup.year.year}) - URField Lab`,
     description: workingGroup.description || `Learn about the ${workingGroup.title} working group at URField Lab.`,
     alternates: {
       canonical: `/blogs/${params.slug}`,
@@ -71,7 +71,6 @@ function getStatusBadge(status: string) {
 export default async function WorkingGroupPage({ params }: Props) {
   const workingGroup = await getWorkingGroup(params.slug);
   
-  // If working group doesn't exist, redirect to 404 page
   if (!workingGroup) {
     notFound();
   }
@@ -82,10 +81,10 @@ export default async function WorkingGroupPage({ params }: Props) {
         {/* Navigation */}
         <div className="mb-8">
           <Link 
-            href="/" 
+            href={`/blogs?year=${workingGroup.year._id}`}
             className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
           >
-            ← Back to Home
+            ← Back to {workingGroup.year.title} Working Groups
           </Link>
         </div>
 
@@ -117,6 +116,8 @@ export default async function WorkingGroupPage({ params }: Props) {
 
           <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
             <span>Established: {formatDate(workingGroup.establishedDate)}</span>
+            <span className="mx-2">|</span>
+            <span>Year: {workingGroup.year.title}</span>
           </div>
         </div>
 
@@ -136,28 +137,39 @@ export default async function WorkingGroupPage({ params }: Props) {
             {workingGroup.members && workingGroup.members.length > 0 && (
               <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
                 <h3 className="text-lg font-semibold mb-4">Members</h3>
-                <div className="space-y-4">
-                  {workingGroup.members.map((member, index) => (
-                    <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-3 last:border-b-0">
-                      <div className="font-medium text-gray-900 dark:text-white">
-                        {member.name}
-                      </div>
-                      {member.role && (
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {member.role}
+                <ul className="space-y-4">
+                  {workingGroup.members.map((member) => (
+                    <li key={member._id} className="flex items-center gap-4">
+                      {member.pictureURL && (
+                        <Image
+                          src={member.pictureURL}
+                          alt={member.name}
+                          width={48}
+                          height={48}
+                          className="rounded-full object-cover"
+                        />
+                      )}
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {member.name}
                         </div>
-                      )}
-                      {member.email && (
-                        <a 
-                          href={`mailto:${member.email}`}
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
-                        >
-                          {member.email}
-                        </a>
-                      )}
-                    </div>
+                        {member.role && (
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {member.role}
+                          </div>
+                        )}
+                        {member.email && (
+                          <a 
+                            href={`mailto:${member.email}`}
+                            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                          >
+                            {member.email}
+                          </a>
+                        )}
+                      </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
 
@@ -165,6 +177,10 @@ export default async function WorkingGroupPage({ params }: Props) {
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 mt-6">
               <h3 className="text-lg font-semibold mb-4">Quick Info</h3>
               <div className="space-y-2 text-sm">
+                <div>
+                  <span className="font-medium">Year:</span>{' '}
+                  <span>{workingGroup.year.title}</span>
+                </div>
                 <div>
                   <span className="font-medium">Status:</span>{' '}
                   <span className="capitalize">{workingGroup.status.replace('-', ' ')}</span>

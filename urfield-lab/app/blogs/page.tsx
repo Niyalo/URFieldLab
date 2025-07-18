@@ -1,8 +1,13 @@
 import Link from "next/link";
-import { getWorkingGroups } from "@/sanity/sanity-utils";
+import { getWorkingGroups, getYears } from "@/sanity/sanity-utils";
 import Image from "next/image";
+import YearSelector from "./YearSelector";
 
 export const revalidate = 0;
+
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 function getStatusBadge(status: string) {
   const statusClasses = {
@@ -18,8 +23,13 @@ function getStatusBadge(status: string) {
   );
 }
 
-export default async function WorkingGroupsPage() {
-  const workingGroups = await getWorkingGroups();
+export default async function WorkingGroupsPage({ searchParams }: Props) {
+  const selectedYearId = typeof searchParams.year === 'string' ? searchParams.year : undefined;
+  
+  const years = await getYears();
+  const workingGroups = await getWorkingGroups(selectedYearId);
+
+  const selectedYear = years.find(y => y._id === selectedYearId);
 
   return (
     <div className="font-sans min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -33,16 +43,23 @@ export default async function WorkingGroupsPage() {
           </Link>
         </div>
         
-        <h1 className="text-4xl font-bold mb-6">Working Groups</h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <h1 className="text-4xl font-bold">
+                Working Groups {selectedYear ? `(${selectedYear.year})` : ''}
+            </h1>
+        </div>
+
+        <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
           Explore our research working groups and their ongoing projects.
         </p>
+
+        <YearSelector years={years} selectedYear={selectedYearId || ''} />
         
         {workingGroups.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-lg text-gray-500">No working groups found.</p>
+            <p className="text-lg text-gray-500">No working groups found for the selected year.</p>
             <p className="text-sm text-gray-400 mt-2">
-              Add working groups through the{' '}
+              Try selecting a different year or add working groups through the{' '}
               <Link href="/studio" className="text-blue-600 hover:text-blue-800">
                 Content Management System
               </Link>
@@ -85,9 +102,9 @@ export default async function WorkingGroupsPage() {
                     <span>
                       {group.members ? `${group.members.length} members` : 'No members listed'}
                     </span>
-                    {group.establishedDate && (
+                    {group.year && (
                       <span>
-                        Est. {new Date(group.establishedDate).getFullYear()}
+                        {group.year.year}
                       </span>
                     )}
                   </div>
