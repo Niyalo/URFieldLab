@@ -1,7 +1,7 @@
 [build]
   base = "urfield-lab"
   command = "npm run build"
-  publish = "urfield-lab/.next"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
