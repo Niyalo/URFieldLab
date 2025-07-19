@@ -1,20 +1,30 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getWorkingGroups } from "@/sanity/sanity-utils";
+import { getWorkingGroups, getYearBySlug } from "@/sanity/sanity-utils";
 import { Metadata } from "next";
 
 export const revalidate = 0;
 
-export const metadata: Metadata = {
-  title: "Working Groups - URField Lab",
-  description: "Explore the themes and working groups of the URField Lab.",
+type Props = {
+  params: { year: string };
 };
 
-export default async function WorkingGroupsPage() {
-  const workingGroups = await getWorkingGroups();
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { year } = params;
+  const yearData = await getYearBySlug(year);
+
+  return {
+    title: `Themes - ${yearData?.title || "URField Lab"}`,
+    description: "Explore the themes and working groups of the URField Lab.",
+  };
+}
+
+export default async function WorkingGroupsPage({ params }: Props) {
+  const { year: yearSlug } = params;
+  const yearData = await getYearBySlug(yearSlug);
+  const workingGroups = await getWorkingGroups(yearData?._id);
 
   return (
-
     <div className="font-sans">
       {/* Hero Section */}
       <div className="relative h-64 sm:h-80 bg-gray-800">
@@ -34,7 +44,9 @@ export default async function WorkingGroupsPage() {
       {/* Description Section */}
       <div className="w-full bg-gray-900 text-white py-8 px-4 sm:px-0 flex justify-center">
         <p className="max-w-2xl text-lg text-center">
-          Each week has several guiding themes. Attendees, however, are also encouraged to propose new themes, bring their own projects or, support the work of other participants.
+          Each week has several guiding themes. Attendees, however, are also
+          encouraged to propose new themes, bring their own projects or,
+          support the work of other participants.
         </p>
       </div>
 
@@ -43,8 +55,11 @@ export default async function WorkingGroupsPage() {
           <div className="text-center py-12">
             <p className="text-lg text-gray-500">No working groups found.</p>
             <p className="text-sm text-gray-400 mt-2">
-              Add working groups through the{' '}
-              <Link href="/studio" className="text-blue-600 hover:text-blue-800">
+              Add working groups through the{" "}
+              <Link
+                href="/studio"
+                className="text-blue-600 hover:text-blue-800"
+              >
                 Content Management System
               </Link>
             </p>
@@ -52,7 +67,10 @@ export default async function WorkingGroupsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {workingGroups.map((group) => (
-              <div key={group._id} className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+              <div
+                key={group._id}
+                className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+              >
                 {group.mainImageURL && (
                   <div className="relative w-full h-56">
                     <Image

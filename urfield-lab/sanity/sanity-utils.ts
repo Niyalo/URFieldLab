@@ -20,10 +20,22 @@ export function urlFor(source: SanityImageSource) {
 // --- TYPES ---
 
 export interface Year {
-    _id: string;
-    _type: 'year';
-    year: number;
-    title: string;
+  _id: string;
+  _type: 'year';
+  year: number;
+  title: string;
+  slug: {
+    current: string;
+  };
+  logo: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  email?: string;
+  facebook?: string;
+  description?: string;
 }
 
 export interface Author {
@@ -97,14 +109,33 @@ export interface Page {
 // --- FETCH FUNCTIONS ---
 
 export async function getYears(): Promise<Year[]> {
-    return client.fetch(
-      groq`*[_type == "year"] | order(year desc) {
-        _id,
-        year,
-        title
-      }`
-    );
+  return client.fetch(
+    groq`*[_type == "year"] | order(year desc) {
+      _id,
+      year,
+      title,
+      slug,
+      logo
+    }`
+  );
 }
+
+export const getYearBySlug = async (slug: string): Promise<Year> => {
+
+  return client.fetch(
+    groq`*[_type == "year" && slug.current == $slug][0]{
+      _id,
+      year,
+      title,
+      slug,
+      logo,
+      email,
+      facebook,
+      description
+    }`,
+    { slug }
+  );
+};
 
 export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
     const params: { yearId?: string } = {};
