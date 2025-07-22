@@ -53,6 +53,23 @@ export interface Author {
     role?: string;
 }
 
+export interface Author {
+    _id: string;
+    _type: 'author';
+    name: string;
+    email: string;
+    picture?: {
+        asset: {
+            _ref: string;
+            url: string;
+        };
+    };
+    pictureURL?: string;
+    role?: string;
+    institute?: string;
+}
+
+
 export interface WorkingGroup {
   _id: string;
   _type: 'workingGroup';
@@ -136,6 +153,27 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
     { slug }
   );
 };
+
+
+export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
+    const params: { yearId?: string } = {};
+    let query = `*[_type == "author"`;
+
+    if (yearId) {
+        query += ` && year._ref == $yearId`;
+        params.yearId = yearId;
+    }
+
+    query += `] | order(name asc) {
+        _id,
+        name,
+        institute,
+        picture { asset-> { _ref, url } },
+        "pictureURL": picture.asset->url
+    }`;
+    
+    return client.fetch(groq`${query}`, params);
+}
 
 export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
     const params: { yearId?: string } = {};

@@ -21,7 +21,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: { params: { year: string } }): Promise<Metadata> {
-  const { year } = params;
+  const { year } = await params;
   const yearData = await getYearBySlug(year);
 
   return {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: { year: string } })
 }
 
 export default async function RootLayout({ children, params }: Props) {
-  const { year } = params;
+  const { year } = await params;
   const yearData = await getYearBySlug(year);
 
   return (

@@ -34,7 +34,7 @@ export default async function WorkingGroupsPage({ params }: Props) {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/50 flex items-center">
+        <div className="absolute inset-0 bg-black/10 flex items-center">
           <div className="text-left text-white p-8 sm:p-12">
             <h1 className="text-4xl sm:text-5xl font-bold">Themes</h1>
           </div>

@@ -12,16 +12,23 @@ export const author = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'login_name',
+      title: 'Login Nmae',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'email',
       title: 'Email',
       type: 'email',
-      validation: (Rule) => Rule.required(),
+      description: 'Contact email for the author',
     }),
     defineField({
       name: 'password',
       title: 'Password',
       type: 'string',
       description: 'Store the hashed password here. For internal use only.',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'picture',
@@ -36,6 +43,19 @@ export const author = defineType({
       title: 'Role',
       type: 'string',
       description: 'e.g., Researcher, Coordinator',
+    }),
+    defineField({
+      name: 'institute',
+      title: 'Institute',
+      type: 'string',
+      description: 'Affiliated institute or organization',
+    }),
+    defineField({
+      name: 'verified',
+      title: 'Verified',
+      type: 'boolean',
+      description: 'Is the author verified by an admin?',
+      initialValue: false,
     }),
     defineField({
       name: 'year',
