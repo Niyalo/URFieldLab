@@ -53,7 +53,15 @@ export async function POST(request: Request) {
         });
     }
 
-    const newAuthor: any = {
+    const newAuthor: {
+      _type: string;
+      name: string;
+      login_name: string;
+      password: string;
+      email?: string;
+      year?: { _type: string; _ref: string };
+      verified: boolean;
+    } = {
       _type: "author",
       name,
       login_name,

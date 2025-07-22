@@ -12,7 +12,7 @@ type Props = {
 
 export default function DashboardPage({ params }: Props) {
     const unwrappedParams = React.use(params);
-    const { user, isLoading, login, logout, signup } = useAuth();
+    const { user, isLoading, login, logout } = useAuth();
     const [isSigningUp, setIsSigningUp] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
@@ -48,7 +48,7 @@ export default function DashboardPage({ params }: Props) {
       } else {
         setError(data.message || 'An error occurred during signup.');
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred.');
     }
   };
@@ -63,10 +63,10 @@ export default function DashboardPage({ params }: Props) {
 
     try {
       const data = await login(login_name, password);
-      if (data.message) {
-        setError(data.message);
+      if (data.error) {
+        setError(data.error);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred.');
     }
   };
@@ -164,7 +164,7 @@ export default function DashboardPage({ params }: Props) {
                     <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Log In</button>
                   </form>
                   <p className="text-center text-sm">
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <button onClick={() => setIsSigningUp(true)} className="font-medium text-blue-600 hover:underline">Sign Up</button>
                   </p>
                 </>

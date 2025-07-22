@@ -60,7 +60,8 @@ export async function POST(request: Request) {
     session.isLoggedIn = true;
     await session.save();
 
-    // Return a subset of author data to the client
+    // Return a subset of author data to the client (excluding password)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...authorData } = author;
     return NextResponse.json(authorData);
 

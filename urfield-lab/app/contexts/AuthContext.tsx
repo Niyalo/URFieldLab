@@ -6,9 +6,9 @@ import { SessionData } from '@/lib/session';
 interface AuthContextType {
   user: SessionData | null;
   isLoading: boolean;
-  login: (login_name: string, password: string) => Promise<any>;
+  login: (login_name: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  signup: (name: string, login_name: string, password: string, yearId: string) => Promise<any>;
+  signup: (name: string, login_name: string, password: string, yearId: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
