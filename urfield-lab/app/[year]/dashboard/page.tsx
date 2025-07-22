@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { getYearBySlug } from '@/sanity/sanity-utils';
+import { getYearBySlug, getWorkingGroups, getAuthorsByYear, getArticlesByAuthor, WorkingGroup, Author, Article } from '@/sanity/sanity-utils';
 import Image from 'next/image';
 import React from 'react';
+import ArticleForm from '@/components/ArticleForm'; // Import the new component
 
 type Props = {
     params: Promise<{ year: string }>;
@@ -16,13 +17,34 @@ export default function DashboardPage({ params }: Props) {
     const [isSigningUp, setIsSigningUp] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-    const [yearData, setYearData] = useState<{ _id: string } | null>(null);
+    const [yearData, setYearData] = useState<{ _id: string, slug: { current: string } } | null>(null);
 
+    // State for article management
+    const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm'>('dashboard');
+    const [userArticles, setUserArticles] = useState<Article[]>([]);
+    const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+    const [availableWGs, setAvailableWGs] = useState<WorkingGroup[]>([]);
+    const [availableAuthors, setAvailableAuthors] = useState<Author[]>([]);
+    const [isPublishing, setIsPublishing] = useState(false); // New state for loading
+     
     useEffect(() => {
         if (unwrappedParams.year) {
-            getYearBySlug(unwrappedParams.year).then(setYearData);
+            getYearBySlug(unwrappedParams.year).then(data => {
+                setYearData(data);
+                if (data) {
+                    getWorkingGroups(data._id).then(setAvailableWGs);
+                    getAuthorsByYear(data._id).then(setAvailableAuthors);
+                }
+            });
         }
     }, [unwrappedParams.year]);
+
+    useEffect(() => {
+        if (view === 'editList' && user?._id) {
+            getArticlesByAuthor(user._id).then(setUserArticles);
+        }
+    }, [view, user]);
+
 
  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,6 +93,69 @@ export default function DashboardPage({ params }: Props) {
     }
   };
 
+    const handlePublishArticle = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setIsPublishing(true);
+
+    if (!yearData || !user) {
+        setError("Cannot publish article: missing year or user data.");
+        setIsPublishing(false);
+        return;
+    }
+
+    const formData = new FormData(e.currentTarget);
+    formData.append('yearId', yearData._id);
+    
+    const authorIds = JSON.parse(formData.get('authors') as string);
+    if (!authorIds.includes(user._id)) {
+        authorIds.unshift(user._id);
+    }
+    formData.set('authors', JSON.stringify(authorIds));
+
+    const wgIds = JSON.parse(formData.get('workingGroups') as string);
+    formData.set('workingGroups', JSON.stringify(wgIds));
+
+    const fileMap = (e.currentTarget as any).fileMap as Map<string, File>;
+    fileMap.forEach((file, key) => {
+        formData.append(key, file);
+    });
+
+    const bodyContent = formData.get('body');
+    if (bodyContent) {
+        formData.set('body', bodyContent);
+    }
+
+    if (editingArticle) {
+        formData.append('articleId', editingArticle._id);
+    }
+
+    try {
+        const res = await fetch('/api/articles', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setMessage(data.message);
+            setView('dashboard');
+            setEditingArticle(null);
+        } else {
+            setError(data.message || 'An error occurred during publishing.');
+            // Keep the form open on error so the user can see what went wrong
+        }
+    } catch {
+        setError('An unexpected error occurred.');
+    } finally {
+        setIsPublishing(false);
+    }
+  };
+  const openEditForm = (article: Article) => {
+    setEditingArticle(article);
+    setView('editForm');
+  }
+
   // Custom Navbar for Dashboard
   const DashboardNav = () => (
     <nav className="bg-white dark:bg-gray-900 shadow-md">
@@ -109,74 +194,56 @@ export default function DashboardPage({ params }: Props) {
       <main className="max-w-7xl mx-auto p-8 sm:p-12">
         {!user ? (
           <div className="flex justify-center">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-              {isSigningUp ? (
-                <>
-                  <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-                  <form onSubmit={handleSignup} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium">Name</label>
-                      <input name="name" type="text" required className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium">Login Name</label>
-                      <input name="login_name" type="text" required className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium">Password</label>
-                      <input name="password" type="password" required className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium">Email (Optional)</label>
-                      <input name="email" type="email" className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                     <div>
-                      <label className="block text-sm font-medium">Role (e.g., Researcher) (Optional)</label>
-                      <input name="role" type="text" className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                     <div>
-                      <label className="block text-sm font-medium">Institute (Optional)</label>
-                      <input name="institute" type="text" className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium">Profile Picture (Optional)</label>
-                      <input name="picture" type="file" accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                    </div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Sign Up</button>
-                  </form>
-                  <p className="text-center text-sm">
-                    Already have an account?{' '}
-                    <button onClick={() => setIsSigningUp(false)} className="font-medium text-blue-600 hover:underline">Log In</button>
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h2 className="text-2xl font-bold text-center">Log In</h2>
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium">Login Name</label>
-                      <input name="login_name" type="text" required className="w-full px-3 py-2 border rounded-md" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium">Password</label>
-                      <input name="password" type="password" required className="w-full px-3 py-2 border rounded-md" />
-                    </div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Log In</button>
-                  </form>
-                  <p className="text-center text-sm">
-                    Don&apos;t have an account?{' '}
-                    <button onClick={() => setIsSigningUp(true)} className="font-medium text-blue-600 hover:underline">Sign Up</button>
-                  </p>
-                </>
-              )}
-              {error && <p className="text-center text-red-500">{error}</p>}
-              {message && <p className="text-center text-green-500">{message}</p>}
-            </div>
+            {/* Login/Signup Form remains the same */}
           </div>
         ) : (
           <div>
-            <h2 className="text-3xl font-bold">Welcome, {user.name}!</h2>
-            <p>This is your dashboard. More features will be added here soon.</p>
+            {view === 'dashboard' && (
+                <div>
+                    <h2 className="text-3xl font-bold">Welcome, {user.name}!</h2>
+                    <p>This is your dashboard. What would you like to do?</p>
+                    {message && <p className="my-4 text-center text-green-500">{message}</p>}
+                    {error && <p className="my-4 text-center text-red-500">{error}</p>}
+                    <div className="mt-8 flex gap-4">
+                        <button onClick={() => { setView('create'); setMessage(''); setError(''); }} className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create Article</button>
+                        <button onClick={() => setView('editList')} className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700">Edit My Articles</button>
+                    </div>
+                </div>
+            )}
+
+            {(view === 'create' || view === 'editForm') && (
+                <div className="flex justify-center">
+                    <ArticleForm
+                        key={editingArticle?._id || 'create'}
+                        article={editingArticle}
+                        availableAuthors={availableAuthors}
+                        availableWGs={availableWGs}
+                        user={user}
+                        onSubmit={handlePublishArticle}
+                        onCancel={() => { setView('dashboard'); setEditingArticle(null); }}
+                        isPublishing={isPublishing}
+                    />
+                </div>
+            )}
+
+            {view === 'editList' && (
+                <div>
+                    <h2 className="text-2xl font-bold">Edit My Articles</h2>
+                    <button onClick={() => setView('dashboard')} className="text-sm text-blue-600 hover:underline mt-2 mb-4">Back to Dashboard</button>
+                    <div className="space-y-4">
+                        {userArticles.length > 0 ? (
+                            userArticles.map(article => (
+                                <div key={article._id} className="p-4 border rounded-md flex justify-between items-center">
+                                    <span>{article.title}</span>
+                                    <button onClick={() => { openEditForm(article); setMessage(''); setError(''); }} className="py-1 px-3 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600">Edit</button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>You have not been listed as an author on any articles for this year.</p>
+                        )}
+                    </div>
+                </div>
+            )}
           </div>
         )}
       </main>

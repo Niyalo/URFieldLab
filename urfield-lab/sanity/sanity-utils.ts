@@ -279,6 +279,31 @@ export async function getArticle(slug: string): Promise<Article | null> {
     );
 }
 
+export async function getArticlesByAuthor(authorId: string): Promise<Article[]> {
+    return client.fetch(
+      groq`*[_type == "article" && $authorId in authors[]._ref] | order(title asc) {
+        _id,
+        title,
+        slug,
+        "mainImage": mainImage.asset->{_id, url},
+        "year": year->{_id, slug},
+        "authors": authors[]->{_id, name},
+        "workingGroups": workingGroups[]->{_id, title},
+        summary,
+        hasBody,
+        buttonText,
+        authorListPrefix,
+        body[]{
+          ...,
+          _type == "imageObject" || _type == "posterObject" || _type == "pdfFile" => {
+            "asset": asset->{_id, url, originalFilename}
+          }
+        }
+      }`,
+      { authorId }
+    );
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return client.fetch(
       groq`*[_type == "article" && slug.current == $slug][0] {
