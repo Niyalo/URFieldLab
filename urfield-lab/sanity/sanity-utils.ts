@@ -90,28 +90,36 @@ export interface WorkingGroup {
   members?: Author[];
   establishedDate?: string;
   status: 'active' | 'inactive' | 'on-hold';
+  articles?: {
+    _id: string;
+    title: string;
+    slug?: { current: string };
+    authors?: { name: string }[];
+    summary: string;
+    mainImage: { asset: { _ref: string; url: string; } };
+    authorListPrefix?: string;
+    buttonText?: string;
+    hasBody?: boolean;
+  }[];
 }
 
 export interface Article {
   _id: string;
-  _type: 'post';
+  _type: 'article';
   title: string;
-  slug: {
+  slug?: {
     current: string;
   };
+  mainImage?: string; // The query renames this to a URL string
+  authorListPrefix?: string;
   year: Year;
-  excerpt?: string;
-  body: PortableTextBlock[];
-  mainImage?: {
-    asset: {
-      _ref: string;
-      url: string;
-    };
-  };
-  mainImageURL?: string;
+  summary: string;
+  hasBody?: boolean;
+  buttonText?: string;
   authors?: Author[];
   workingGroups?: WorkingGroup[];
-  publishedAt: string;
+  // The body can be complex, so we'll use 'any' for now on the client side
+  body?: any[]; 
 }
 
 export interface Page {
@@ -194,7 +202,18 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
         "mainImageURL": mainImage.asset->url,
         "members": members[]->{ name, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url, role },
         establishedDate,
-        status
+        status,
+        "articles": *[_type == "article" && ^._id in workingGroups[]._ref] | order(title asc) {
+          _id,
+          title,
+          slug,
+          summary,
+          mainImage { asset-> { _ref, url } },
+          authorListPrefix,
+          buttonText,
+          hasBody,
+          "authors": authors[]->{name}
+        }
     }`;
     
     return client.fetch(groq`${query}`, params);
@@ -255,6 +274,33 @@ export async function getArticle(slug: string): Promise<Article | null> {
         "authors": authors[]->{ name, email, role, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url },
         "workingGroups": workingGroups[]->{ title, slug },
         publishedAt
+      }`,
+      { slug }
+    );
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+    return client.fetch(
+      groq`*[_type == "article" && slug.current == $slug][0] {
+        _id,
+        title,
+        slug,
+        summary,
+        authorListPrefix,
+        "authors": authors[]->{ name },
+        "mainImage": mainImage.asset->url,
+        body[]{
+          ...,
+          _type == "imageObject" => {
+            "asset": asset->
+          },
+          _type == "posterObject" => {
+            "asset": asset->
+          },
+          _type == "pdfFile" => {
+            "asset": asset->{url, originalFilename}
+          }
+        }
       }`,
       { slug }
     );

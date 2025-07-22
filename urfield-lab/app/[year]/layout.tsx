@@ -35,14 +35,14 @@ export default async function RootLayout({ children, params }: Props) {
   const yearData = await getYearBySlug(year);
 
   return (
-
-      <div
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header year={yearData} />
+    <div
+      className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+    >
+      <Header year={yearData} />
+      <main className="flex-1">
         {children}
-        <Footer year={yearData} />
-      </div>
-
+      </main>
+      <Footer year={yearData} />
+    </div>
   );
 }
