@@ -11,7 +11,8 @@ const navLinks = [
   { href: "/people", label: "THE PEOPLE", match: (path: string) => path.startsWith("/people") },
   { href: "/outputs", label: "OUTPUTS", match: (path: string) => path.startsWith("/outputs") },
   { href: "/urfield-labs", label: "URFIELD LABS", match: (path: string) => path.startsWith("/urfield-labs") },
-  { href: "/viewer", label: "PDF VIEWER", match: (path: string) => path.startsWith("/viewer") },
+  //TODO: ROB remove this after testing
+  { href: "/viewer?url=/Sneha.pdf", label: "PDF VIEWER", match: (path: string) => path.startsWith("/viewer") },
 ];
 
 const Header = () => {
