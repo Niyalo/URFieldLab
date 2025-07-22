@@ -17,10 +17,10 @@ const geistMono = Geist_Mono({
 
 type Props = {
   children: React.ReactNode;
-  params: { year: string };
+  params: Promise<{ year: string }>;
 };
 
-export async function generateMetadata({ params }: { params: { year: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ year: string }> }): Promise<Metadata> {
   const { year } = await params;
   const yearData = await getYearBySlug(year);
 

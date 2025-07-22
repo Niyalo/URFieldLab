@@ -6,11 +6,11 @@ import { Metadata } from "next";
 export const revalidate = 0;
 
 type Props = {
-  params: { year: string };
+  params: Promise<{ year: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { year } = params;
+  const { year } = await params;
   const yearData = await getYearBySlug(year);
 
   return {
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function WorkingGroupsPage({ params }: Props) {
-  const { year: yearSlug } = params;
+  const { year: yearSlug } = await params;
   const yearData = await getYearBySlug(yearSlug);
   const workingGroups = await getWorkingGroups(yearData?._id);
 
