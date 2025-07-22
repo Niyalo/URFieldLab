@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { getYearBySlug, getWorkingGroups, getAuthorsByYear, getArticlesByAuthor, WorkingGroup, Author, Article } from '@/sanity/sanity-utils';
+import { getYearBySlug, getWorkingGroups, getAuthorsByYear, getArticlesByAuthor, WorkingGroup, Author, Article, getAuthorById } from '@/sanity/sanity-utils';
 import Image from 'next/image';
 import React from 'react';
 import ArticleForm from '@/components/ArticleForm'; // Import the new component
+import Link from 'next/link';
 
 type Props = {
     params: Promise<{ year: string }>;
@@ -18,6 +19,9 @@ export default function DashboardPage({ params }: Props) {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const [yearData, setYearData] = useState<{ _id: string, slug: { current: string } } | null>(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [authorProfile, setAuthorProfile] = useState<Author | null>(null);
 
     // State for article management
     const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm'>('dashboard');
@@ -40,10 +44,27 @@ export default function DashboardPage({ params }: Props) {
     }, [unwrappedParams.year]);
 
     useEffect(() => {
-        if (view === 'editList' && user?._id) {
-            getArticlesByAuthor(user._id).then(setUserArticles);
+        if (user?._id) {
+            getAuthorById(user._id).then(setAuthorProfile);
+            if (view === 'editList') {
+                getArticlesByAuthor(user._id).then(setUserArticles);
+            }
+        } else {
+            setAuthorProfile(null);
         }
     }, [view, user]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownRef]);
 
 
  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -161,22 +182,49 @@ export default function DashboardPage({ params }: Props) {
     <nav className="bg-white dark:bg-gray-900 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
+          <div className="flex items-center gap-8">
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+            <Link 
+                href="/studio" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+            >
+                Content Management
+            </Link>
           </div>
           {user && (
-            <div className="relative">
-              <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                <Image
-                  className="h-8 w-8 rounded-full object-cover"
-                  src={user.pictureURL || '/default-avatar.png'} // Provide a default avatar
-                  alt="User avatar"
-                  width={32}
-                  height={32}
-                />
-              </button>
-              {/* Dropdown would go here */}
-              <button onClick={() => logout()} className="ml-4 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Logout</button>
+            <div className="relative" ref={dropdownRef}>
+              <div className="flex items-center gap-3">
+                <span className="text-gray-800 dark:text-gray-200 hidden sm:block">{user.name}</span>
+                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                  <Image
+                    className="h-8 w-8 rounded-full object-cover"
+                    src={user.pictureURL || '/default-avatar.png'}
+                    alt="User avatar"
+                    width={32}
+                    height={32}
+                  />
+                </button>
+              </div>
+              {isDropdownOpen && authorProfile && (
+                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <div className="px-4 py-2 border-b">
+                      <p className="text-sm font-medium text-gray-900 truncate">{authorProfile.name}</p>
+                      <p className="text-sm text-gray-500 truncate">{authorProfile.email}</p>
+                      {authorProfile.role && <p className="text-sm text-gray-500 truncate">{authorProfile.role}</p>}
+                    </div>
+                    <button
+                      onClick={() => { logout(); setIsDropdownOpen(false); }}
+                      className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

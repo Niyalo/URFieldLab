@@ -51,21 +51,6 @@ export interface Author {
     };
     pictureURL?: string;
     role?: string;
-}
-
-export interface Author {
-    _id: string;
-    _type: 'author';
-    name: string;
-    email: string;
-    picture?: {
-        asset: {
-            _ref: string;
-            url: string;
-        };
-    };
-    pictureURL?: string;
-    role?: string;
     institute?: string;
 }
 
@@ -162,6 +147,20 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
   );
 };
 
+export async function getAuthorById(authorId: string): Promise<Author | null> {
+    return client.fetch(
+      groq`*[_type == "author" && _id == $authorId][0]{
+        _id,
+        name,
+        email,
+        role,
+        institute,
+        "pictureURL": picture.asset->url
+      }`,
+      { authorId }
+    );
+}
+
 
 export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
     const params: { yearId?: string } = {};
@@ -176,6 +175,7 @@ export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
         _id,
         name,
         institute,
+        email,
         picture { asset-> { _ref, url } },
         "pictureURL": picture.asset->url
     }`;
