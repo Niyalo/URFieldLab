@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download, RotateCw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Download, RotateCw, BookOpen, FileText } from 'lucide-react';
 import '../styles/pdf-viewer.css';
 
 // Dynamic import of react-pdf to avoid SSR issues
@@ -19,11 +19,12 @@ interface PDFViewerClientProps {
 export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClientProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [scale, setScale] = useState<number>(1.0);
+  const [scale, setScale] = useState<number>(0.7);
   const [rotation, setRotation] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<'single' | 'book'>('book');
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Ensure we're on the client side
@@ -49,9 +50,20 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
 
   function changePage(delta: number) {
     setPageNumber(prevPageNumber => {
-      const newPageNumber = prevPageNumber + delta;
+      const step = viewMode === 'book' ? 2 : 1;
+      const newPageNumber = prevPageNumber + (delta * step);
       return Math.min(Math.max(newPageNumber, 1), numPages);
     });
+  }
+
+  function goToPage(page: number) {
+    if (viewMode === 'book') {
+      // In book mode, ensure we start on odd pages (1, 3, 5, etc.)
+      const adjustedPage = page % 2 === 0 ? page - 1 : page;
+      setPageNumber(Math.min(Math.max(adjustedPage, 1), numPages));
+    } else {
+      setPageNumber(Math.min(Math.max(page, 1), numPages));
+    }
   }
 
   function zoomIn() {
@@ -71,6 +83,20 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
     link.href = originalUrl; // Use original URL for download
     link.download = originalUrl.split('/').pop() || 'document.pdf';
     link.click();
+  }
+
+  function switchViewMode(mode: 'single' | 'book') {
+    setViewMode(mode);
+    // Adjust scale based on view mode
+    if (mode === 'book') {
+      setScale(0.7); // Smaller scale for two-page view
+      // Ensure we're on an odd page for book view
+      if (pageNumber % 2 === 0 && pageNumber > 1) {
+        setPageNumber(pageNumber - 1);
+      }
+    } else {
+      setScale(1.0); // Normal scale for single page
+    }
   }
 
   return (
@@ -107,14 +133,36 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
                   <ChevronLeft size={20} />
                 </button>
                 <span className="text-sm text-gray-700">
-                  Page {pageNumber} of {numPages}
+                  {viewMode === 'book' ? (
+                    `Pages ${pageNumber}${pageNumber < numPages ? `-${Math.min(pageNumber + 1, numPages)}` : ''} of ${numPages}`
+                  ) : (
+                    `Page ${pageNumber} of ${numPages}`
+                  )}
                 </span>
                 <button
                   onClick={() => changePage(1)}
-                  disabled={pageNumber >= numPages}
+                  disabled={viewMode === 'book' ? pageNumber >= numPages - 1 : pageNumber >= numPages}
                   className="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronRight size={20} />
+                </button>
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center space-x-2 border-l pl-4">
+                <button
+                  onClick={() => switchViewMode('single')}
+                  className={`p-1 rounded ${viewMode === 'single' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+                  title="Single page view"
+                >
+                  <FileText size={20} />
+                </button>
+                <button
+                  onClick={() => switchViewMode('book')}
+                  className={`p-1 rounded ${viewMode === 'book' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'}`}
+                  title="Book view (two pages)"
+                >
+                  <BookOpen size={20} />
                 </button>
               </div>
 
@@ -198,14 +246,37 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
                 loading=""
                 className="max-w-full"
               >
-                <Page
-                  pageNumber={pageNumber}
-                  scale={scale}
-                  rotate={rotation}
-                  className="shadow-lg"
-                  renderTextLayer={true}
-                  renderAnnotationLayer={true}
-                />
+                {viewMode === 'book' ? (
+                  <div className="flex gap-4">
+                    <Page
+                      pageNumber={pageNumber}
+                      scale={scale}
+                      rotate={rotation}
+                      className="shadow-lg"
+                      renderTextLayer={true}
+                      renderAnnotationLayer={true}
+                    />
+                    {pageNumber < numPages && (
+                      <Page
+                        pageNumber={pageNumber + 1}
+                        scale={scale}
+                        rotate={rotation}
+                        className="shadow-lg"
+                        renderTextLayer={true}
+                        renderAnnotationLayer={true}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <Page
+                    pageNumber={pageNumber}
+                    scale={scale}
+                    rotate={rotation}
+                    className="shadow-lg"
+                    renderTextLayer={true}
+                    renderAnnotationLayer={true}
+                  />
+                )}
               </Document>
             ) : (
               <div className="flex items-center justify-center h-64">
@@ -220,6 +291,7 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
           {numPages > 0 && (
             <div className="mt-4 text-center">
               <div className="inline-flex items-center space-x-2 bg-white rounded-lg px-4 py-2 shadow">
+                <span className="text-sm text-gray-600">Go to page:</span>
                 <input
                   type="number"
                   min={1}
@@ -228,7 +300,7 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
                   onChange={(e) => {
                     const page = parseInt(e.target.value);
                     if (page >= 1 && page <= numPages) {
-                      setPageNumber(page);
+                      goToPage(page);
                     }
                   }}
                   className="w-16 px-2 py-1 border border-gray-300 rounded text-center text-sm"
