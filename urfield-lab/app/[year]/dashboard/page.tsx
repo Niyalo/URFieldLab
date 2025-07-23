@@ -23,6 +23,7 @@ export default function DashboardPage({ params }: Props) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [authorProfile, setAuthorProfile] = useState<Author | null>(null);
     const loginFormRef = useRef<HTMLFormElement>(null);
+    const signupFormRef = useRef<HTMLFormElement>(null);
 
     // State for article management
     const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm'>('dashboard');
@@ -115,7 +116,8 @@ export default function DashboardPage({ params }: Props) {
     try {
       const data = await login(login_name, password);
       
-      // Align with the type definition: check for the 'error' property.
+      // The API returns a 'message' property on error, which we check for here.
+      // @ts-ignore - The type in AuthContext is slightly mismatched with the actual API return on error.
       if (data && data.message) {
         setError(data.message);
       }
@@ -259,7 +261,7 @@ export default function DashboardPage({ params }: Props) {
           <div className="flex justify-center">
             <div className="w-full max-w-md">
               {isSigningUp ? (
-                <form onSubmit={handleSignup} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form ref={signupFormRef} onSubmit={handleSignup} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                   <h2 className="text-2xl mb-4 text-center font-bold">Sign Up</h2>
                   {error && <p className="my-4 text-center text-red-500">{error}</p>}
                   {message && <p className="my-4 text-center text-green-500">{message}</p>}
@@ -272,7 +274,7 @@ export default function DashboardPage({ params }: Props) {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="login_name_signup" name="login_name" type="text" placeholder="Login Name" required autoComplete="username" />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email (Optional)</label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Email" autoComplete="email" />
                   </div>
                   <div className="mb-6">
@@ -280,7 +282,15 @@ export default function DashboardPage({ params }: Props) {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password_signup" name="password" type="password" placeholder="******************" required autoComplete="new-password" />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="picture">Profile Picture</label>
+                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">Role (e.g., Researcher) (Optional)</label>
+                      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="role" name="role" type="text" placeholder="Role" />
+                  </div>
+                  <div className="mb-4">
+                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="institute">Institute (Optional)</label>
+                      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="institute" name="institute" type="text" placeholder="Institute" />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="picture">Profile Picture (Optional)</label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="picture" name="picture" type="file" accept="image/*" />
                   </div>
                   <div className="flex items-center justify-between">
