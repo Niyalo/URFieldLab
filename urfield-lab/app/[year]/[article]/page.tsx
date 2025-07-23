@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
-import { getArticleBySlug, urlFor } from "@/sanity/sanity-utils";
+import { getArticleBySlug } from "@/sanity/sanity-utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleBody from "@/components/ArticleBody";
@@ -8,11 +7,12 @@ import ArticleBody from "@/components/ArticleBody";
 export const revalidate = 0;
 
 type Props = {
-  params: { year: string; article: string };
+  params: Promise<{ year: string; article: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getArticleBySlug(params.article);
+  const { article: articleSlug } = await params;
+  const article = await getArticleBySlug(articleSlug);
   if (!article) {
     return { title: "Article not found" };
   }
@@ -23,7 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const article = await getArticleBySlug(params.article);
+  const { article: articleSlug } = await params;
+  const article = await getArticleBySlug(articleSlug);
 
   if (!article) {
     notFound();
