@@ -1,13 +1,17 @@
 
-import Link from 'next/link';
-import Image from 'next/image';
 import Hero from '../../components/Hero';
 import ContentDescription from '../../components/ContentDescription';
 import KeyValues from '../../components/KeyValues';
 import VideoSection from '../../components/VideoSection';
 import QuoteSection from '../../components/QuoteSection';
+import ProjectThemes from '../../components/ProjectThemes';
+import FeaturedOutputs from '../../components/FeaturedOutputs';
+import LogoViews from '../../components/LogoViews';
 
 export default function Home() {
+  // Theme color configuration
+  const themeColor = "#f97316";
+
   return (
     <div className="font-sans">
       {/* Hero Section */}
@@ -39,7 +43,7 @@ export default function Home() {
         eventStructureDescription="come when you want, stay as long as you need — the field lab's timetable is defined by its participants, who self-initiate their projects and deadlines."
         eventStructureIconPath="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
         
-        themeColor="#f97316"
+        themeColor={themeColor}
       />
 
       {/* Video Section */}
@@ -50,7 +54,7 @@ export default function Home() {
         linkHref="/outputs/#headvid"
         videoLink="https://www.youtube.com/watch?v=B39NdRehbBE"
         backgroundImage="https://urfieldlab.com/wp-content/uploads/2019/06/Week-4-6222.jpg"
-        themeColor="#f97316"
+        themeColor={themeColor}
         buttonTextColor="#1f2937"
       />
 
@@ -58,377 +62,186 @@ export default function Home() {
       <QuoteSection 
         quote="We believe in open space — creating a shared experience of collaboration and co-production where people of diverse disciplines and backgrounds work as equals, drive the event agenda, and share their work freely."
         backgroundImage="https://urfieldlab.com/wp-content/uploads/2019/08/UNADJUSTEDNONRAW_thumb_b5e6.jpg"
-        textColor="#fb923c"
+        textColor={themeColor}
       />
 
       {/* Project Themes Section */}
-      <div 
-        className="py-16"
-        style={{
-          backgroundColor: 'rgba(251, 192, 45, 0.663)'
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              <Link href="/themes" className="text-gray-900 hover:text-orange-600 transition-colors">
-                Project Themes
-              </Link>
-            </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              Each week has several guiding themes. Attendees, however, are also encouraged to propose new themes, bring their own projects or, support the work of other participants.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: "Drones & 360° Camera", href: "/outputs/#head-drone", icon: "M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" },
-              { title: "Mapping", href: "/outputs/#head-map", icon: "M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" },
-              { title: "Sensing", href: "/outputs/#head-sens", icon: "M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" },
-              { title: "Vulnerable Groups", href: "/outputs/#head-vul", icon: "M10 12a2 2 0 100-4 2 2 0 000 4z M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" },
-              { title: "Nature-based Solutions", href: "/outputs/#head-nbs", icon: "M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z" },
-              { title: "Artificial Intelligence & Machine Learning", href: "/outputs/#head-ml", icon: "M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3z" },
-              { title: "User-centered Design", href: "/outputs/#head-drfi", icon: "M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" },
-              { title: "Risk Communications", href: "/outputs/#head-comm", icon: "M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.894A1 1 0 0018 16V3z" },
-              { title: "Art & Science", href: "/outputs/#head-art", icon: "M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z" }
-            ].map((theme, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d={theme.icon} clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <h5 className="text-lg font-semibold text-orange-600 leading-tight">
-                    <Link href={theme.href} className="hover:text-orange-800 transition-colors">
-                      {theme.title}
-                    </Link>
-                  </h5>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <ProjectThemes 
+        title="Project Themes"
+        description="Each week has several guiding themes. Attendees, however, are also encouraged to propose new themes, bring their own projects or, support the work of other participants."
+        titleHref="/themes"
+        themeColor={themeColor}
+        themes={[
+          { title: "Drones & 360° Camera", href: "/outputs/#head-drone", icon: "M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" },
+          { title: "Mapping", href: "/outputs/#head-map", icon: "M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" },
+          { title: "Sensing", href: "/outputs/#head-sens", icon: "M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" },
+          { title: "Vulnerable Groups", href: "/outputs/#head-vul", icon: "M10 12a2 2 0 100-4 2 2 0 000 4z M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" },
+          { title: "Nature-based Solutions", href: "/outputs/#head-nbs", icon: "M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z" },
+          { title: "Artificial Intelligence & Machine Learning", href: "/outputs/#head-ml", icon: "M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3z" },
+          { title: "User-centered Design", href: "/outputs/#head-drfi", icon: "M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" },
+          { title: "Risk Communications", href: "/outputs/#head-comm", icon: "M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.894A1 1 0 0018 16V3z" },
+          { title: "Art & Science", href: "/outputs/#head-art", icon: "M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z" }
+        ]}
+      />
 
       {/* Featured Outputs Section */}
-      <div className="py-16 bg-[#fbc02d22]">
+      <FeaturedOutputs 
+        title="Featured Outputs"
+        themeColor={themeColor}
+        outputs={[
+          {
+            imageUrl: "/images/cropped-UNADJUSTEDNONRAW_thumb_d449.jpg",
+            title: "Living with Water in Chiang Mai",
+            description: "A Medium blog post discussing risk communications experiences during the field lab. It served as an entry to the #vizRisk challenge by Understanding Risk with Mapbox and the Data Visualization Society, featuring community engagement strategies.",
+            linkText: "Read the blog post",
+            linkUrl: "https://medium.com/ur-field-lab-chiang-mai/living-with-water-d9b671296ba6"
+          },
+          {
+            imageUrl: "/images/cropped-Screenshot-2019-07-25-at-18.30.04-2.png",
+            title: "SEADRIF User Experience Sprint",
+            description: "A user-centered design approach creating a website prototype for the SEADRIF platform. The platform informs users of real-time flood risks across Southeast Asian countries through extensive user research and testing phases.",
+            linkText: "Check out the prototype",
+            linkUrl: "/seadrif-webpage-prototype"
+          },
+          {
+            imageUrl: "/images/00_Context-of-Workshop.jpg",
+            title: "Living with Water Art & Science Exhibition Write Up",
+            description: "Documentation of a collaborative arts workshop held June 24-28 on \"Living with Water.\" The write-up describes creative processes and outputs bringing together artists, scientists, and community members to explore urban flooding solutions.",
+            linkText: "Learn more",
+            linkUrl: "/living-with-water-art-science-workshop-and-exhibition"
+          },
+          {
+            imageUrl: "/images/cropped-Screenshot-2019-07-22-at-10.17.30-PM.png",
+            title: "Field Lab Zine: Deconstructed Field Lab",
+            description: "An independently published zine created by participants to capture fun moments and collaborative spirit of the un-conference. Features illustrations, photography, interviews, and creative reflections from the field lab experience.",
+            linkText: "Check out the Zine",
+            linkUrl: "/field-lab-zine"
+          },
+          {
+            imageUrl: "/images/cropped-Screenshot-2019-07-25-at-22.56.18-4.png",
+            title: "Persona Cards for Nature-based Solutions",
+            description: "Educational persona cards designed to help understand urban flooding complexities. Based on real people, animals, and environmental systems of Chiang Mai, serving as tools for stakeholders implementing flood management strategies.",
+            linkText: "Check out the prototype",
+            linkUrl: "/persona-card-deck"
+          },
+          {
+            imageUrl: "/images/cropped-FB-circle-logo-e1568121369532.png",
+            title: "What is the Field Lab?",
+            description: "Video featuring participants explaining the event's intent, their motivation for attending, and projects worked on during the month. Provides insights into collaborative approaches to disaster risk reduction and urban flooding challenges.",
+            linkText: "Watch the video",
+            linkUrl: "https://youtu.be/Q0RTsu89kvk"
+          }
+        ]}
+      />
+
+      {/* Organized by Section */}
+      <LogoViews 
+        title="Organized by:"
+        logos={[
+          {
+            imageUrl: "/images/CO-RISK-LABS-LOGO_BLACK.png",
+            alt: "CO-RISK LABS",
+            linkUrl: "http://co-risk.org",
+            width: 200,
+            height: 80
+          }
+        ]}
+      />
+
+      {/* With support from Section */}
+      <LogoViews 
+        title="With support from:"
+        logos={[
+          {
+            imageUrl: "/images/drf.png",
+            alt: "Disater Risk Financing and Insurance Program World Bank Group",
+            linkUrl: "https://www.worldbank.org/en/programs/disaster-risk-financing-and-insurance-program",
+            width: 120,
+            height: 60
+          },
+          {
+            imageUrl: "/images/hotosm.png",
+            alt: "HOT OSM - Humanitarian OpenStreetMap Team",
+            linkUrl: "https://www.hotosm.org/",
+            width: 120,
+            height: 40
+          },
+          {
+            imageUrl: "/images/gfdrr.png",
+            alt: "Global Facility for Disaster Reduction and Recovery (GFDRR)",
+            linkUrl: "https://www.gfdrr.org/",
+            width: 120,
+            height: 40
+          },
+          {
+            imageUrl: "/images/worldbank.png",
+            alt: "World Bank",
+            linkUrl: "https://www.worldbank.org/",
+            width: 120,
+            height: 60
+          },
+          {
+            imageUrl: "/images/EOS_Logo_Horizontal_Colour.png",
+            alt: "Earth Observatory of Singapore",
+            linkUrl: "https://earthobservatory.sg/",
+            width: 120,
+            height: 50
+          },
+          {
+            imageUrl: "/images/nanyang.png",
+            alt: "Nanyang Technological University - NTU Singapore",
+            linkUrl: "https://www.ntu.edu.sg/",
+            width: 120,
+            height: 60
+          },
+          {
+            imageUrl: "/images/natural-capital_long.png",
+            alt: "Natural Capital Project",
+            linkUrl: "https://naturalcapitalproject.stanford.edu/",
+            width: 120,
+            height: 50
+          },
+          {
+            imageUrl: "/images/cmu.png",
+            alt: "Chiang Mai University",
+            linkUrl: "https://www.cmu.ac.th/",
+            width: 120,
+            height: 60
+          },
+          {
+            imageUrl: "/images/facebook_long.png",
+            alt: "Facebook",
+            linkUrl: "https://www.facebook.com/",
+            width: 120,
+            height: 50
+          },
+          {
+            imageUrl: "/images/nrf-2by1.png",
+            alt: "National Research Foundation, Singapore (NRF)",
+            linkUrl: "https://www.nrf.gov.sg/",
+            width: 120,
+            height: 60
+          }
+        ]}
+      />
+
+      {/* Footer Section */}
+      <div className="py-8 bg-black">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-gray-900">Featured Outputs</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            {/* Card 1 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/cropped-UNADJUSTEDNONRAW_thumb_d449.jpg"
-                  alt="Living with Water in Chiang Mai"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Living with Water in Chiang Mai">
-                  <span className="line-clamp-2">
-                    Living with Water in Chiang Mai
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  A Medium blog post discussing risk communications experiences during the field lab. It served as an entry to the #vizRisk challenge by Understanding Risk with Mapbox and the Data Visualization Society, featuring community engagement strategies.
-                </p>
-                <Link 
-                  href="https://medium.com/ur-field-lab-chiang-mai/living-with-water-d9b671296ba6"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Read the blog post
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/cropped-Screenshot-2019-07-25-at-18.30.04-2.png"
-                  alt="SEADRIF User Experience Sprint"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="SEADRIF User Experience Sprint">
-                  <span className="line-clamp-2">
-                    SEADRIF User Experience Sprint
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  A user-centered design approach creating a website prototype for the SEADRIF platform. The platform informs users of real-time flood risks across Southeast Asian countries through extensive user research and testing phases.
-                </p>
-                <Link 
-                  href="/seadrif-webpage-prototype"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Check out the prototype
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/00_Context-of-Workshop.jpg"
-                  alt="Living with Water Art & Science Exhibition"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Living with Water Art & Science Exhibition Write Up">
-                  <span className="line-clamp-2">
-                    Living with Water Art & Science Exhibition Write Up
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  Documentation of a collaborative arts workshop held June 24-28 on &ldquo;Living with Water.&rdquo; The write-up describes creative processes and outputs bringing together artists, scientists, and community members to explore urban flooding solutions.
-                </p>
-                <Link 
-                  href="/living-with-water-art-science-workshop-and-exhibition"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Learn more
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 4 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/cropped-Screenshot-2019-07-22-at-10.17.30-PM.png"
-                  alt="Field Lab Zine"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Field Lab Zine: Deconstructed Field Lab">
-                  <span className="line-clamp-2">
-                    Field Lab Zine: Deconstructed Field Lab
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  An independently published zine created by participants to capture fun moments and collaborative spirit of the un-conference. Features illustrations, photography, interviews, and creative reflections from the field lab experience.
-                </p>
-                <Link 
-                  href="/field-lab-zine"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Check out the Zine
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 5 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/cropped-Screenshot-2019-07-25-at-22.56.18-4.png"
-                  alt="Persona Cards for Nature-based Solutions"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Persona Cards for Nature-based Solutions">
-                  <span className="line-clamp-2">
-                    Persona Cards for Nature-based Solutions
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  Educational persona cards designed to help understand urban flooding complexities. Based on real people, animals, and environmental systems of Chiang Mai, serving as tools for stakeholders implementing flood management strategies.
-                </p>
-                <Link 
-                  href="/persona-card-deck"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Check out the prototype
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 6 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-gray-200 bg-cover bg-center">
-                <Image
-                  src="/images/cropped-FB-circle-logo-e1568121369532.png"
-                  alt="What is the Field Lab Video"
-                  width={400}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="What is the Field Lab?">
-                  <span className="line-clamp-2">
-                    What is the Field Lab?
-                  </span>
-                </h4>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
-                  Video featuring participants explaining the event&apos;s intent, their motivation for attending, and projects worked on during the month. Provides insights into collaborative approaches to disaster risk reduction and urban flooding challenges.
-                </p>
-                <Link 
-                  href="https://youtu.be/Q0RTsu89kvk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-orange-600 hover:text-orange-800 font-medium"
-                >
-                  Watch the video
-                </Link>
-              </div>
-            </div>
+          <div className="text-center">
+            <p className="text-white text-sm">
+              © {new Date().getFullYear()} UR Field Lab &apos;19. Understanding Risk. For more information contact{' '}
+              <a 
+                href="mailto:floodlab2019@co-risk.org" 
+                className="text-white hover:text-gray-300 underline"
+              >
+                floodlab2019@co-risk.org
+              </a>
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Organizations Section */}
-      <div className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Organized by */}
-          <div className="mb-12">
-            <p className="text-lg font-bold text-gray-800 mb-6 text-center">Organized by:</p>
-            <div className="flex justify-center">
-              <div className="flex items-center justify-center p-4">
-                <Link href="http://co-risk.org" target="_blank" rel="noopener noreferrer">
-                  <Image
-                    src="/images/CO-RISK-LABS-LOGO_BLACK.png"
-                    alt="CO-RISK LABS"
-                    width={200}
-                    height={80}
-                    className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                  />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* With support from */}
-          <div>
-            <p className="text-lg font-bold text-gray-800 mb-8 text-center">With support from:</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-items-center">
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/drf.png"
-                  alt="DRF"
-                  width={120}
-                  height={60}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/hotosm.png"
-                  alt="HOT OSM"
-                  width={120}
-                  height={40}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/gfdrr.png"
-                  alt="GFDRR"
-                  width={120}
-                  height={40}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/worldbank.png"
-                  alt="World Bank"
-                  width={120}
-                  height={60}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/EOS_Logo_Horizontal_Colour.png"
-                  alt="Earth Observation"
-                  width={120}
-                  height={50}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/nanyang.png"
-                  alt="Nanyang Technological University"
-                  width={120}
-                  height={60}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/natural-capital_long.png"
-                  alt="Natural Capital"
-                  width={120}
-                  height={50}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/cmu.png"
-                  alt="Chiang Mai University"
-                  width={120}
-                  height={60}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/facebook_long.png"
-                  alt="Facebook"
-                  width={120}
-                  height={50}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-
-              <div className="flex items-center justify-center p-4">
-                <Image
-                  src="/images/nrf-2by1.png"
-                  alt="NRF"
-                  width={120}
-                  height={60}
-                  className="max-w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
