@@ -1,175 +1,45 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import Hero from '../../components/Hero';
+import ContentDescription from '../../components/ContentDescription';
+import KeyValues from '../../components/KeyValues';
 
 export default function Home() {
   return (
     <div className="font-sans">
       {/* Hero Section */}
-      <div 
-        className="relative min-h-screen bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/cropped-Week-4-6-copy3-2.jpg')`,
-          backgroundColor: 'rgb(51, 51, 51)',
-          paddingTop: '171.984px'
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className="relative z-10 flex items-center justify-center min-h-screen">
-          <div className="text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-            <h1 
-              className="text-white font-light leading-tight mb-0"
-              style={{
-                fontFamily: 'Muli, Helvetica, Arial, sans-serif',
-                fontSize: 'clamp(2.5rem, 5vw, 3.3rem)',
-                lineHeight: '1.14',
-                letterSpacing: '0.9px'
-              }}
-            >
-              Understanding Risk Field Lab on Urban Flooding, Chiang Mai 2019
-            </h1>
-          </div>
-        </div>
-      </div>
+      <Hero 
+        title="Understanding Risk Field Lab on Urban Flooding, Chiang Mai 2019"
+        backgroundImage="/cropped-Week-4-6-copy3-2.jpg"
+      />
 
       {/* Content Description Section */}
-      <div className="bg-white py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p 
-              className="text-gray-700 leading-relaxed max-w-4xl mx-auto"
-              style={{
-                fontSize: '1.1rem',
-                lineHeight: '1.6'
-              }}
-            >
-              A one-month long arts and technology un-conference in Chiang Mai, Thailand exploring critical design practices in disaster risk management, collaborative technology production, hacking and art. The event took place between June 2-28, 2019. The event design, outputs and participants are documented here.
-            </p>
-          </div>
-        </div>
-      </div>
+      <ContentDescription 
+        content="A one-month long arts and technology un-conference in Chiang Mai, Thailand exploring critical design practices in disaster risk management, collaborative technology production, hacking and art. The event took place between June 2-28, 2019. The event design, outputs and participants are documented here."
+      />
 
       {/* Key Values Section - 4 Cards */}
-      <div className="bg-white py-16 relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 shadow-lg bg-white rounded-lg overflow-hidden">
-            
-            {/* Crossing Disciplines - Gray Background */}
-            <div className="bg-gray-100 p-8 border-r border-gray-200 flex flex-col h-full">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-                <h5 className="text-sm font-bold text-gray-900 uppercase tracking-wider">
-                  CROSSING DISCIPLINES
-                </h5>
-              </div>
-              <div className="flex-grow">
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                  Artists, engineers, geographers, hydrologists, hackers, practitioners and mappers learnt about each other&apos;s methods and tools to develop deeper collaborations.
-                </p>
-              </div>
-              <Link 
-                href="/themes" 
-                className="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium mt-auto"
-              >
-                Read more
-                <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
-            </div>
-
-            {/* Output Oriented - Orange Background */}
-            <div className="bg-orange-500 p-8 text-white border-r border-orange-400 flex flex-col h-full">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <svg className="w-6 h-6 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-                  </svg>
-                </div>
-                <h5 className="text-sm font-bold uppercase tracking-wider">
-                  OUTPUT ORIENTED
-                </h5>
-              </div>
-              <div className="flex-grow">
-                <p className="text-orange-100 mb-6 text-sm leading-relaxed">
-                  Make something, document what you did, and share your work. Participants developed new flood models, exhibited art projects, mapped information flows, and so much more.
-                </p>
-              </div>
-              <Link 
-                href="/outputs" 
-                className="inline-flex items-center px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium mt-auto"
-              >
-                Explore more
-                <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
-            </div>
-
-            {/* Glocal Participation - Gray Background */}
-            <div className="bg-gray-100 p-8 border-r border-gray-200 flex flex-col h-full">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h5 className="text-sm font-bold text-gray-900 uppercase tracking-wider">
-                  GLOCAL PARTICIPATION
-                </h5>
-              </div>
-              <div className="flex-grow">
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                  Bringing skilled and passionate collaborators everywhere from Chiang Mai to Mexico into a single space and enable meaningful participation.
-                </p>
-              </div>
-              <Link 
-                href="/people" 
-                className="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium mt-auto"
-              >
-                Explore more
-                <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
-            </div>
-
-            {/* Fluid Timeframe - Orange Background */}
-            <div className="bg-orange-500 p-8 text-white flex flex-col h-full">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <svg className="w-6 h-6 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-                <h5 className="text-sm font-bold uppercase tracking-wider">
-                  FLUID TIMEFRAME
-                </h5>
-              </div>
-              <div className="flex-grow">
-                <p className="text-orange-100 mb-6 text-sm leading-relaxed">
-                  come when you want, stay as long as you need — the field lab&apos;s timetable is defined by its participants, who self-initiate their projects and deadlines.
-                </p>
-              </div>
-              <Link 
-                href="/event-structure" 
-                className="inline-flex items-center px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium mt-auto"
-              >
-                Read more
-                <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <KeyValues 
+        themesTitle="CROSSING DISCIPLINES"
+        themesDescription="Artists, engineers, geographers, hydrologists, hackers, practitioners and mappers learnt about each other's methods and tools to develop deeper collaborations."
+        themesIconPath="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+        
+        outputsTitle="OUTPUT ORIENTED"
+        outputsDescription="Make something, document what you did, and share your work. Participants developed new flood models, exhibited art projects, mapped information flows, and so much more."
+        outputsIconPath="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"
+        
+        peopleTitle="GLOCAL PARTICIPATION"
+        peopleDescription="Bringing skilled and passionate collaborators everywhere from Chiang Mai to Mexico into a single space and enable meaningful participation."
+        peopleIconPath="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        
+        eventStructureTitle="FLUID TIMEFRAME"
+        eventStructureDescription="come when you want, stay as long as you need — the field lab's timetable is defined by its participants, who self-initiate their projects and deadlines."
+        eventStructureIconPath="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+        
+        themePrimaryColor="#f97316"
+        themeSecondaryColor="#fb923c"
+      />
 
       {/* Video Section */}
       <div 
@@ -180,12 +50,12 @@ export default function Home() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 shadow-lg rounded-lg overflow-hidden">
-            <div className="bg-orange-500 text-white p-12 flex flex-col justify-center">
+            <div className="bg-gray-900 text-white p-12 flex flex-col justify-center">
               <h5 className="text-sm font-bold mb-4 uppercase tracking-wider">What is the field lab?</h5>
               <h2 className="text-3xl lg:text-4xl font-bold mb-8 leading-tight">Check out the video to find out!</h2>
               <Link 
                 href="/outputs/#headvid" 
-                className="inline-flex items-center px-6 py-3 bg-yellow-400 text-gray-900 rounded-md hover:bg-yellow-300 transition-colors font-medium text-sm"
+                className="inline-flex items-center px-6 py-3 bg-orange-400 text-gray-900 rounded-md hover:bg-orange-300 transition-colors font-medium text-sm"
               >
                 Want to see more? Click here for more field lab videos!
               </Link>
@@ -196,13 +66,13 @@ export default function Home() {
                 backgroundImage: "url('https://urfieldlab.com/wp-content/uploads/2019/06/Week-4-6222.jpg')"
               }}
             >
-              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+              <div className="absolute inset-0 bg-black/40"></div>
               <div className="relative z-10">
                 <Link 
                   href="https://www.youtube.com/watch?v=B39NdRehbBE"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-20 h-20 bg-yellow-400 text-gray-900 rounded-full hover:bg-yellow-300 transition-colors"
+                  className="flex items-center justify-center w-20 h-20 bg-orange-400 text-gray-900 rounded-full hover:bg-orange-300 transition-colors"
                 >
                   <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
@@ -222,7 +92,7 @@ export default function Home() {
           backgroundImage: "url('https://urfieldlab.com/wp-content/uploads/2019/08/UNADJUSTEDNONRAW_thumb_b5e6.jpg')"
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 bg-black/80"></div>
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             className="text-2xl lg:text-4xl leading-relaxed"
@@ -296,6 +166,8 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {/* Card 1 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -307,9 +179,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Living with Water in Chiang Mai</h4>
-                <p className="text-gray-600 mb-4 text-justify">
-                  A Medium blogpost that discusses experiences in risk communications. The blog post served also as an entry to the #vizRisk challenge, organized by UR with Mapbox and the Data Visualization Society.
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Living with Water in Chiang Mai">
+                  <span className="line-clamp-2">
+                    Living with Water in Chiang Mai
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  A Medium blog post discussing risk communications experiences during the field lab. It served as an entry to the #vizRisk challenge by Understanding Risk with Mapbox and the Data Visualization Society, featuring community engagement strategies.
                 </p>
                 <Link 
                   href="https://medium.com/ur-field-lab-chiang-mai/living-with-water-d9b671296ba6"
@@ -322,6 +198,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Card 2 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -333,9 +210,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">SEADRIF User Experience Sprint</h4>
-                <p className="text-gray-600 mb-4">
-                  A user-design approach was used to create a website prototype for the SEADRIF platform. The platform aims to inform users of real-time flood risks of participating countries.
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="SEADRIF User Experience Sprint">
+                  <span className="line-clamp-2">
+                    SEADRIF User Experience Sprint
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  A user-centered design approach creating a website prototype for the SEADRIF platform. The platform informs users of real-time flood risks across Southeast Asian countries through extensive user research and testing phases.
                 </p>
                 <Link 
                   href="/seadrif-webpage-prototype"
@@ -346,6 +227,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Card 3 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -357,9 +239,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Living with Water Art & Science Exhibition Write Up</h4>
-                <p className="text-gray-600 mb-4">
-                  During June 24-28, the Chiang Mai Urban Flooding Field Lab held a collaborative arts workshop on the theme &ldquo;Living with Water.&rdquo; This write up describes the process and outputs of the workshop
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Living with Water Art & Science Exhibition Write Up">
+                  <span className="line-clamp-2">
+                    Living with Water Art & Science Exhibition Write Up
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  Documentation of a collaborative arts workshop held June 24-28 on &ldquo;Living with Water.&rdquo; The write-up describes creative processes and outputs bringing together artists, scientists, and community members to explore urban flooding solutions.
                 </p>
                 <Link 
                   href="/living-with-water-art-science-workshop-and-exhibition"
@@ -370,6 +256,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Card 4 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -381,9 +268,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Field Lab Zine: Deconstructed Field Lab</h4>
-                <p className="text-gray-600 mb-4 text-justify">
-                  A zine is an independently published magazine that aims to disseminate information widely through inexpensive and effective means. A group of participants came together to create a Field Lab Zine that captures the fun moments of the un-conference
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Field Lab Zine: Deconstructed Field Lab">
+                  <span className="line-clamp-2">
+                    Field Lab Zine: Deconstructed Field Lab
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  An independently published zine created by participants to capture fun moments and collaborative spirit of the un-conference. Features illustrations, photography, interviews, and creative reflections from the field lab experience.
                 </p>
                 <Link 
                   href="/field-lab-zine"
@@ -394,6 +285,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Card 5 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -405,9 +297,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Persona Cards for Nature-based Solutions</h4>
-                <p className="text-gray-600 mb-4 text-justify">
-                  Persona cards designed to help users understand the complexities of urban flooding have been created during the workshop. These personas were based of people, animals, and environments of Chiang Mai.
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="Persona Cards for Nature-based Solutions">
+                  <span className="line-clamp-2">
+                    Persona Cards for Nature-based Solutions
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  Educational persona cards designed to help understand urban flooding complexities. Based on real people, animals, and environmental systems of Chiang Mai, serving as tools for stakeholders implementing flood management strategies.
                 </p>
                 <Link 
                   href="/persona-card-deck"
@@ -418,6 +314,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Card 6 */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="h-48 bg-gray-200 bg-cover bg-center">
                 <Image
@@ -429,9 +326,13 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">What is the Field Lab?</h4>
-                <p className="text-gray-600 mb-4 text-justify">
-                  In this video participants explain the intent behind the event, their motivation for attending and some of the projects they worked on over the course of the month. Watch this video to learn more about the event and its sponsors.
+                <h4 className="text-xl font-semibold mb-3 text-gray-900 h-12 overflow-hidden relative" title="What is the Field Lab?">
+                  <span className="line-clamp-2">
+                    What is the Field Lab?
+                  </span>
+                </h4>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed h-32">
+                  Video featuring participants explaining the event&apos;s intent, their motivation for attending, and projects worked on during the month. Provides insights into collaborative approaches to disaster risk reduction and urban flooding challenges.
                 </p>
                 <Link 
                   href="https://youtu.be/Q0RTsu89kvk"
