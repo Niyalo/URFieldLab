@@ -71,10 +71,10 @@ export default async function WorkingGroupsPage({ params }: Props) {
                 key={group._id}
                 className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
               >
-                {group.mainImageURL && (
+                {(group.mainImageURL || group.iconURL) && (
                   <div className="relative w-full h-56">
                     <Image
-                      src={group.mainImageURL}
+                      src={group.mainImageURL || group.iconURL || ''}
                       alt={group.title}
                       fill
                       className="object-cover"
@@ -82,6 +82,18 @@ export default async function WorkingGroupsPage({ params }: Props) {
                   </div>
                 )}
                 <div className="p-6 flex flex-col flex-grow">
+                  {!group.mainImageURL && group.iconURL && (
+                    <div className="flex items-center mb-4">
+                      <div className="relative w-12 h-12 mr-3">
+                        <Image
+                          src={group.iconURL}
+                          alt={`${group.title} icon`}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
                   <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
                     {group.title}
                   </h2>

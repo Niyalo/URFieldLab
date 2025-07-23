@@ -36,6 +36,177 @@ export interface Year {
   email?: string;
   facebook?: string;
   description?: string;
+  themeColor?: {
+    hex: string;
+  };
+  pageTitle?: string;
+  heroImage?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  heroImageURL?: string;
+  contentDescription?: string;
+  keyValues?: {
+    themes?: {
+      title: string;
+      description: string;
+      icon?: {
+        asset: {
+          _ref: string;
+          url: string;
+        };
+      };
+      iconURL?: string;
+    };
+    outputs?: {
+      title: string;
+      description: string;
+      icon?: {
+        asset: {
+          _ref: string;
+          url: string;
+        };
+      };
+      iconURL?: string;
+    };
+    people?: {
+      title: string;
+      description: string;
+      icon?: {
+        asset: {
+          _ref: string;
+          url: string;
+        };
+      };
+      iconURL?: string;
+    };
+    eventStructure?: {
+      title: string;
+      description: string;
+      icon?: {
+        asset: {
+          _ref: string;
+          url: string;
+        };
+      };
+      iconURL?: string;
+    };
+  };
+  pageContent?: PageContentSection[];
+}
+
+export type PageContentSection = 
+  | VideoSection
+  | QuoteSection  
+  | ProjectThemesSection
+  | CategoriesSection
+  | FeaturedOutputsSection
+  | LogoViewsSection;
+
+export interface VideoSection {
+  _type: 'videoSection';
+  _key: string;
+  heading: string;
+  title: string;
+  linkText: string;
+  linkHref: string;
+  videoLink: string;
+  backgroundImage: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  backgroundImageURL?: string;
+  buttonTextColor?: {
+    hex: string;
+  };
+}
+
+export interface QuoteSection {
+  _type: 'quoteSection';
+  _key: string;
+  quote: string;
+  backgroundImage: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  backgroundImageURL?: string;
+}
+
+export interface ProjectThemesSection {
+  _type: 'projectThemes';
+  _key: string;
+  title: string;
+  description: string;
+  titleHref?: string;
+}
+
+export interface CategoriesSection {
+  _type: 'categories';
+  _key: string;
+  title: string;
+  description: string;
+  titleHref?: string;
+  themes: ThemeItem[];
+}
+
+export interface ThemeItem {
+  title: string;
+  href: string;
+  icon?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  iconURL?: string;
+}
+
+export interface FeaturedOutputsSection {
+  _type: 'featuredOutputs';
+  _key: string;
+  title: string;
+  outputs: OutputItem[];
+}
+
+export interface OutputItem {
+  imageUrl: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  imageURL?: string;
+  title: string;
+  description: string;
+  linkText: string;
+  linkUrl: string;
+}
+
+export interface LogoViewsSection {
+  _type: 'logoViews';
+  _key: string;
+  title: string;
+  logos: LogoItem[];
+}
+
+export interface LogoItem {
+  imageUrl: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  imageURL?: string;
+  alt: string;
+  linkUrl: string;
+  width?: number;
+  height?: number;
 }
 
 export interface Author {
@@ -65,6 +236,13 @@ export interface WorkingGroup {
   year: Year;
   description?: string;
   content?: PortableTextBlock[];
+  icon?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  iconURL?: string;
   mainImage?: {
     asset: {
       _ref: string;
@@ -103,9 +281,17 @@ export interface Article {
   buttonText?: string;
   authors?: Author[];
   workingGroups?: WorkingGroup[];
-  // The body can be complex, so we'll use 'any' for now on the client side
-  body?: any[]; 
+  // The body can contain various content blocks
+  body?: ContentBlock[]; 
 }
+
+export type ContentBlock = 
+  | { _type: 'textBlock'; content: PortableTextBlock[] }
+  | { _type: 'subheading'; text: string }
+  | { _type: 'list'; items: string[] }
+  | { _type: 'imageObject'; asset: SanityImageSource; caption?: string }
+  | { _type: 'posterObject'; asset: SanityImageSource }
+  | { _type: 'pdfFile'; asset: { url: string; originalFilename?: string } };
 
 export interface Page {
   _id: string;
@@ -141,7 +327,199 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
       logo,
       email,
       facebook,
-      description
+      description,
+      themeColor,
+      pageTitle,
+      heroImage { asset-> { _ref, url } },
+      "heroImageURL": heroImage.asset->url,
+      contentDescription,
+      keyValues {
+        themes {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        outputs {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        people {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        eventStructure {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        }
+      },
+      pageContent[] {
+        _type,
+        _key,
+        _type == "videoSection" => {
+          heading,
+          title,
+          linkText,
+          linkHref,
+          videoLink,
+          backgroundImage { asset-> { _ref, url } },
+          "backgroundImageURL": backgroundImage.asset->url,
+          buttonTextColor
+        },
+        _type == "quoteSection" => {
+          quote,
+          backgroundImage { asset-> { _ref, url } },
+          "backgroundImageURL": backgroundImage.asset->url
+        },
+        _type == "projectThemes" => {
+          title,
+          description,
+          titleHref
+        },
+        _type == "categories" => {
+          title,
+          description,
+          titleHref,
+          themes[] {
+            title,
+            href,
+            icon { asset-> { _ref, url } },
+            "iconURL": icon.asset->url
+          }
+        },
+        _type == "featuredOutputs" => {
+          title,
+          outputs[] {
+            imageUrl { asset-> { _ref, url } },
+            "imageURL": imageUrl.asset->url,
+            title,
+            description,
+            linkText,
+            linkUrl
+          }
+        },
+        _type == "logoViews" => {
+          title,
+          logos[] {
+            imageUrl { asset-> { _ref, url } },
+            "imageURL": imageUrl.asset->url,
+            alt,
+            linkUrl,
+            width,
+            height
+          }
+        }
+      }
+    }`,
+    { slug }
+  );
+};
+
+export const getYearPageData = async (slug: string): Promise<Year | null> => {
+  return client.fetch(
+    groq`*[_type == "year" && slug.current == $slug][0]{
+      _id,
+      year,
+      title,
+      slug,
+      logo,
+      email,
+      facebook,
+      description,
+      themeColor,
+      pageTitle,
+      heroImage { asset-> { _ref, url } },
+      "heroImageURL": heroImage.asset->url,
+      contentDescription,
+      keyValues {
+        themes {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        outputs {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        people {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        },
+        eventStructure {
+          title,
+          description,
+          icon { asset-> { _ref, url } },
+          "iconURL": icon.asset->url
+        }
+      },
+      pageContent[] {
+        _type,
+        _key,
+        _type == "videoSection" => {
+          heading,
+          title,
+          linkText,
+          linkHref,
+          videoLink,
+          backgroundImage { asset-> { _ref, url } },
+          "backgroundImageURL": backgroundImage.asset->url,
+          buttonTextColor
+        },
+        _type == "quoteSection" => {
+          quote,
+          backgroundImage { asset-> { _ref, url } },
+          "backgroundImageURL": backgroundImage.asset->url
+        },
+        _type == "projectThemes" => {
+          title,
+          description,
+          titleHref
+        },
+        _type == "categories" => {
+          title,
+          description,
+          titleHref,
+          themes[] {
+            title,
+            href,
+            icon { asset-> { _ref, url } },
+            "iconURL": icon.asset->url
+          }
+        },
+        _type == "featuredOutputs" => {
+          title,
+          outputs[] {
+            imageUrl { asset-> { _ref, url } },
+            "imageURL": imageUrl.asset->url,
+            title,
+            description,
+            linkText,
+            linkUrl
+          }
+        },
+        _type == "logoViews" => {
+          title,
+          logos[] {
+            imageUrl { asset-> { _ref, url } },
+            "imageURL": imageUrl.asset->url,
+            alt,
+            linkUrl,
+            width,
+            height
+          }
+        }
+      }
     }`,
     { slug }
   );
@@ -198,6 +576,8 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
         slug,
         "year": year->,
         description,
+        icon { asset-> { _ref, url } },
+        "iconURL": icon.asset->url,
         mainImage { asset-> { _ref, url } },
         "mainImageURL": mainImage.asset->url,
         "members": members[]->{ name, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url, role },
@@ -228,6 +608,8 @@ export async function getWorkingGroup(slug: string): Promise<WorkingGroup | null
         "year": year->,
         description,
         content,
+        icon { asset-> { _ref, url } },
+        "iconURL": icon.asset->url,
         mainImage { asset-> { _ref, url } },
         "mainImageURL": mainImage.asset->url,
         "members": members[]->{ name, email, role, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url },

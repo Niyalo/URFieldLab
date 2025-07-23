@@ -43,6 +43,11 @@ export default function ProjectThemes({
            path.startsWith('../');
   };
 
+  // Helper function to check if the URL is an SVG
+  const isSvg = (path: string) => {
+    return path.toLowerCase().includes('.svg') || path.toLowerCase().includes('svg');
+  };
+
   // Generate hover colors
   const generateHoverColor = (color: string) => {
     const hex = color.replace('#', '');
@@ -101,21 +106,38 @@ export default function ProjectThemes({
                     backgroundColor: themeColor
                   }}
                 >
-                  {isImageUrl(theme.icon) ? (
-                    <Image 
-                      src={theme.icon} 
-                      alt={theme.title}
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 object-contain"
-                      style={{
-                        filter: 'brightness(0) invert(1)' // Make image white
-                      }}
-                    />
-                  ) : (
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  {theme.icon && isImageUrl(theme.icon) ? (
+                    isSvg(theme.icon) ? (
+                      // For SVG images, use img tag instead of Next.js Image for better compatibility
+                      <img 
+                        src={theme.icon} 
+                        alt={theme.title}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 object-contain"
+                        style={{
+                          filter: 'brightness(0) invert(1)' // Make image white
+                        }}
+                      />
+                    ) : (
+                      <Image 
+                        src={theme.icon} 
+                        alt={theme.title}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 object-contain"
+                        style={{
+                          filter: 'brightness(0) invert(1)' // Make image white
+                        }}
+                      />
+                    )
+                  ) : theme.icon ? (
+                    <svg className="w-6 h-6" fill="white" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d={theme.icon} clipRule="evenodd" />
                     </svg>
+                  ) : (
+                    // Fallback icon if no icon is provided
+                    <div className="w-6 h-6 bg-white rounded" />
                   )}
                 </div>
                 <h5 

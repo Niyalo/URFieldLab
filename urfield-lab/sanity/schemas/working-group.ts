@@ -35,6 +35,16 @@ export const workingGroup = defineType({
       rows: 4,
     }),
     defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'image',
+      options: {
+        hotspot: true,
+        accept: 'image/svg+xml,image/*',
+      },
+      description: 'Icon for the working group (SVG recommended)',
+    }),
+    defineField({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
@@ -47,7 +57,15 @@ export const workingGroup = defineType({
     select: {
       title: 'title',
       subtitle: 'status',
-      media: 'mainImage',
+      media: 'icon',
+      mainImage: 'mainImage',
+    },
+    prepare({title, subtitle, media, mainImage}) {
+      return {
+        title,
+        subtitle,
+        media: media || mainImage,
+      }
     },
   },
 })

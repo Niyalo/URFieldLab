@@ -27,6 +27,7 @@ interface KeyValuesProps {
   eventStructureDescription: string;
   eventStructureIconPath: string;
   themeColor: string;
+  year: string;
 }
 
 export default function KeyValues({
@@ -42,7 +43,8 @@ export default function KeyValues({
   eventStructureTitle,
   eventStructureDescription,
   eventStructureIconPath,
-  themeColor = '#f97316' // orange-500 default
+  themeColor = '#f97316', // orange-500 default
+  year
 }: KeyValuesProps) {
   // Generate secondary color by brightening the primary color by ~15%
   const generateSecondaryColor = (color: string) => {
@@ -63,11 +65,16 @@ export default function KeyValues({
            path.startsWith('../');
   };
 
+  // Helper function to check if the URL is an SVG
+  const isSvg = (path: string) => {
+    return path.toLowerCase().includes('.svg') || path.toLowerCase().includes('svg');
+  };
+
   const keyValues: KeyValue[] = [
     {
       title: themesTitle,
       description: themesDescription,
-      href: '/themes',
+      href: `/${year}/themes`,
       iconPath: themesIconPath,
       backgroundColor: 'gray',
       buttonText: 'Read more'
@@ -75,7 +82,7 @@ export default function KeyValues({
     {
       title: outputsTitle,
       description: outputsDescription,
-      href: '/outputs',
+      href: `/${year}/outputs`,
       iconPath: outputsIconPath,
       backgroundColor: 'orange',
       buttonText: 'Explore more'
@@ -83,7 +90,7 @@ export default function KeyValues({
     {
       title: peopleTitle,
       description: peopleDescription,
-      href: '/people',
+      href: `/${year}/people`,
       iconPath: peopleIconPath,
       backgroundColor: 'gray',
       buttonText: 'Explore more'
@@ -91,7 +98,7 @@ export default function KeyValues({
     {
       title: eventStructureTitle,
       description: eventStructureDescription,
-      href: '/event-structure',
+      href: `/${year}/event-structure`,
       iconPath: eventStructureIconPath,
       backgroundColor: 'orange',
       buttonText: 'Read more'
@@ -124,30 +131,42 @@ export default function KeyValues({
                     backgroundColor: item.backgroundColor === 'gray' ? themeColor : undefined
                   }}
                 >
-                  {isImageUrl(item.iconPath) ? (
-                    <Image 
-                      src={item.iconPath} 
-                      alt={item.title}
-                      width={24}
-                      height={24}
-                      className="w-6 h-6 object-contain"
-                      style={{
-                        filter: item.backgroundColor === 'orange' ? 'brightness(0) invert(1)' : undefined
-                      }}
-                    />
-                  ) : (
+                  {item.iconPath && isImageUrl(item.iconPath) ? (
+                    isSvg(item.iconPath) ? (
+                      // For SVG images, use img tag instead of Next.js Image for better compatibility
+                      <img 
+                        src={item.iconPath} 
+                        alt={item.title}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 object-contain"
+                        style={{
+                          filter: item.backgroundColor === 'orange' ? 'brightness(0) invert(1)' : undefined
+                        }}
+                      />
+                    ) : (
+                      <Image 
+                        src={item.iconPath} 
+                        alt={item.title}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 object-contain"
+                        style={{
+                          filter: item.backgroundColor === 'orange' ? 'brightness(0) invert(1)' : undefined
+                        }}
+                      />
+                    )
+                  ) : item.iconPath ? (
                     <svg 
-                      className={`w-6 h-6 ${
-                        item.backgroundColor === 'gray' ? 'text-white' : ''
-                      }`} 
-                      fill="currentColor" 
+                      className="w-6 h-6" 
+                      fill={item.backgroundColor === 'orange' ? 'white' : themeColor}
                       viewBox="0 0 20 20"
-                      style={{
-                        color: item.backgroundColor === 'orange' ? themeColor : undefined
-                      }}
                     >
                       <path d={item.iconPath} />
                     </svg>
+                  ) : (
+                    // Fallback icon if no iconPath is provided
+                    <div className="w-6 h-6 bg-gray-400 rounded" />
                   )}
                 </div>
                 <h5 className={`text-sm font-bold ${
