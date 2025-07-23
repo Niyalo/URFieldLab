@@ -17,6 +17,7 @@
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^4.0.1",
     "bcryptjs": "^3.0.2",
+    "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "iron-session": "^8.0.4",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/cheerio": "^0.22.35",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-beautiful-dnd": "^13.1.8",

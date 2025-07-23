@@ -13,7 +13,7 @@ export const author = defineType({
     }),
     defineField({
       name: 'login_name',
-      title: 'Login Nmae',
+      title: 'Login Name',
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
