@@ -22,6 +22,7 @@ export default function DashboardPage({ params }: Props) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [authorProfile, setAuthorProfile] = useState<Author | null>(null);
+    const loginFormRef = useRef<HTMLFormElement>(null);
 
     // State for article management
     const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm'>('dashboard');
@@ -30,6 +31,7 @@ export default function DashboardPage({ params }: Props) {
     const [availableWGs, setAvailableWGs] = useState<WorkingGroup[]>([]);
     const [availableAuthors, setAvailableAuthors] = useState<Author[]>([]);
     const [isPublishing, setIsPublishing] = useState(false); // New state for loading
+    const [isSubmitting, setIsSubmitting] = useState(false);
      
     useEffect(() => {
         if (unwrappedParams.year) {
@@ -71,10 +73,12 @@ export default function DashboardPage({ params }: Props) {
     e.preventDefault();
     setError('');
     setMessage('');
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
     if (!yearData) {
       setError("Could not determine the event year. Please try again later.");
+      setIsSubmitting(false);
       return;
     }
     formData.append('yearId', yearData._id);
@@ -88,11 +92,14 @@ export default function DashboardPage({ params }: Props) {
       if (res.ok) {
         setMessage(data.message);
         setIsSigningUp(false);
+        loginFormRef.current?.reset();
       } else {
         setError(data.message || 'An error occurred during signup.');
       }
     } catch {
       setError('An unexpected error occurred.');
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
@@ -100,17 +107,25 @@ export default function DashboardPage({ params }: Props) {
     e.preventDefault();
     setError('');
     setMessage('');
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     const login_name = formData.get('login_name') as string;
     const password = formData.get('password') as string;
 
     try {
       const data = await login(login_name, password);
-      if (data.error) {
-        setError(data.error);
+      
+      // Align with the type definition: check for the 'error' property.
+      if (data && data.message) {
+        setError(data.message);
       }
-    } catch {
-      setError('An unexpected error occurred.');
+      // On successful login, the useAuth context will handle the state update.
+    } catch (err) {
+      // This will catch network errors or if the login function throws an exception.
+      setError('An unexpected error occurred during login.');
+      console.error(err);
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
@@ -200,7 +215,7 @@ export default function DashboardPage({ params }: Props) {
                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                   <Image
                     className="h-8 w-8 rounded-full object-cover"
-                    src={user.pictureURL || '/default-avatar.png'}
+                    src={user.pictureURL || '/default profile pic.webp'}
                     alt="User avatar"
                     width={32}
                     height={32}
@@ -242,7 +257,65 @@ export default function DashboardPage({ params }: Props) {
       <main className="max-w-7xl mx-auto p-8 sm:p-12">
         {!user ? (
           <div className="flex justify-center">
-            {/* Login/Signup Form remains the same */}
+            <div className="w-full max-w-md">
+              {isSigningUp ? (
+                <form onSubmit={handleSignup} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                  <h2 className="text-2xl mb-4 text-center font-bold">Sign Up</h2>
+                  {error && <p className="my-4 text-center text-red-500">{error}</p>}
+                  {message && <p className="my-4 text-center text-green-500">{message}</p>}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">Full Name</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" name="name" type="text" placeholder="Full Name" required />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login_name_signup">Login Name</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="login_name_signup" name="login_name" type="text" placeholder="Login Name" required autoComplete="username" />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Email" autoComplete="email" />
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password_signup">Password</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password_signup" name="password" type="password" placeholder="******************" required autoComplete="new-password" />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="picture">Profile Picture</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="picture" name="picture" type="file" accept="image/*" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-400" type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+                    </button>
+                    <button type="button" onClick={() => { setIsSigningUp(false); setError(''); setMessage(''); loginFormRef.current?.reset(); }} className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800" disabled={isSubmitting}>
+                      Already have an account?
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <form ref={loginFormRef} onSubmit={handleLogin} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                  <h2 className="text-2xl mb-4 text-center font-bold">Login</h2>
+                  {error && <p className="my-4 text-center text-red-500">{error}</p>}
+                  {message && <p className="my-4 text-center text-green-500">{message}</p>}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login_name">Login Name</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="login_name" name="login_name" type="text" placeholder="Login Name" required autoComplete="username" />
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password</label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="******************" required autoComplete="current-password" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-400" type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? 'Signing In...' : 'Sign In'}
+                    </button>
+                    <button type="button" onClick={() => { setIsSigningUp(true); setError(''); setMessage(''); signupFormRef.current?.reset(); }} className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800" disabled={isSubmitting}>
+                      Register as an Author
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         ) : (
           <div>
