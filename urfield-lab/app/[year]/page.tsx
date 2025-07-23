@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Hero from '../../components/Hero';
 import ContentDescription from '../../components/ContentDescription';
 import KeyValues from '../../components/KeyValues';
+import VideoSection from '../../components/VideoSection';
+import QuoteSection from '../../components/QuoteSection';
 
 export default function Home() {
   return (
@@ -37,76 +39,27 @@ export default function Home() {
         eventStructureDescription="come when you want, stay as long as you need — the field lab's timetable is defined by its participants, who self-initiate their projects and deadlines."
         eventStructureIconPath="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
         
-        themePrimaryColor="#f97316"
-        themeSecondaryColor="#fb923c"
+        themeColor="#f97316"
       />
 
       {/* Video Section */}
-      <div 
-        className="relative py-16"
-        style={{
-          backgroundColor: 'rgba(251, 192, 45, 0.663)'
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 shadow-lg rounded-lg overflow-hidden">
-            <div className="bg-gray-900 text-white p-12 flex flex-col justify-center">
-              <h5 className="text-sm font-bold mb-4 uppercase tracking-wider">What is the field lab?</h5>
-              <h2 className="text-3xl lg:text-4xl font-bold mb-8 leading-tight">Check out the video to find out!</h2>
-              <Link 
-                href="/outputs/#headvid" 
-                className="inline-flex items-center px-6 py-3 bg-orange-400 text-gray-900 rounded-md hover:bg-orange-300 transition-colors font-medium text-sm"
-              >
-                Want to see more? Click here for more field lab videos!
-              </Link>
-            </div>
-            <div 
-              className="relative bg-cover bg-center min-h-80 lg:min-h-full flex items-center justify-center"
-              style={{
-                backgroundImage: "url('https://urfieldlab.com/wp-content/uploads/2019/06/Week-4-6222.jpg')"
-              }}
-            >
-              <div className="absolute inset-0 bg-black/40"></div>
-              <div className="relative z-10">
-                <Link 
-                  href="https://www.youtube.com/watch?v=B39NdRehbBE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-20 h-20 bg-orange-400 text-gray-900 rounded-full hover:bg-orange-300 transition-colors"
-                >
-                  <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <VideoSection 
+        heading="What is the field lab?"
+        title="Check out the video to find out!"
+        linkText="Want to see more? Click here for more field lab videos!"
+        linkHref="/outputs/#headvid"
+        videoLink="https://www.youtube.com/watch?v=B39NdRehbBE"
+        backgroundImage="https://urfieldlab.com/wp-content/uploads/2019/06/Week-4-6222.jpg"
+        themeColor="#f97316"
+        buttonTextColor="#1f2937"
+      />
 
       {/* Quote Section */}
-      <div 
-        className="relative py-20 text-white text-center bg-cover bg-center"
-        style={{
-          backgroundColor: '#f5fafd',
-          backgroundImage: "url('https://urfieldlab.com/wp-content/uploads/2019/08/UNADJUSTEDNONRAW_thumb_b5e6.jpg')"
-        }}
-      >
-        <div className="absolute inset-0 bg-black/80"></div>
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 
-            className="text-2xl lg:text-4xl leading-relaxed"
-            style={{
-              fontFamily: 'Muli, Helvetica, Arial, sans-serif',
-              fontWeight: '300'
-            }}
-          >
-            <span className="text-orange-400">
-              We believe in open space — creating a shared experience of collaboration and co-production where people of diverse disciplines and backgrounds work as equals, drive the event agenda, and share their work freely.
-            </span>
-          </h2>
-        </div>
-      </div>
+      <QuoteSection 
+        quote="We believe in open space — creating a shared experience of collaboration and co-production where people of diverse disciplines and backgrounds work as equals, drive the event agenda, and share their work freely."
+        backgroundImage="https://urfieldlab.com/wp-content/uploads/2019/08/UNADJUSTEDNONRAW_thumb_b5e6.jpg"
+        textColor="#fb923c"
+      />
 
       {/* Project Themes Section */}
       <div 

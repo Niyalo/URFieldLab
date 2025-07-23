@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface KeyValue {
   title: string;
@@ -25,8 +26,7 @@ interface KeyValuesProps {
   eventStructureTitle: string;
   eventStructureDescription: string;
   eventStructureIconPath: string;
-  themePrimaryColor?: string;
-  themeSecondaryColor?: string;
+  themeColor: string;
 }
 
 export default function KeyValues({
@@ -42,9 +42,27 @@ export default function KeyValues({
   eventStructureTitle,
   eventStructureDescription,
   eventStructureIconPath,
-  themePrimaryColor = '#f97316', // orange-500 default
-  themeSecondaryColor = '#fb923c' // orange-400 default
+  themeColor = '#f97316' // orange-500 default
 }: KeyValuesProps) {
+  // Generate secondary color by brightening the primary color by ~15%
+  const generateSecondaryColor = (color: string) => {
+    // This CSS filter brightens and slightly saturates the color
+    // to transform #f97316 into something close to #fb923c
+    return {
+      backgroundColor: color,
+      filter: 'brightness(1.15) saturate(1.05)'
+    };
+  };
+
+  // Helper function to determine if iconPath is a URL or SVG path
+  const isImageUrl = (path: string) => {
+    return path.startsWith('http://') || 
+           path.startsWith('https://') || 
+           path.startsWith('/') || 
+           path.startsWith('./') || 
+           path.startsWith('../');
+  };
+
   const keyValues: KeyValue[] = [
     {
       title: themesTitle,
@@ -93,8 +111,8 @@ export default function KeyValues({
                   : 'text-white border-r'
               } p-8 flex flex-col h-full ${index === keyValues.length - 1 ? 'border-r-0' : ''}`}
               style={{
-                backgroundColor: item.backgroundColor === 'orange' ? themePrimaryColor : undefined,
-                borderRightColor: item.backgroundColor === 'orange' ? themePrimaryColor : undefined
+                backgroundColor: item.backgroundColor === 'orange' ? themeColor : undefined,
+                borderRightColor: item.backgroundColor === 'orange' ? themeColor : undefined
               }}
             >
               <div className="flex items-center mb-6">
@@ -103,21 +121,34 @@ export default function KeyValues({
                     item.backgroundColor === 'gray' ? '' : 'bg-gray-100'
                   } rounded-full flex items-center justify-center mr-4 flex-shrink-0`}
                   style={{
-                    backgroundColor: item.backgroundColor === 'gray' ? themePrimaryColor : undefined
+                    backgroundColor: item.backgroundColor === 'gray' ? themeColor : undefined
                   }}
                 >
-                  <svg 
-                    className={`w-6 h-6 ${
-                      item.backgroundColor === 'gray' ? 'text-white' : ''
-                    }`} 
-                    fill="currentColor" 
-                    viewBox="0 0 20 20"
-                    style={{
-                      color: item.backgroundColor === 'orange' ? themePrimaryColor : undefined
-                    }}
-                  >
-                    <path d={item.iconPath} />
-                  </svg>
+                  {isImageUrl(item.iconPath) ? (
+                    <Image 
+                      src={item.iconPath} 
+                      alt={item.title}
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 object-contain"
+                      style={{
+                        filter: item.backgroundColor === 'orange' ? 'brightness(0) invert(1)' : undefined
+                      }}
+                    />
+                  ) : (
+                    <svg 
+                      className={`w-6 h-6 ${
+                        item.backgroundColor === 'gray' ? 'text-white' : ''
+                      }`} 
+                      fill="currentColor" 
+                      viewBox="0 0 20 20"
+                      style={{
+                        color: item.backgroundColor === 'orange' ? themeColor : undefined
+                      }}
+                    >
+                      <path d={item.iconPath} />
+                    </svg>
+                  )}
                 </div>
                 <h5 className={`text-sm font-bold ${
                   item.backgroundColor === 'gray' ? 'text-white' : 'text-white'
@@ -140,16 +171,19 @@ export default function KeyValues({
                     : 'text-white'
                 } rounded-md transition-colors text-sm font-medium mt-auto`}
                 style={{
-                  backgroundColor: item.backgroundColor === 'orange' ? themeSecondaryColor : undefined
+                  backgroundColor: item.backgroundColor === 'orange' ? themeColor : undefined,
+                  ...(item.backgroundColor === 'orange' ? generateSecondaryColor(themeColor) : {})
                 }}
                 onMouseEnter={(e) => {
                   if (item.backgroundColor === 'orange') {
-                    e.currentTarget.style.backgroundColor = '#ea580c'; // darker orange on hover
+                    // Apply a darker filter on hover (reduce brightness)
+                    e.currentTarget.style.filter = 'brightness(0.9) saturate(1.05)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (item.backgroundColor === 'orange') {
-                    e.currentTarget.style.backgroundColor = themeSecondaryColor;
+                    // Reset to secondary color filter
+                    e.currentTarget.style.filter = 'brightness(1.15) saturate(1.05)';
                   }
                 }}
               >
