@@ -93,6 +93,47 @@ export const article = defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
+      name: 'externalLinks',
+      title: 'External Links',
+      type: 'array',
+      description: 'Add external links that will appear as buttons in the article preview.',
+      of: [
+        {
+          type: 'object',
+          name: 'externalLink',
+          title: 'External Link',
+          fields: [
+            defineField({
+              name: 'buttonText',
+              title: 'Button Text',
+              type: 'string',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              validation: Rule => Rule.required().uri({
+                scheme: ['http', 'https']
+              }),
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'buttonText',
+              subtitle: 'url'
+            }
+          }
+        }
+      ]
+    }),
+    defineField({
+      name: 'youtubeVideoUrl',
+      title: 'YouTube Video URL',
+      type: 'url',
+      description: 'Optional: A URL to a YouTube video to embed on the article page.',
+    }),
+    defineField({
       name: 'hasBody',
       title: 'Enable Full Article Page?',
       type: 'boolean',
@@ -127,12 +168,37 @@ export const article = defineType({
         }),
     }),
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'A number to determine the order of articles within a working group. Lower numbers appear first.',
+    }),
+    defineField({
       name: 'body',
       title: 'Page Content',
       type: 'array',
       description: 'Add and order content blocks for the full article page.',
       hidden: ({document}) => !document?.hasBody,
       of: [
+        {
+          name: 'sectionTitle',
+          title: 'Section Title',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Title Text',
+              type: 'string',
+              validation: Rule => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: { title: 'text' },
+            prepare({ title }) {
+              return { title: `Section: ${title}` };
+            },
+          },
+        },
         {
           name: 'subheading',
           title: 'Subheading',
@@ -155,7 +221,33 @@ export const article = defineType({
               name: 'content',
               title: 'Content',
               type: 'array',
-              of: [{type: 'block'}],
+              of: [
+                {
+                  type: 'block',
+                  marks: {
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'External link',
+                        fields: [
+                          {
+                            name: 'href',
+                            type: 'url',
+                            title: 'URL'
+                          },
+                          {
+                            name: 'target',
+                            title: 'Open in new tab',
+                            type: 'boolean',
+                            initialValue: true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
             }),
           ],
         },
@@ -200,6 +292,39 @@ export const article = defineType({
               name: 'caption',
               title: 'Caption',
               type: 'string',
+            }),
+          ],
+        },
+        {
+          name: 'externalLinksList',
+          title: 'External Links List',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'links',
+              title: 'Links',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  name: 'externalLink',
+                  title: 'External Link',
+                  fields: [
+                    defineField({
+                      name: 'buttonText',
+                      title: 'Button Text',
+                      type: 'string',
+                      validation: Rule => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'url',
+                      title: 'URL',
+                      type: 'url',
+                      validation: Rule => Rule.required().uri({ scheme: ['http', 'https'] }),
+                    }),
+                  ],
+                },
+              ],
             }),
           ],
         },

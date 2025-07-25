@@ -263,6 +263,7 @@ export interface WorkingGroup {
     authorListPrefix?: string;
     buttonText?: string;
     hasBody?: boolean;
+    externalLinks?: { buttonText: string; url: string }[];
   }[];
 }
 
@@ -279,19 +280,23 @@ export interface Article {
   summary: string;
   hasBody?: boolean;
   buttonText?: string;
+  youtubeVideoUrl?: string;
   authors?: Author[];
   workingGroups?: WorkingGroup[];
   // The body can contain various content blocks
   body?: ContentBlock[]; 
 }
 
-export type ContentBlock = 
+export type ContentBlock = (
   | { _type: 'textBlock'; content: PortableTextBlock[] }
   | { _type: 'subheading'; text: string }
+  | { _type: 'sectionTitle'; text: string }
   | { _type: 'list'; items: string[] }
   | { _type: 'imageObject'; asset: SanityImageSource; caption?: string }
   | { _type: 'posterObject'; asset: SanityImageSource }
-  | { _type: 'pdfFile'; asset: { url: string; originalFilename?: string } };
+  | { _type: 'pdfFile'; asset: { url: string; originalFilename?: string }; caption?: string }
+  | { _type: 'externalLinksList'; links: { buttonText: string; url: string }[] }
+) & { _key: string };
 
 export interface Page {
   _id: string;
@@ -570,7 +575,7 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
         params.yearId = yearId;
     }
 
-    query += `] | order(title asc) {
+    query += `] | order(order asc, title asc) {
         _id,
         title,
         slug,
@@ -583,7 +588,7 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
         "members": members[]->{ name, picture { asset->{_ref, url} }, "pictureURL": picture.asset->url, role },
         establishedDate,
         status,
-        "articles": *[_type == "article" && ^._id in workingGroups[]._ref] | order(title asc) {
+        "articles": *[_type == "article" && ^._id in workingGroups[]._ref] | order(order asc, title asc) {
           _id,
           title,
           slug,
@@ -592,6 +597,7 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
           authorListPrefix,
           buttonText,
           hasBody,
+          externalLinks,
           "authors": authors[]->{name}
         }
     }`;
@@ -675,6 +681,7 @@ export async function getArticlesByAuthor(authorId: string): Promise<Article[]> 
         hasBody,
         buttonText,
         authorListPrefix,
+        youtubeVideoUrl,
         body[]{
           ...,
           _type == "imageObject" || _type == "posterObject" || _type == "pdfFile" => {
@@ -687,28 +694,48 @@ export async function getArticlesByAuthor(authorId: string): Promise<Article[]> 
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-    return client.fetch(
-      groq`*[_type == "article" && slug.current == $slug][0] {
+    const query = groq`*[_type == "article" && slug.current == $slug][0] {
         _id,
         title,
         slug,
+        "year": *[_type=='year' && references(^.workingGroups[0]._ref)][0]{"slug": slug.current},
+        mainImage { asset-> },
+        youtubeVideoUrl,
         summary,
         authorListPrefix,
-        "authors": authors[]->{ name },
-        "mainImage": mainImage.asset->url,
+        buttonText,
+        hasBody,
+        "authors": authors[]->{name},
+        "workingGroups": workingGroups[]->{title, slug},
         body[]{
-          ...,
-          _type == "imageObject" => {
-            "asset": asset->
-          },
-          _type == "posterObject" => {
-            "asset": asset->
-          },
-          _type == "pdfFile" => {
-            "asset": asset->{url, originalFilename}
-          }
+            ...,
+            markDefs[]{
+              ...,
+              _type == "link" => {
+                "href": href,
+                "target": target
+              }
+            },
+            _type == "imageObject" => {
+                "asset": asset->{
+                    ...,
+                    "metadata": metadata
+                }
+            },
+            _type == "posterObject" => {
+                "asset": asset->{
+                    ...,
+                    "metadata": metadata
+                }
+            },
+            _type == "pdfFile" => {
+                "asset": asset->{
+                    url,
+                    originalFilename
+                }
+            }
         }
-      }`,
-      { slug }
-    );
+    }`;
+
+    return client.fetch(query, { slug });
 }

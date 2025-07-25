@@ -21,6 +21,8 @@ interface ArticleFormProps {
   isPublishing: boolean;
 }
 
+
+
 // Sortable Item Component for the body editor
 function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: { id: string, block: any, index: number, updateBlock: Function, removeBlock: Function, fileMap: Map<string, File> }) {
     const {
@@ -220,6 +222,10 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                 <div>
                     <label className="block text-sm font-medium">Summary</label>
                     <textarea name="summary" required defaultValue={article?.summary} className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium">YouTube Video URL (Optional)</label>
+                    <input name="youtubeVideoUrl" type="url" defaultValue={article?.youtubeVideoUrl || ''} placeholder="https://www.youtube.com/watch?v=..." className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium">Author List Prefix (e.g., "By")</label>

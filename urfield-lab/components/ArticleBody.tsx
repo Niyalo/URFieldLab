@@ -8,15 +8,33 @@ import PDFViewerClient from "./PDFViewerClient"; // Import the PDF viewer
 
 type Props = {
     body: any[];
+    youtubeVideoUrl?: string;
 };
 
-export default function ArticleBody({ body }: Props) {
-    if (!body) return null;
+const getYouTubeVideoId = (url: string) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+};
+
+export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
+    const videoId = youtubeVideoUrl ? getYouTubeVideoId(youtubeVideoUrl) : null;
 
     const components = {
         block: {
             h2: ({ children }: any) => <h2 className="text-2xl font-bold my-4">{children}</h2>,
             normal: ({ children }: any) => <p className="mb-4">{children}</p>,
+        },
+        marks: {
+            link: ({ children, value }: any) => {
+                const rel = value.target === '_blank' ? 'noopener noreferrer' : undefined;
+                return (
+                    <a href={value.href} target={value.target} rel={rel} className="text-cyan-600 hover:text-cyan-800 dark:text-cyan-400 dark:hover:text-cyan-300 underline">
+                        {children}
+                    </a>
+                );
+            },
         },
     };
 
@@ -50,7 +68,7 @@ export default function ArticleBody({ body }: Props) {
     let currentGroup: any[] = [];
 
     for (const block of body) {
-        if (block._type === 'posterObject' || block._type === 'pdfFile') {
+        if (block._type === 'posterObject' || block._type === 'pdfFile' || block._type === 'sectionTitle' || block._type === 'externalLinksList') {
             if (currentGroup.length > 0) {
                 contentGroups.push({ type: 'column', blocks: currentGroup });
                 currentGroup = [];
@@ -66,11 +84,56 @@ export default function ArticleBody({ body }: Props) {
 
     return (
         <div>
+            {videoId && youtubeVideoUrl && (
+                <div className="my-8">
+                    <a href={youtubeVideoUrl} target="_blank" rel="noopener noreferrer" className="relative w-full aspect-video block rounded-lg shadow-lg overflow-hidden group">
+                        <Image
+                            src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                            alt={`Video thumbnail for article`}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            priority
+                        />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <svg className="h-20 w-20 text-white/80 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            )}
             {contentGroups.map((group, groupIndex) => {
-                if (group.type === 'posterObject') {
+                if (group.type === 'sectionTitle') {
+                    return (
+                        <div key={groupIndex} className="my-12">
+                            <hr className="mb-8 border-gray-300 dark:border-gray-700" />
+                            <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 dark:text-gray-200">
+                                {group.block.text}
+                            </h2>
+                        </div>
+                    );
+                }
+                if (group.type === 'posterObject' && group.block.asset) {
                     return (
                         <div key={groupIndex} className="my-8">
                             <Image src={urlFor(group.block.asset).url()} alt="Poster image" width={group.block.asset.metadata.dimensions.width} height={group.block.asset.metadata.dimensions.height} className="w-full h-auto rounded-lg shadow-lg" />
+                        </div>
+                    );
+                }
+                if (group.type === 'externalLinksList' && group.block.links) {
+                    return (
+                        <div key={groupIndex} className="my-8 flex flex-wrap justify-center gap-4">
+                            {group.block.links.map((link: any, linkIndex: number) => (
+                                <a
+                                    key={linkIndex}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block bg-cyan-500 text-white font-bold py-2 px-5 rounded-md hover:bg-cyan-600 transition-colors"
+                                >
+                                    {link.buttonText}
+                                </a>
+                            ))}
                         </div>
                     );
                 }

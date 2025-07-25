@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getWorkingGroups, getYearBySlug, urlFor } from "@/sanity/sanity-utils";
 import { Metadata } from "next";
 import { Author } from "@/sanity/sanity-utils";
+import ArticlePreview from "@/components/ArticlePreview";
 
 export const revalidate = 0;
 
@@ -129,36 +130,17 @@ export default async function OutputsPage({ params }: Props) {
                   // For even groups, reverse the order
                   const textOrder = isEvenGroup ? "md:order-2" : "md:order-1";
                   const imageOrder = isEvenGroup ? "md:order-1" : "md:order-2";
+                  const authorsString = formatAuthorsForDetails(article.authors);
+
                   return (
-                <div key={article._id} id={`article-${article.slug?.current}`} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                  <div className={textOrder}>
-                    <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                      {article.title}
-                    </h4>
-                    <p className="text-md text-gray-600 dark:text-gray-400 italic mt-2">
-                      {article.authorListPrefix || 'By'} {formatAuthorsForDetails(article.authors)}
-                    </p>
-                    <p className="mt-4 text-gray-700 dark:text-gray-300">
-                      {article.summary}
-                    </p>
-                    {article.hasBody && article.slug && (
-                      <Link href={`/${yearSlug}/${article.slug.current}`} className="mt-6 inline-block bg-cyan-500 text-white font-bold py-2 px-5 rounded-md hover:bg-cyan-600 transition-colors">
-                      {article.buttonText || 'Read More'}
-                      </Link>
-                    )}
-                  </div>
-                  <div className={imageOrder}>
-                    {article.mainImage && (
-                      <Image
-                    src={urlFor(article.mainImage).width(800).height(600).url()}
-                    alt={`Cover image for ${article.title}`}
-                    width={800}
-                    height={600}
-                    className="rounded-lg shadow-lg object-cover"
-                      />
-                    )}
-                  </div>
-                </div>
+                    <ArticlePreview
+                      key={article._id}
+                      article={article}
+                      yearSlug={yearSlug}
+                      imageOrder={imageOrder}
+                      textOrder={textOrder}
+                      authorsString={authorsString}
+                    />
                   );
                 })}
               </div>

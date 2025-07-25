@@ -29,6 +29,12 @@ export const workingGroup = defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'A number to determine the order of the working groups. Lower numbers appear first.',
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
