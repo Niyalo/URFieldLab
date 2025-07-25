@@ -274,7 +274,12 @@ export interface Article {
   slug?: {
     current: string;
   };
-  mainImage?: string; // The query renames this to a URL string
+  mainImage?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  }; // Sanity image object, not a URL string
   authorListPrefix?: string;
   year: Year;
   summary: string;
