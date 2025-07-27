@@ -47,6 +47,9 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
                 {block._type === 'subheading' && (
                     <input type="text" placeholder="Subheading" value={block.text || ''} onChange={e => updateBlock(index, { text: e.target.value })} className="w-full text-xl font-bold bg-transparent border-b dark:border-gray-500" />
                 )}
+                {block._type === 'sectionTitle' && (
+                    <input type="text" placeholder="Section Title" value={block.text || ''} onChange={e => updateBlock(index, { text: e.target.value })} className="w-full text-2xl font-bold text-center bg-transparent border-b dark:border-gray-500" />
+                )}
                 {block._type === 'textBlock' && (
                     <textarea placeholder="Text content..." value={block.content?.[0]?.children?.[0]?.text || ''} onChange={e => updateBlock(index, { content: [{ _type: 'block', style: 'normal', children: [{ _type: 'span', text: e.target.value }] }] })} className="w-full h-24 bg-transparent border rounded-md p-2 dark:border-gray-500" />
                 )}
@@ -67,6 +70,31 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
                             </div>
                         ))}
                         <button type="button" onClick={() => updateBlock(index, { items: [...(block.items || []), ''] })} className="text-sm text-blue-500">+ Add item</button>
+                    </div>
+                )}
+                {block._type === 'externalLinksList' && (
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium">External Links</label>
+                        {(block.links || []).map((link: { buttonText: string, url: string }, i: number) => (
+                            <div key={i} className="flex items-center gap-2 p-2 border rounded-md">
+                                <input type="text" placeholder="Button Text" value={link.buttonText} onChange={e => {
+                                    const newLinks = [...(block.links || [])];
+                                    newLinks[i] = { ...newLinks[i], buttonText: e.target.value };
+                                    updateBlock(index, { links: newLinks });
+                                }} className="w-1/2 bg-transparent border-b" />
+                                <input type="url" placeholder="https://example.com" value={link.url} onChange={e => {
+                                    const newLinks = [...(block.links || [])];
+                                    newLinks[i] = { ...newLinks[i], url: e.target.value };
+                                    updateBlock(index, { links: newLinks });
+                                }} className="w-1/2 bg-transparent border-b" />
+                                <button type="button" onClick={() => {
+                                    const newLinks = [...(block.links || [])];
+                                    newLinks.splice(i, 1);
+                                    updateBlock(index, { links: newLinks });
+                                }} className="ml-2 text-red-500 text-xs">X</button>
+                            </div>
+                        ))}
+                        <button type="button" onClick={() => updateBlock(index, { links: [...(block.links || []), { buttonText: '', url: '' }] })} className="text-sm text-blue-500">+ Add Link</button>
                     </div>
                 )}
                 {(block._type === 'imageObject' || block._type === 'posterObject' || block._type === 'pdfFile') && (
@@ -139,12 +167,14 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
     const addBlock = (type: string) => {
         let newBlock: any;
         switch (type) {
+            case 'sectionTitle': newBlock = { _type: 'sectionTitle', text: '' }; break;
             case 'subheading': newBlock = { _type: 'subheading', text: '' }; break;
             case 'textBlock': newBlock = { _type: 'textBlock', content: [{ _type: 'block', children: [{ _type: 'span', text: '' }], style: 'normal' }] }; break;
             case 'list': newBlock = { _type: 'list', items: [''] }; break;
             case 'imageObject': newBlock = { _type: 'imageObject', caption: '' }; break;
             case 'posterObject': newBlock = { _type: 'posterObject' }; break;
             case 'pdfFile': newBlock = { _type: 'pdfFile', caption: '' }; break;
+            case 'externalLinksList': newBlock = { _type: 'externalLinksList', links: [{ buttonText: '', url: '' }] }; break;
             default: return;
         }
         setBody([...body, { ...newBlock, _key: nanoid() }]);
@@ -257,12 +287,14 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                                 </SortableContext>
                             </DndContext>
                             <div className="mt-4 flex gap-2 flex-wrap">
+                                <button type="button" onClick={() => addBlock('sectionTitle')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ Section Title</button>
                                 <button type="button" onClick={() => addBlock('subheading')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ Subheading</button>
                                 <button type="button" onClick={() => addBlock('textBlock')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ Text Block</button>
                                 <button type="button" onClick={() => addBlock('list')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ List</button>
                                 <button type="button" onClick={() => addBlock('imageObject')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ Image</button>
                                 <button type="button" onClick={() => addBlock('posterObject')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ Poster</button>
                                 <button type="button" onClick={() => addBlock('pdfFile')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ PDF</button>
+                                <button type="button" onClick={() => addBlock('externalLinksList')} className="text-sm py-1 px-2 bg-gray-200 dark:bg-gray-600 rounded-md">+ External Links</button>
                             </div>
                         </div>
                     </div>

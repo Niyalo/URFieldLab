@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/images/**',
       },
+      {
+          protocol: 'https',
+          hostname: 'img.youtube.com',
+      },
     ],
   },
   webpack: (config) => {

@@ -23,7 +23,7 @@ type Article = {
   hasBody?: boolean;
   buttonText?: string;
   authorListPrefix?: string;
-  authors?: { name: string }[];
+  authors?: { name: string, image?: any }[];
   externalLinks?: { buttonText: string; url: string }[];
 };
 
@@ -32,22 +32,39 @@ type Props = {
   yearSlug: string;
   imageOrder: string;
   textOrder: string;
-  authorsString: string;
 };
 
-export default function ArticlePreview({ article, yearSlug, imageOrder, textOrder, authorsString }: Props) {
+export default function ArticlePreview({ article, yearSlug, imageOrder, textOrder }: Props) {
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
 
   return (
     <>
-      <div id={`article-${article.slug?.current}`} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div id={`article-${article.slug?.current}`} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         <div className={textOrder}>
           <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {article.title}
           </h4>
-          <p className="text-md text-gray-600 dark:text-gray-400 italic mt-2">
-            {article.authorListPrefix || 'By'} {authorsString}
-          </p>
+          
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="text-md text-gray-600 dark:text-gray-400 italic">
+              {article.authorListPrefix || 'By'}
+            </span>
+            {article.authors?.map((author, index) => (
+              <div key={author.name + index} className="flex items-center gap-2">
+                {author.image && (
+                  <Image
+                    src={urlFor(author.image).width(24).height(24).fit('crop').url()}
+                    alt={author.name}
+                    width={24}
+                    height={24}
+                    className="rounded-full"
+                  />
+                )}
+                <span className="text-md text-gray-600 dark:text-gray-400 italic">{author.name}</span>
+              </div>
+            ))}
+          </div>
+
           <p className="mt-4 text-gray-700 dark:text-gray-300">
             {article.summary}
           </p>
@@ -87,11 +104,13 @@ export default function ArticlePreview({ article, yearSlug, imageOrder, textOrde
             </a>
           ) : article.mainImage && (
             <Image
-              src={urlFor(article.mainImage).width(800).height(600).url()}
+              src={urlFor(article.mainImage).width(800).url()}
               alt={`Cover image for ${article.title}`}
               width={800}
-              height={600}
-              className="rounded-lg shadow-lg object-cover"
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }}
+              className="rounded-lg shadow-lg"
             />
           )}
         </div>

@@ -265,6 +265,20 @@ export interface WorkingGroup {
     hasBody?: boolean;
     externalLinks?: { buttonText: string; url: string }[];
   }[];
+  doors?: Door[];
+}
+
+export interface ContentGroup extends Omit<WorkingGroup, '_type'> {
+  _type: 'contentGroup';
+}
+
+export interface Door {
+  _id: string;
+  _type: 'door';
+  title: string;
+  summary: string;
+  icon: { asset: { _ref: string; url: string; } };
+  externalLinks?: { buttonText: string; url: string }[];
 }
 
 export interface Article {
@@ -283,6 +297,7 @@ export interface Article {
   youtubeVideoUrl?: string;
   authors?: Author[];
   workingGroups?: WorkingGroup[];
+  contentGroups?: ContentGroup[];
   // The body can contain various content blocks
   body?: ContentBlock[]; 
 }
@@ -566,7 +581,7 @@ export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
     return client.fetch(groq`${query}`, params);
 }
 
-export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
+/*export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
     const params: { yearId?: string } = {};
     let query = `*[_type == "workingGroup"`;
 
@@ -603,7 +618,48 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
     }`;
     
     return client.fetch(groq`${query}`, params);
+}*/
+
+export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
+  if (!yearId) return [];
+  return client.fetch(
+    groq`*[_type == "workingGroup" && year._ref == $yearId] | order(order asc, title asc) {
+      ...,
+      icon { asset->{ url } },
+      "articles": *[_type == "article" && references(^._id)] | order(order asc, title asc) {
+        ...,
+        mainImage { "asset": asset-> },
+        authors[]-> { name, image }
+      }
+    }`,
+    { yearId }
+  );
 }
+
+export async function getContentGroups(yearId?: string): Promise<ContentGroup[]> {
+  if (!yearId) return [];
+  return client.fetch(
+    groq`*[_type == "contentGroup" && year._ref == $yearId] | order(order asc, title asc) {
+      ...,
+      icon { asset->{ url } },
+      "articles": *[_type == "article" && references(^._id)] | order(order asc, title asc) {
+        ...,
+        mainImage { "asset": asset-> },
+        authors[]-> { name, image }
+      },
+      "doors": *[_type == "door" && references(^._id)] | order(title asc) {
+        _id,
+        _type,
+        title,
+        summary,
+        icon { asset-> { _ref, url } },
+        externalLinks
+      }
+    }`,
+    { yearId }
+  );
+}
+
 
 export async function getWorkingGroup(slug: string): Promise<WorkingGroup | null> {
     return client.fetch(

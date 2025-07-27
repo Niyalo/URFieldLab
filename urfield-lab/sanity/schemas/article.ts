@@ -41,7 +41,38 @@ export const article = defineType({
           },
         },
       ],
-      validation: Rule => Rule.required().min(1).error('At least one working group is required.'),
+      validation: Rule =>
+        Rule.custom((workingGroups, context) => {
+          const contentGroups = (context.document as {contentGroups?: unknown[]})?.contentGroups
+          if ((!workingGroups || workingGroups.length === 0) && (!contentGroups || contentGroups.length === 0)) {
+            return 'An article must belong to at least one Working Group or Content Group.'
+          }
+          return true
+        }),
+    }),
+    defineField({
+      name: 'contentGroups',
+      title: 'Content Groups',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: {type: 'contentGroup'},
+          options: {
+            // Filter to only show content groups from the selected year
+            filter: ({document}) => {
+              const yearRef = (document.year as {_ref?: string})?._ref
+              if (!yearRef) {
+                return {filter: '!defined(year)', params: {}}
+              }
+              return {
+                filter: `year._ref == $yearRef`,
+                params: {yearRef},
+              }
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: 'authors',
