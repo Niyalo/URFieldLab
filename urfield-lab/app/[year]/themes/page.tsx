@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getWorkingGroups, getYearBySlug } from "@/sanity/sanity-utils";
+import { getWorkingGroups, getYearBySlug, urlFor } from "@/sanity/sanity-utils";
 import { Metadata } from "next";
 
 export const revalidate = 0;
@@ -50,69 +50,69 @@ export default async function WorkingGroupsPage({ params }: Props) {
         </p>
       </div>
 
-      <main className="max-w-7xl mx-auto p-8 sm:p-12">
-        {workingGroups.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-500">No working groups found.</p>
-            <p className="text-sm text-gray-400 mt-2">
-              Add working groups through the{" "}
-              <Link
-                href="/studio"
-                className="text-blue-600 hover:text-blue-800"
-              >
-                Content Management System
-              </Link>
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {workingGroups.map((group) => (
-              <div
-                key={group._id}
-                className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
-              >
-                {(group.mainImageURL || group.iconURL) && (
-                  <div className="relative w-full h-56">
-                    <Image
-                      src={group.mainImageURL || group.iconURL || ''}
-                      alt={group.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <div className="p-6 flex flex-col flex-grow">
-                  {!group.mainImageURL && group.iconURL && (
-                    <div className="flex items-center mb-4">
-                      <div className="relative w-12 h-12 mr-3">
-                        <Image
-                          src={group.iconURL}
-                          alt={`${group.title} icon`}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
+      <main className="w-full bg-gray-50 dark:bg-gray-800/50 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {workingGroups.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-gray-500">No themes found for this year.</p>
+              <p className="text-sm text-gray-400 mt-2">
+                Add working groups through the{" "}
+                <Link
+                  href="/studio"
+                  className="text-cyan-600 hover:text-cyan-800"
+                >
+                  Content Management System
+                </Link>
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {workingGroups.map((group) => (
+                <div
+                  key={group._id}
+                  className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700"
+                >
+                  {group.mainImage && (
+                    <div className="relative w-full h-56">
+                      <Image
+                        src={urlFor(group.mainImage).width(600).height(400).url()}
+                        alt={group.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   )}
-                  <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-                    {group.title}
-                  </h2>
-                  {group.description && (
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
-                      {group.description}
-                    </p>
-                  )}
-                  <Link
-                    href={`/outputs#${group.slug.current}`}
-                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-medium self-start"
-                  >
-                    Check out the projects! »
-                  </Link>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center mb-4">
+                      <div className="flex-shrink-0 bg-cyan-500 rounded-full h-10 w-10 flex items-center justify-center mr-4">
+                        {group.icon?.asset?.url ? (
+                          <Image src={group.icon.asset.url} alt={`${group.title} icon`} width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                        ) : (
+                          <span className="text-white font-bold text-lg">#</span>
+                        )}
+                      </div>
+                      <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                        {group.title}
+                      </h2>
+                    </div>
+                    
+                    {group.description && (
+                      <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
+                        {group.description}
+                      </p>
+                    )}
+                    <Link
+                      href={`/${yearSlug}/outputs#wg-${group.slug.current}`}
+                      className="text-cyan-600 hover:text-cyan-800 dark:text-cyan-400 dark:hover:text-cyan-200 font-medium self-start mt-auto"
+                    >
+                      View Outputs »
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
