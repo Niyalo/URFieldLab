@@ -10,7 +10,7 @@ export default function ContentDescription({ content }: ContentDescriptionProps)
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p 
-            className="text-gray-700 leading-relaxed max-w-4xl mx-auto"
+            className="text-gray-700 leading-relaxed max-w-4xl mx-auto whitespace-pre-wrap"
             style={{
               fontSize: '1.1rem',
               lineHeight: '1.6'
