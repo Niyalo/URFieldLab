@@ -139,10 +139,10 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
                 }
                 if (group.type === 'pdfFile') {
                     const originalUrl = group.block.asset.url;
-                    const pdfUrl = `/api/pdf?file=${encodeURIComponent(originalUrl)}`;
+                    // Use the original Sanity CDN URL directly instead of the local API
                     return (
                         <div key={groupIndex} className="my-8 border rounded-lg overflow-hidden shadow-lg">
-                           <PDFViewerClient pdfUrl={pdfUrl} originalUrl={originalUrl} />
+                           <PDFViewerClient pdfUrl={originalUrl} originalUrl={originalUrl} />
                         </div>
                     );
                 }

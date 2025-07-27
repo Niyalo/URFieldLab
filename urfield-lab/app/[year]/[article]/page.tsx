@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getArticleBySlug } from "@/sanity/sanity-utils";
+import { getArticleBySlug, urlFor } from "@/sanity/sanity-utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleBody from "@/components/ArticleBody";
@@ -38,7 +38,7 @@ export default async function ArticlePage({ params }: Props) {
       <div className="relative h-80 bg-gray-800">
         {article.mainImage && (
           <Image
-            src={article.mainImage}
+            src={urlFor(article.mainImage).url()}
             alt={`Cover for ${article.title}`}
             fill
             className="object-cover"
