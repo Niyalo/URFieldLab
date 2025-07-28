@@ -51,6 +51,12 @@ export const author = defineType({
       description: 'Affiliated institute or organization',
     }),
     defineField({
+      name: 'bio',
+      title: 'Bio',
+      type: 'text',
+      description: "Author's biography",
+    }),
+    defineField({
       name: 'verified',
       title: 'Verified',
       type: 'boolean',

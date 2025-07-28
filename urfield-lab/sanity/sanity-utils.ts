@@ -223,6 +223,7 @@ export interface Author {
     pictureURL?: string;
     role?: string;
     institute?: string;
+    bio?: string;
 }
 
 

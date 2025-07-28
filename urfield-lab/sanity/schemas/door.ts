@@ -93,7 +93,8 @@ export const door = defineType({
             }
           }
         }
-      ]
+      ],
+      validation: Rule => Rule.required().min(1).error('At least one external link is required.'),
     }),
   ],
   preview: {
