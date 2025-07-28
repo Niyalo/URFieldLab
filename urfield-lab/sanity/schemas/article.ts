@@ -19,6 +19,12 @@ export const article = defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
+      name: 'date',
+      title: 'Date Written',
+      type: 'date',
+      description: 'The date when the article was written.',
+    }),
+    defineField({
       name: 'workingGroups',
       title: 'Working Groups',
       type: 'array',
