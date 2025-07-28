@@ -1,14 +1,14 @@
 import { createClient, groq } from "next-sanity";
-import imageUrlBuilder from '@sanity/image-url'
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import imageUrlBuilder from "@sanity/image-url";
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { PortableTextBlock } from "sanity";
 
 // This is a placeholder. Remember to replace it with your actual client configuration.
 const client = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id',
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-    apiVersion: "2024-01-01",
-    useCdn: true,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your-project-id",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  apiVersion: "2024-01-01",
+  useCdn: true,
 });
 
 const builder = imageUrlBuilder(client);
@@ -21,7 +21,7 @@ export function urlFor(source: SanityImageSource) {
 
 export interface Year {
   _id: string;
-  _type: 'year';
+  _type: "year";
   year: number;
   title: string;
   slug: {
@@ -97,16 +97,80 @@ export interface Year {
   pageContent?: PageContentSection[];
 }
 
-export type PageContentSection = 
+export type PageContentSection =
   | VideoSection
-  | QuoteSection  
+  | QuoteSection
   | ProjectThemesSection
   | CategoriesSection
   | FeaturedOutputsSection
-  | LogoViewsSection;
+  | LogoViewsSection
+  | SectionTitleSection
+  | SubheadingSection
+  | TextBlockSection
+  | ImageBlockSection
+  | ListBlockSection
+  | PosterSection
+  | PdfFileSection
+  | ExternalLinksListSection;
+
+export interface SectionTitleSection {
+  _type: "sectionTitle";
+  _key: string;
+  text: string;
+}
+
+export interface SubheadingSection {
+  _type: "subheading";
+  _key: string;
+  text: string;
+}
+
+export interface TextBlockSection {
+  _type: "textBlock";
+  _key: string;
+  content: PortableTextBlock[];
+}
+
+export interface ImageBlockSection {
+  _type: "imageObject";
+  _key: string;
+  asset: SanityImageSource;
+  caption?: string;
+}
+
+export interface PosterSection {
+  _type: "posterObject";
+  _key: string;
+  asset: SanityImageSource;
+}
+
+export interface PdfFileSection {
+  _type: "pdfFile";
+  _key: string;
+  asset: {
+    url: string;
+    originalFilename?: string;
+  };
+  caption?: string;
+}
+
+export interface ExternalLinksListSection {
+  _type: "externalLinksList";
+  _key: string;
+  links: {
+    buttonText: string;
+    url: string;
+  }[];
+}
+
+export interface ListBlockSection {
+  _type: "list";
+  _key: string;
+  items: string[];
+}
 
 export interface VideoSection {
-  _type: 'videoSection';
+  _type: "videoSection";
   _key: string;
   heading: string;
   title: string;
@@ -126,7 +190,7 @@ export interface VideoSection {
 }
 
 export interface QuoteSection {
-  _type: 'quoteSection';
+  _type: "quoteSection";
   _key: string;
   quote: string;
   backgroundImage: {
@@ -139,7 +203,7 @@ export interface QuoteSection {
 }
 
 export interface ProjectThemesSection {
-  _type: 'projectThemes';
+  _type: "projectThemes";
   _key: string;
   title: string;
   description: string;
@@ -147,7 +211,7 @@ export interface ProjectThemesSection {
 }
 
 export interface CategoriesSection {
-  _type: 'categories';
+  _type: "categories";
   _key: string;
   title: string;
   description: string;
@@ -168,7 +232,7 @@ export interface ThemeItem {
 }
 
 export interface FeaturedOutputsSection {
-  _type: 'featuredOutputs';
+  _type: "featuredOutputs";
   _key: string;
   title: string;
   outputs: OutputItem[];
@@ -189,7 +253,7 @@ export interface OutputItem {
 }
 
 export interface LogoViewsSection {
-  _type: 'logoViews';
+  _type: "logoViews";
   _key: string;
   title: string;
   logos: LogoItem[];
@@ -229,7 +293,7 @@ export interface Author {
 
 export interface WorkingGroup {
   _id: string;
-  _type: 'workingGroup';
+  _type: "workingGroup";
   title: string;
   slug: {
     current: string;
@@ -253,14 +317,14 @@ export interface WorkingGroup {
   mainImageURL?: string;
   members?: Author[];
   establishedDate?: string;
-  status: 'active' | 'inactive' | 'on-hold';
+  status: "active" | "inactive" | "on-hold";
   articles?: {
     _id: string;
     title: string;
     slug?: { current: string };
     authors?: { name: string }[];
     summary: string;
-    mainImage: { asset: { _ref: string; url: string; } };
+    mainImage: { asset: { _ref: string; url: string } };
     authorListPrefix?: string;
     buttonText?: string;
     hasBody?: boolean;
@@ -269,22 +333,22 @@ export interface WorkingGroup {
   doors?: Door[];
 }
 
-export interface ContentGroup extends Omit<WorkingGroup, '_type'> {
-  _type: 'contentGroup';
+export interface ContentGroup extends Omit<WorkingGroup, "_type"> {
+  _type: "contentGroup";
 }
 
 export interface Door {
   _id: string;
-  _type: 'door';
+  _type: "door";
   title: string;
   summary: string;
-  icon: { asset: { _ref: string; url: string; } };
+  icon: { asset: { _ref: string; url: string } };
   externalLinks?: { buttonText: string; url: string }[];
 }
 
 export interface Article {
   _id: string;
-  _type: 'article';
+  _type: "article";
   title: string;
   slug?: {
     current: string;
@@ -305,18 +369,22 @@ export interface Article {
   workingGroups?: WorkingGroup[];
   contentGroups?: ContentGroup[];
   // The body can contain various content blocks
-  body?: ContentBlock[]; 
+  body?: ContentBlock[];
 }
 
 export type ContentBlock = (
-  | { _type: 'textBlock'; content: PortableTextBlock[] }
-  | { _type: 'subheading'; text: string }
-  | { _type: 'sectionTitle'; text: string }
-  | { _type: 'list'; items: string[] }
-  | { _type: 'imageObject'; asset: SanityImageSource; caption?: string }
-  | { _type: 'posterObject'; asset: SanityImageSource }
-  | { _type: 'pdfFile'; asset: { url: string; originalFilename?: string }; caption?: string }
-  | { _type: 'externalLinksList'; links: { buttonText: string; url: string }[] }
+  | { _type: "textBlock"; content: PortableTextBlock[] }
+  | { _type: "subheading"; text: string }
+  | { _type: "sectionTitle"; text: string }
+  | { _type: "list"; items: string[] }
+  | { _type: "imageObject"; asset: SanityImageSource; caption?: string }
+  | { _type: "posterObject"; asset: SanityImageSource }
+  | {
+      _type: "pdfFile";
+      asset: { url: string; originalFilename?: string };
+      caption?: string;
+    }
+  | { _type: "externalLinksList"; links: { buttonText: string; url: string }[] }
 ) & { _key: string };
 
 export interface Page {
@@ -343,7 +411,6 @@ export async function getYears(): Promise<Year[]> {
 }
 
 export const getYearBySlug = async (slug: string): Promise<Year> => {
-
   return client.fetch(
     groq`*[_type == "year" && slug.current == $slug][0]{
       _id,
@@ -440,6 +507,43 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
             width,
             height
           }
+        },
+        _type == "sectionTitle" => {
+          text
+        },
+        _type == "subheading" => {
+          text
+        },
+        _type == "textBlock" => {
+          content
+        },
+        _type == "imageObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          },
+          caption
+        },
+        _type == "posterObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          }
+        },
+        _type == "pdfFile" => {
+          asset-> { url, originalFilename },
+          caption
+        },
+        _type == "externalLinksList" => {
+          links[] {
+            buttonText,
+            url
+          }
+        },
+        _type == "list" => {
+          items
         }
       }
     }`,
@@ -544,6 +648,43 @@ export const getYearPageData = async (slug: string): Promise<Year | null> => {
             width,
             height
           }
+        },
+        _type == "sectionTitle" => {
+          text
+        },
+        _type == "subheading" => {
+          text
+        },
+        _type == "textBlock" => {
+          content
+        },
+        _type == "imageObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          },
+          caption
+        },
+        _type == "posterObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          }
+        },
+        _type == "pdfFile" => {
+          asset-> { url, originalFilename },
+          caption
+        },
+        _type == "externalLinksList" => {
+          links[] {
+            buttonText,
+            url
+          }
+        },
+        _type == "list" => {
+          items
         }
       }
     }`,
@@ -552,8 +693,8 @@ export const getYearPageData = async (slug: string): Promise<Year | null> => {
 };
 
 export async function getAuthorById(authorId: string): Promise<Author | null> {
-    return client.fetch(
-      groq`*[_type == "author" && _id == $authorId][0]{
+  return client.fetch(
+    groq`*[_type == "author" && _id == $authorId][0]{
         _id,
         name,
         email,
@@ -561,21 +702,20 @@ export async function getAuthorById(authorId: string): Promise<Author | null> {
         institute,
         "pictureURL": picture.asset->url
       }`,
-      { authorId }
-    );
+    { authorId }
+  );
 }
 
-
 export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
-    const params: { yearId?: string } = {};
-    let query = `*[_type == "author"`;
+  const params: { yearId?: string } = {};
+  let query = `*[_type == "author"`;
 
-    if (yearId) {
-        query += ` && year._ref == $yearId`;
-        params.yearId = yearId;
-    }
+  if (yearId) {
+    query += ` && year._ref == $yearId`;
+    params.yearId = yearId;
+  }
 
-    query += `] | order(name asc) {
+  query += `] | order(name asc) {
         _id,
         name,
         institute,
@@ -583,8 +723,8 @@ export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
         picture { asset-> { _ref, url } },
         "pictureURL": picture.asset->url
     }`;
-    
-    return client.fetch(groq`${query}`, params);
+
+  return client.fetch(groq`${query}`, params);
 }
 
 /*export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
@@ -626,7 +766,9 @@ export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
     return client.fetch(groq`${query}`, params);
 }*/
 
-export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
+export async function getWorkingGroups(
+  yearId?: string
+): Promise<WorkingGroup[]> {
   if (!yearId) return [];
   return client.fetch(
     groq`*[_type == "workingGroup" && year._ref == $yearId] | order(order asc, title asc) {
@@ -642,7 +784,9 @@ export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]>
   );
 }
 
-export async function getContentGroups(yearId?: string): Promise<ContentGroup[]> {
+export async function getContentGroups(
+  yearId?: string
+): Promise<ContentGroup[]> {
   if (!yearId) return [];
   return client.fetch(
     groq`*[_type == "contentGroup" && year._ref == $yearId] | order(order asc, title asc) {
@@ -666,10 +810,11 @@ export async function getContentGroups(yearId?: string): Promise<ContentGroup[]>
   );
 }
 
-
-export async function getWorkingGroup(slug: string): Promise<WorkingGroup | null> {
-    return client.fetch(
-      groq`*[_type == "workingGroup" && slug.current == $slug][0] {
+export async function getWorkingGroup(
+  slug: string
+): Promise<WorkingGroup | null> {
+  return client.fetch(
+    groq`*[_type == "workingGroup" && slug.current == $slug][0] {
         _id,
         title,
         slug,
@@ -684,20 +829,20 @@ export async function getWorkingGroup(slug: string): Promise<WorkingGroup | null
         establishedDate,
         status
       }`,
-      { slug }
-    );
+    { slug }
+  );
 }
 
 export async function getArticles(yearId?: string): Promise<Article[]> {
-    const params: { yearId?: string } = {};
-    let query = `*[_type == "post"`;
+  const params: { yearId?: string } = {};
+  let query = `*[_type == "post"`;
 
-    if (yearId) {
-        query += ` && year._ref == $yearId`;
-        params.yearId = yearId;
-    }
+  if (yearId) {
+    query += ` && year._ref == $yearId`;
+    params.yearId = yearId;
+  }
 
-    query += `] | order(publishedAt desc) {
+  query += `] | order(publishedAt desc) {
         _id,
         title,
         slug,
@@ -708,12 +853,12 @@ export async function getArticles(yearId?: string): Promise<Article[]> {
         publishedAt
     }`;
 
-    return client.fetch(groq`${query}`, params);
+  return client.fetch(groq`${query}`, params);
 }
 
 export async function getArticle(slug: string): Promise<Article | null> {
-    return client.fetch(
-      groq`*[_type == "post" && slug.current == $slug][0] {
+  return client.fetch(
+    groq`*[_type == "post" && slug.current == $slug][0] {
         _id,
         title,
         slug,
@@ -725,13 +870,15 @@ export async function getArticle(slug: string): Promise<Article | null> {
         "workingGroups": workingGroups[]->{ title, slug },
         publishedAt
       }`,
-      { slug }
-    );
+    { slug }
+  );
 }
 
-export async function getArticlesByAuthor(authorId: string): Promise<Article[]> {
-    return client.fetch(
-      groq`*[_type == "article" && $authorId in authors[]._ref] | order(title asc) {
+export async function getArticlesByAuthor(
+  authorId: string
+): Promise<Article[]> {
+  return client.fetch(
+    groq`*[_type == "article" && $authorId in authors[]._ref] | order(title asc) {
         _id,
         title,
         slug,
@@ -751,12 +898,12 @@ export async function getArticlesByAuthor(authorId: string): Promise<Article[]> 
           }
         }
       }`,
-      { authorId }
-    );
+    { authorId }
+  );
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-    const query = groq`*[_type == "article" && slug.current == $slug][0] {
+  const query = groq`*[_type == "article" && slug.current == $slug][0] {
         _id,
         title,
         slug,
@@ -799,5 +946,5 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
         }
     }`;
 
-    return client.fetch(query, { slug });
+  return client.fetch(query, { slug });
 }

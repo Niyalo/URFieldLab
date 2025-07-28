@@ -8,7 +8,7 @@ import { Year } from "@/sanity/sanity-utils";
 import { urlFor } from "@/sanity/sanity-utils";
 
 type HeaderProps = {
-  year: Year | null;
+  year: (Year & { slug: { current: string } }) | null;
 };
 
 const navLinks = [
@@ -18,8 +18,6 @@ const navLinks = [
   { href: "/people", label: "THE PEOPLE", match: (path: string) => path.startsWith("/people") },
   { href: "/outputs", label: "OUTPUTS", match: (path: string) => path.startsWith("/outputs") },
   { href: "/urfield-labs", label: "URFIELD LABS", match: (path: string) => path.startsWith("/urfield-labs") },
-  //TODO: ROB remove this after testing
-  { href: "/viewer?url=/Sneha.pdf", label: "PDF VIEWER", match: (path: string) => path.startsWith("/viewer") },
 ];
 
 const Header = ({ year }: HeaderProps) => {
@@ -28,8 +26,8 @@ const Header = ({ year }: HeaderProps) => {
 
   // Helper to build the correct href
   const getHref = (href: string) => {
-    if (!year?.slug?.current && !year?.slug) return href;
-    const slug = year.slug.current || year.slug;
+    if (!year?.slug?.current) return href;
+    const slug = year.slug.current;
     if (href === "/") return `/${slug}`;
     return `/${slug}${href}`;
   };
