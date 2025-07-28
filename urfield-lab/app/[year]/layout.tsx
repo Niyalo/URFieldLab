@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
-import Header from "@/components/Header";
+import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 import { getYearBySlug } from "@/sanity/sanity-utils";
 
@@ -38,7 +38,7 @@ export default async function RootLayout({ children, params }: Props) {
     <div
       className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
     >
-      <Header year={yearData} />
+      <HeaderWrapper year={yearData} />
       <main className="flex-1">
         {children}
       </main>

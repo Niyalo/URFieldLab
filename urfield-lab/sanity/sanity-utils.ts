@@ -505,6 +505,43 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
             width,
             height
           }
+        },
+        _type == "sectionTitle" => {
+          text
+        },
+        _type == "subheading" => {
+          text
+        },
+        _type == "textBlock" => {
+          content
+        },
+        _type == "imageObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          },
+          caption
+        },
+        _type == "posterObject" => {
+          asset-> {
+            _ref,
+            url,
+            metadata
+          }
+        },
+        _type == "pdfFile" => {
+          asset-> { url, originalFilename },
+          caption
+        },
+        _type == "externalLinksList" => {
+          links[] {
+            buttonText,
+            url
+          }
+        },
+        _type == "list" => {
+          items
         }
       }
     }`,

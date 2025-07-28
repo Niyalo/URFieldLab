@@ -76,7 +76,7 @@ export const myStructure = (S: StructureBuilder) =>
       // --- FIX 1: Use S.documentTypeListItem ---
       // The .items() array expects ListItemBuilders. S.documentTypeList() creates a whole pane.
       // S.documentTypeListItem() creates the correct 'ListItemBuilder' that links to a document type list.
-      S.documentTypeListItem('year').title('All Years'),
+      S.documentTypeListItem('year').title('Year HomePages'),
       S.documentTypeListItem('author').title('All Authors'),
       S.documentTypeListItem('workingGroup').title('All Working Groups'),
       S.documentTypeListItem('contentGroup').title('All Content Groups'),

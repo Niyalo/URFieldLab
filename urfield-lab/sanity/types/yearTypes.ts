@@ -122,7 +122,7 @@ export const quoteSection = defineType({
 
 // Project Themes Section
 export const projectThemesSection = defineType({
-  name: 'projectThemesSection',
+  name: 'projectThemes',
   title: 'Project Themes',
   type: 'object',
   fields: [
@@ -166,7 +166,7 @@ export const projectThemesSection = defineType({
 
 // Categories Section
 export const categoriesSection = defineType({
-  name: 'categoriesSection',
+  name: 'categories',
   title: 'Categories',
   type: 'object',
   fields: [
@@ -246,7 +246,7 @@ export const categoriesSection = defineType({
 
 // Featured Outputs Section
 export const featuredOutputsSection = defineType({
-  name: 'featuredOutputsSection',
+  name: 'featuredOutputs',
   title: 'Featured Outputs',
   type: 'object',
   fields: [
@@ -574,7 +574,7 @@ export const externalLinksListSection = defineType({
 
 // Logo Views Section
 export const logoViewsSection = defineType({
-  name: 'logoViewsSectionType',
+  name: 'logoViews',
   title: 'Logo Views',
   type: 'object',
   fields: [

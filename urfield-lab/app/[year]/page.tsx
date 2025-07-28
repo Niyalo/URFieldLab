@@ -7,6 +7,13 @@ import QuoteSection from '../../components/QuoteSection';
 import ProjectThemes from '../../components/ProjectThemes';
 import FeaturedOutputs from '../../components/FeaturedOutputs';
 import LogoViews from '../../components/LogoViews';
+import TextBlock from '../../components/TextBlock';
+import ListBlock from '../../components/ListBlock';
+import ImageBlock from '../../components/ImageBlock';
+import SectionTitle from '../../components/SectionTitle';
+import Subheading from '../../components/Subheading';
+import ExternalLinksList from '../../components/ExternalLinksList';
+import PDFViewerClient from '../../components/PDFViewerClient';
 import { getYearPageData, getWorkingGroups, urlFor, Year, PageContentSection } from '../../sanity/sanity-utils';
 
 interface Props {
@@ -124,6 +131,72 @@ export default async function YearPage({ params }: Props) {
               width: logo.width || 120,
               height: logo.height || 60
             }))}
+          />
+        );
+
+      case 'sectionTitle':
+        return (
+          <SectionTitle
+            key={section._key || index}
+            text={section.text}
+          />
+        );
+
+      case 'subheading':
+        return (
+          <Subheading
+            key={section._key || index}
+            text={section.text}
+          />
+        );
+
+      case 'textBlock':
+        return (
+          <TextBlock
+            key={section._key || index}
+            content={section.content}
+          />
+        );
+
+      case 'list':
+        return (
+          <ListBlock
+            key={section._key || index}
+            items={section.items}
+          />
+        );
+
+      case 'imageObject':
+        return (
+          <ImageBlock
+            key={section._key || index}
+            asset={section.asset}
+            caption={section.caption}
+          />
+        );
+
+      case 'posterObject':
+        return (
+          <ImageBlock
+            key={section._key || index}
+            asset={section.asset}
+            isPoster={true}
+          />
+        );
+
+      case 'pdfFile':
+        return (
+          <div key={section._key || index} className="my-8 border rounded-lg overflow-hidden shadow-lg">
+            <PDFViewerClient pdfUrl={section.asset.url} originalUrl={section.asset.url} />
+          </div>
+        );
+
+      case 'externalLinksList':
+        return (
+          <ExternalLinksList
+            key={section._key || index}
+            links={section.links}
+            themeColor={themeColor}
           />
         );
 
