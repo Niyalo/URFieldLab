@@ -275,20 +275,28 @@ export interface LogoItem {
 }
 
 export interface Author {
-  _id: string;
-  _type: "author";
-  name: string;
-  email: string;
-  picture?: {
-    asset: {
-      _ref: string;
-      url: string;
+    _id: string;
+    _type: 'author';
+    name: string;
+    email: string;
+    picture?: {
+        asset: {
+            _ref: string;
+            url: string;
+        };
     };
-  };
-  pictureURL?: string;
-  role?: string;
-  institute?: string;
+    pictureURL?: string;
+    role?: string;
+    institute?: string;
+    bio?: string;
+    articles?: {
+        _id: string;
+        title: string;
+        slug?: { current: string };
+        year: { slug: { current: string } };
+    }[];
 }
+
 
 export interface WorkingGroup {
   _id: string;
@@ -716,18 +724,37 @@ export async function getAuthorsByYear(yearId?: string): Promise<Author[]> {
     params.yearId = yearId;
   }
 
+  // Fetch only the data needed for the grid view
   query += `] | order(name asc) {
         _id,
         name,
         institute,
-        email,
-        picture { asset-> { _ref, url } },
         "pictureURL": picture.asset->url
     }`;
 
   return client.fetch(groq`${query}`, params);
 }
 
+export async function getAuthorDetails(authorId: string): Promise<Author | null> {
+    if (!authorId) return null;
+
+    // Corrected the subquery to use $authorId to correctly reference the author
+    const query = groq`*[_type == "author" && _id == $authorId][0] {
+        _id,
+        name,
+        institute,
+        bio,
+        "pictureURL": picture.asset->url,
+        "articles": *[_type == "article" && references($authorId)] | order(title asc) {
+            _id,
+            title,
+            slug,
+            "year": year->{slug}
+        }
+    }`;
+
+    return client.fetch(query, { authorId });
+}
 /*export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
     const params: { yearId?: string } = {};
     let query = `*[_type == "workingGroup"`;
