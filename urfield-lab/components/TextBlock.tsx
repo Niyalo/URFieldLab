@@ -25,7 +25,7 @@ const components = {
 
 export default function TextBlock({ content }: Props) {
     return (
-        <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="prose prose-lg dark:prose-invert max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <PortableText value={content} components={components} />
         </div>
     );

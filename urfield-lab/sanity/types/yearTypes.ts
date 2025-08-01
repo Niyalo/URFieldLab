@@ -273,7 +273,6 @@ export const featuredOutputsSection = defineType({
               options: {
                 hotspot: true,
               },
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'title',
@@ -292,13 +291,11 @@ export const featuredOutputsSection = defineType({
               name: 'linkText',
               title: 'Link Text',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'linkUrl',
               title: 'Link URL',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
           ],
         },
@@ -531,6 +528,12 @@ export const externalLinksListSection = defineType({
   type: 'object',
   fields: [
     defineField({
+      name: 'text',
+      title: 'Text',
+      type: 'array',
+      of: [{ type: 'block' }]
+    }),
+    defineField({
       name: 'links',
       title: 'Links',
       type: 'array',
@@ -560,13 +563,16 @@ export const externalLinksListSection = defineType({
   preview: {
     select: {
       links: 'links',
+      text: 'text',
     },
-    prepare({ links }) {
+    prepare({ links, text }) {
       const linkCount = links?.length || 0;
       const firstLink = links?.[0]?.buttonText || '';
+      const hasText = text && text.length > 0;
+      
       return {
         title: `🔗 External Links (${linkCount})`,
-        subtitle: firstLink ? `First link: "${firstLink}"` : 'No links added',
+        subtitle: `${hasText ? '📝 With text • ' : ''}${firstLink ? `First link: "${firstLink}"` : 'No links added'}`,
       }
     },
   },

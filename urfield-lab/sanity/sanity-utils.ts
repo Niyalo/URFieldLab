@@ -157,6 +157,7 @@ export interface PdfFileSection {
 export interface ExternalLinksListSection {
   _type: "externalLinksList";
   _key: string;
+  text?: PortableTextBlock[];
   links: {
     buttonText: string;
     url: string;
@@ -535,6 +536,7 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
           caption
         },
         _type == "externalLinksList" => {
+          text,
           links[] {
             buttonText,
             url
@@ -676,6 +678,7 @@ export const getYearPageData = async (slug: string): Promise<Year | null> => {
           caption
         },
         _type == "externalLinksList" => {
+          text,
           links[] {
             buttonText,
             url

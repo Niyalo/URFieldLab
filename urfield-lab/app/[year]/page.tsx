@@ -110,7 +110,7 @@ export default async function YearPage({ params }: Props) {
             title={section.title}
             themeColor={themeColor}
             outputs={section.outputs.map(output => ({
-              imageUrl: output.imageURL || urlFor(output.imageUrl).url(),
+              imageUrl: output.imageURL ? output.imageURL || urlFor(output.imageUrl).url() : undefined,
               title: output.title,
               description: output.description,
               linkText: output.linkText,
@@ -197,6 +197,7 @@ export default async function YearPage({ params }: Props) {
             key={section._key || index}
             links={section.links}
             themeColor={themeColor}
+            text={section.text}
           />
         );
 
