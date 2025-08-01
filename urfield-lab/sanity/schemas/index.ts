@@ -4,6 +4,8 @@ import {author} from './author'
 import {workingGroup} from './working-group'
 import {contentGroup} from './content-group'
 import {door} from './door'
+import {eventStructure} from './eventStructure'
+import {twoColumnSection} from './twoColumnSection'
 import {
   videoSection,
   quoteSection,
@@ -29,6 +31,7 @@ export const schemaTypes = [
   workingGroup, 
   contentGroup, 
   door,
+  eventStructure,
   // Section Types
   videoSection,
   quoteSection,
@@ -44,4 +47,5 @@ export const schemaTypes = [
   posterSection,
   pdfFileSection,
   externalLinksListSection,
+  twoColumnSection,
 ]

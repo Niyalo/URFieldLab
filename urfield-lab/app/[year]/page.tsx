@@ -3,16 +3,16 @@ import Hero from '../../components/Hero';
 import ContentDescription from '../../components/ContentDescription';
 import KeyValues from '../../components/KeyValues';
 import VideoSection from '../../components/VideoSection';
+import TwoColumnSection from '../../components/TwoColumnSection';
 import QuoteSection from '../../components/QuoteSection';
 import ProjectThemes from '../../components/ProjectThemes';
 import FeaturedOutputs from '../../components/FeaturedOutputs';
 import LogoViews from '../../components/LogoViews';
-import TextBlock from '../../components/TextBlock';
 import ListBlock from '../../components/ListBlock';
 import ImageBlock from '../../components/ImageBlock';
 import SectionTitle from '../../components/SectionTitle';
 import Subheading from '../../components/Subheading';
-import ExternalLinksList from '../../components/ExternalLinksList';
+import TextBlockWithLinks from '../../components/TextBlockWithLinks';
 import PDFViewerClient from '../../components/PDFViewerClient';
 import { getYearPageData, getWorkingGroups, urlFor, Year, PageContentSection } from '../../sanity/sanity-utils';
 
@@ -150,14 +150,6 @@ export default async function YearPage({ params }: Props) {
           />
         );
 
-      case 'textBlock':
-        return (
-          <TextBlock
-            key={section._key || index}
-            content={section.content}
-          />
-        );
-
       case 'list':
         return (
           <ListBlock
@@ -193,11 +185,22 @@ export default async function YearPage({ params }: Props) {
 
       case 'externalLinksList':
         return (
-          <ExternalLinksList
+          <TextBlockWithLinks
             key={section._key || index}
             links={section.links}
             themeColor={themeColor}
             text={section.text}
+          />
+        );
+
+      case 'twoColumnSection':
+        return (
+          <TwoColumnSection
+            key={section._key || index}
+            title={section.title}
+            leftColumn={section.leftColumn}
+            rightColumn={section.rightColumn}
+            themeColor={themeColor}
           />
         );
 
@@ -213,6 +216,8 @@ export default async function YearPage({ params }: Props) {
         title={yearData.pageTitle || yearData.title}
         backgroundImage={yearData.heroImageURL || (yearData.heroImage ? urlFor(yearData.heroImage).url() : "/cropped-Week-4-6-copy3-2.jpg")}
       />
+
+      {/* Here */}
 
       {/* Content Description Section */}
       <ContentDescription 
@@ -245,23 +250,6 @@ export default async function YearPage({ params }: Props) {
 
       {/* Dynamic Page Content Sections */}
       {yearData.pageContent?.map((section, index) => renderPageSection(section, index))}
-
-      {/* Footer Section */}
-      <div className="py-8 bg-black">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-white text-sm">
-              © {new Date().getFullYear()} UR Field Lab &apos;{yearData.year.toString().slice(-2)}. Understanding Risk. For more information contact{' '}
-              <a 
-                href={`mailto:${yearData.email || 'contact@co-risk.org'}`}
-                className="text-white hover:text-gray-300 underline"
-              >
-                {yearData.email || 'contact@co-risk.org'}
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
 
     </div>
   );

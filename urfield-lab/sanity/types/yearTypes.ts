@@ -524,7 +524,7 @@ export const pdfFileSection = defineType({
 // External Links List
 export const externalLinksListSection = defineType({
   name: 'externalLinksList',
-  title: 'External Links List',
+  title: 'Text with Links',
   type: 'object',
   fields: [
     defineField({
@@ -568,11 +568,28 @@ export const externalLinksListSection = defineType({
     prepare({ links, text }) {
       const linkCount = links?.length || 0;
       const firstLink = links?.[0]?.buttonText || '';
-      const hasText = text && text.length > 0;
+      
+      // Get text content from the Portable Text array
+      const textContent = text?.[0]?.children
+        ?.map((child: { text?: string }) => child.text)
+        .filter(Boolean)
+        .join(' ') || '';
+      
+      // Split text into lines
+      const textLines = textContent.split('\n').filter(Boolean);
+      const firstLine = textLines[0] || '';
+      const remainingLines = textLines.slice(1).join(' ');
+      
+      if (textContent) {
+        return {
+          title: firstLine,
+          subtitle: remainingLines || `${linkCount} link${linkCount !== 1 ? 's' : ''} ${firstLink ? `• "${firstLink}"` : ''}`,
+        }
+      }
       
       return {
         title: `🔗 External Links (${linkCount})`,
-        subtitle: `${hasText ? '📝 With text • ' : ''}${firstLink ? `First link: "${firstLink}"` : 'No links added'}`,
+        subtitle: firstLink ? `First link: "${firstLink}"` : 'No links added',
       }
     },
   },

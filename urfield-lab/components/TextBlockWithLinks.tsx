@@ -21,6 +21,16 @@ const components: PortableTextComponents = {
     em: ({children}) => <em className="italic">{children}</em>,
     code: ({children}) => <code className="bg-gray-100 rounded px-1 py-0.5">{children}</code>,
     underline: ({children}) => <span className="underline">{children}</span>,
+    link: ({children, value}) => (
+      <a 
+        href={value?.href} 
+        target={value?.blank ? '_blank' : '_self'}
+        rel={value?.blank ? 'noopener noreferrer' : undefined}
+        className="text-blue-600 underline hover:text-blue-800"
+      >
+        {children}
+      </a>
+    ),
   },
   list: {
     bullet: ({children}) => <ul className="list-disc list-inside mb-4">{children}</ul>,
@@ -28,17 +38,16 @@ const components: PortableTextComponents = {
   },
 };
 
-interface ExternalLinksListProps {
+interface TextBlockWithLinksProps {
     links: { buttonText: string; url: string; }[];
     themeColor?: string;
     text?: PortableTextBlock[];
 }
 
-export default function ExternalLinksList({ links, themeColor = "#f97316", text }: ExternalLinksListProps) {
-    if (!links?.length) return null;
-    
+export default function TextBlockWithLinks({ links, themeColor = "#f97316", text }: TextBlockWithLinksProps) {
+       
     return (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl pt-4 mx-auto px-4 sm:px-6 lg:px-8">
             {text && (
                 <div className="prose max-w-none mb-8">
                     <PortableText 
@@ -47,8 +56,8 @@ export default function ExternalLinksList({ links, themeColor = "#f97316", text 
                     />
                 </div>
             )}
-            <div className="my-8 flex flex-wrap justify-center gap-4">
-                {links.map((link, index) => (
+            <div className="my-8 flex flex-wrap justify-start gap-4">
+                {links && links.map((link, index) => (
                     <a
                         key={index}
                         href={link.url}

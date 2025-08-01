@@ -31,7 +31,7 @@ export default function ImageBlock({ asset, caption, isPoster = false }: ImageBl
     const dimensions = (asset as SanityImageAsset).metadata?.dimensions;
     
     return (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl pt-4 mx-auto px-4 sm:px-6 lg:px-8">
             <figure className={`${isPoster ? 'my-8' : 'mb-4 break-inside-avoid'}`}>
                 <Image
                     src={imageUrl}

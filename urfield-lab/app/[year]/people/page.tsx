@@ -1,5 +1,5 @@
 
-import { getAuthorsByYear, getYearBySlug } from "@/sanity/sanity-utils";
+import { getAuthorsByYear, getYearBySlug, urlFor } from '@/sanity/sanity-utils';
 import { Metadata } from "next";
 import Image from "next/image";
 import PeopleClientPage from "./people-client";
@@ -30,7 +30,7 @@ export default async function PeoplePage({ params }: Props) {
       {/* Hero Section */}
       <div className="relative h-64 sm:h-80 bg-gray-800">
         <Image
-          src="/cropped-Week-4-6-copy3-2.jpg" // Placeholder image
+          src={yearData.heroImageURL || (yearData.heroImage ? urlFor(yearData.heroImage).url() : "/cropped-Week-4-6-copy3-2.jpg")}
           alt="Group of participants"
           fill
           className="object-cover"

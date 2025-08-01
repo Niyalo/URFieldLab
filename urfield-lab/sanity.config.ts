@@ -67,6 +67,15 @@ export const myStructure = (S: StructureBuilder) =>
                         .filter('_type == "article" && year._ref == $yearId')
                         .params({yearId})
                     ),
+                  S.listItem()
+                    .title('Event Structure')
+                    .icon(() => '🗓️')
+                    .child(
+                      S.documentList()
+                        .title('Event Structure')
+                        .filter('_type == "eventStructure" && year._ref == $yearId')
+                        .params({yearId})
+                    ),
                 ])
             )
         ),
@@ -82,10 +91,11 @@ export const myStructure = (S: StructureBuilder) =>
       S.documentTypeListItem('contentGroup').title('All Content Groups'),
       S.documentTypeListItem('door').title('All Doors'),
       S.documentTypeListItem('article').title('All Articles'),
+      S.documentTypeListItem('eventStructure').title('All Event Structures'),
 
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['year', 'author', 'workingGroup', 'article', 'contentGroup', 'door'].includes(listItem.getId() || '')
+          !['year', 'author', 'workingGroup', 'article', 'contentGroup', 'door', 'eventStructure'].includes(listItem.getId() || '')
       ),
     ])
 

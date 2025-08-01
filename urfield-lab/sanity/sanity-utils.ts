@@ -111,7 +111,8 @@ export type PageContentSection =
   | ListBlockSection
   | PosterSection
   | PdfFileSection
-  | ExternalLinksListSection;
+  | ExternalLinksListSection
+  | TwoColumnSection;
 
 export interface SectionTitleSection {
   _type: "sectionTitle";
@@ -162,6 +163,31 @@ export interface ExternalLinksListSection {
     buttonText: string;
     url: string;
   }[];
+}
+
+interface ColumnItem {
+  _type: 'columnText' | 'columnImage' | 'columnButtons';
+  _key: string;
+  columnText?: PortableTextBlock[];
+  image?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+    caption?: string;
+  };
+  links?: {
+    buttonText: string;
+    url: string;
+  }[];
+}
+
+export interface TwoColumnSection {
+  _type: "twoColumnSection";
+  _key: string;
+  title: string;
+  leftColumn: ColumnItem[];
+  rightColumn: ColumnItem[];
 }
 
 export interface ListBlockSection {
@@ -403,6 +429,31 @@ export interface Page {
   content: PortableTextBlock[];
 }
 
+export interface EventSection {
+  sectionTitle: string;
+  sectionId: {
+    current: string;
+  };
+  content?: PageContentSection[];
+  subsections?: EventSubsection[];
+}
+
+export interface EventSubsection {
+  title: string;
+  subsectionId: {
+    current: string;
+  };
+  content?: PageContentSection[];
+}
+
+export interface EventStructure {
+  _id: string;
+  title: string;
+  year: Year;
+  description?: string;
+  sections: EventSection[];
+}
+
 // --- FETCH FUNCTIONS ---
 
 export async function getYears(): Promise<Year[]> {
@@ -521,9 +572,6 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
         _type == "subheading" => {
           text
         },
-        _type == "textBlock" => {
-          content
-        },
         _type == "imageObject" => {
           asset-> {
             _ref,
@@ -552,6 +600,41 @@ export const getYearBySlug = async (slug: string): Promise<Year> => {
         },
         _type == "list" => {
           items
+        },
+        _type == "twoColumnSection" => {
+          title,
+          leftColumn[] {
+            _type,
+            _key,
+            columnText,
+            image {
+              asset-> {
+                _ref,
+                url
+              },
+              caption
+            },
+            links[] {
+              buttonText,
+              url
+            }
+          },
+          rightColumn[] {
+            _type,
+            _key,
+            columnText,
+            image {
+              asset-> {
+                _ref,
+                url
+              },
+              caption
+            },
+            links[] {
+              buttonText,
+              url
+            }
+          }
         }
       }
     }`,
@@ -663,9 +746,6 @@ export const getYearPageData = async (slug: string): Promise<Year | null> => {
         _type == "subheading" => {
           text
         },
-        _type == "textBlock" => {
-          content
-        },
         _type == "imageObject" => {
           asset-> {
             _ref,
@@ -694,6 +774,41 @@ export const getYearPageData = async (slug: string): Promise<Year | null> => {
         },
         _type == "list" => {
           items
+        },
+        _type == "twoColumnSection" => {
+          title,
+          leftColumn[] {
+            _type,
+            _key,
+            columnText,
+            image {
+              asset-> {
+                _ref,
+                url
+              },
+              caption
+            },
+            links[] {
+              buttonText,
+              url
+            }
+          },
+          rightColumn[] {
+            _type,
+            _key,
+            columnText,
+            image {
+              asset-> {
+                _ref,
+                url
+              },
+              caption
+            },
+            links[] {
+              buttonText,
+              url
+            }
+          }
         }
       }
     }`,
@@ -975,4 +1090,162 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     }`;
 
   return client.fetch(query, { slug });
+}
+
+export async function getEventStructureByYear(yearSlug: string): Promise<EventStructure | null> {
+  return client.fetch(
+    groq`*[_type == "eventStructure" && year->slug.current == $yearSlug][0] {
+      _id,
+      title,
+      "year": year->,
+      description,
+      sections[] {
+        sectionTitle,
+        sectionId,
+        content[] {
+          _type,
+          _key,
+          _type == "sectionTitle" => {
+            text
+          },
+          _type == "subheading" => {
+            text
+          },
+          _type == "textBlock" => {
+            content
+          },
+          _type == "imageObject" => {
+            asset-> {
+              _id,
+              _ref,
+              url,
+              metadata
+            },
+            caption
+          },
+          _type == "list" => {
+            items
+          },
+          _type == "externalLinksList" => {
+            text,
+            links[] {
+              buttonText,
+              url
+            }
+          },
+          _type == "twoColumnSection" => {
+            title,
+            leftColumn[] {
+              _type,
+              _key,
+              columnText,
+              image {
+                asset-> {
+                  _id,
+                  _ref,
+                  url
+                },
+                caption
+              },
+              links[] {
+                buttonText,
+                url
+              }
+            },
+            rightColumn[] {
+              _type,
+              _key,
+              columnText,
+              image {
+                asset-> {
+                  _id,
+                  _ref,
+                  url
+                },
+                caption
+              },
+              links[] {
+                buttonText,
+                url
+              }
+            }
+          }
+        },
+        subsections[] {
+          title,
+          subsectionId,
+          content[] {
+            _type,
+            _key,
+            _type == "sectionTitle" => {
+              text
+            },
+            _type == "subheading" => {
+              text
+            },
+            _type == "textBlock" => {
+              content
+            },
+            _type == "imageObject" => {
+              asset-> {
+                _id,
+                _ref,
+                url,
+                metadata
+              },
+              caption
+            },
+            _type == "list" => {
+              items
+            },
+            _type == "externalLinksList" => {
+              text,
+              links[] {
+                buttonText,
+                url
+              }
+            },
+            _type == "twoColumnSection" => {
+              title,
+              leftColumn[] {
+                _type,
+                _key,
+                columnText,
+                image {
+                  asset-> {
+                    _id,
+                    _ref,
+                    url
+                  },
+                  caption
+                },
+                links[] {
+                  buttonText,
+                  url
+                }
+              },
+              rightColumn[] {
+                _type,
+                _key,
+                columnText,
+                image {
+                  asset-> {
+                    _id,
+                    _ref,
+                    url
+                  },
+                  caption
+                },
+                links[] {
+                  buttonText,
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }`,
+    { yearSlug }
+  );
 }

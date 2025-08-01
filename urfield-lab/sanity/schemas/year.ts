@@ -242,7 +242,8 @@ export const year = defineType({
         { type: 'list' },
         { type: 'posterObject' },
         { type: 'pdfFile' },
-        { type: 'externalLinksList' }
+        { type: 'externalLinksList' },
+        { type: 'twoColumnSection' }
       ],
     }),
   ],
