@@ -32,128 +32,24 @@ export const eventStructure = defineType({
       description: 'The year this event structure belongs to'
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-      description: 'Optional description text for the event structure page'
-    }),
-    defineField({
-      name: 'sections',
-      title: 'Page Sections',
+      name: 'content',
+      title: 'Page Content',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          name: 'eventSection',
-          title: 'Event Section',
-          fields: [
-            defineField({
-              name: 'sectionTitle',
-              title: 'Section Title',
-              type: 'string',
-              validation: Rule => Rule.required(),
-              description: 'Main heading for this section'
-            }),
-            defineField({
-              name: 'sectionId',
-              title: 'Section ID',
-              type: 'slug',
-              description: 'URL-friendly identifier for this section (for navigation)',
-              options: {
-                source: 'sectionTitle',
-                maxLength: 50,
-              },
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'content',
-              title: 'Section Content',
-              type: 'array',
-              of: eventSectionTypes.map(type => ({ type })),
-              description: 'Content blocks for this section'
-            }),
-            defineField({
-              name: 'subsections',
-              title: 'Subsections',
-              type: 'array',
-              of: [
-                {
-                  type: 'object',
-                  name: 'eventSubsection',
-                  title: 'Subsection',
-                  fields: [
-                    defineField({
-                      name: 'title',
-                      title: 'Subsection Title',
-                      type: 'string',
-                      validation: Rule => Rule.required()
-                    }),
-                    defineField({
-                      name: 'subsectionId',
-                      title: 'Subsection ID',
-                      type: 'slug',
-                      description: 'URL-friendly identifier for this subsection',
-                      options: {
-                        source: 'title',
-                        maxLength: 50,
-                      },
-                      validation: Rule => Rule.required()
-                    }),
-                    defineField({
-                      name: 'content',
-                      title: 'Subsection Content',
-                      type: 'array',
-                      of: eventSectionTypes.map(type => ({ type })),
-                      description: 'Content blocks for this subsection'
-                    })
-                  ],
-                  preview: {
-                    select: {
-                      title: 'title',
-                      content: 'content'
-                    },
-                    prepare({ title, content }) {
-                      const contentCount = content?.length || 0;
-                      return {
-                        title: `📄 ${title}`,
-                        subtitle: `${contentCount} content block${contentCount !== 1 ? 's' : ''}`
-                      };
-                    }
-                  }
-                }
-              ]
-            })
-          ],
-          preview: {
-            select: {
-              title: 'sectionTitle',
-              content: 'content',
-              subsections: 'subsections'
-            },
-            prepare({ title, content, subsections }) {
-              const contentCount = content?.length || 0;
-              const subsectionCount = subsections?.length || 0;
-              return {
-                title: `📋 ${title}`,
-                subtitle: `${contentCount} content blocks • ${subsectionCount} subsections`
-              };
-            }
-          }
-        }
-      ]
+      of: eventSectionTypes.map(type => ({ type })),
+      description: 'Content blocks for the event structure page'
     })
   ],
   preview: {
     select: {
       title: 'title',
       year: 'year.year',
-      sections: 'sections'
+      content: 'content'
     },
-    prepare({ title, year, sections }) {
-      const sectionCount = sections?.length || 0;
+    prepare({ title, year, content }) {
+      const contentCount = content?.length || 0;
       return {
-        title: `🗓️ ${title} (${year})`,
-        subtitle: `${sectionCount} section${sectionCount !== 1 ? 's' : ''}`
+        title: `�️ ${title} (${year})`,
+        subtitle: `${contentCount} content block${contentCount !== 1 ? 's' : ''}`
       };
     }
   }

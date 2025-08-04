@@ -30,7 +30,9 @@ export default async function YearPage({ params }: Props) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Year not found</h1>
+          <h1 className="text-2xl font-bold mb-4" style={{
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>Year not found</h1>
           <p>The requested year data could not be found.</p>
         </div>
       </div>

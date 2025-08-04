@@ -79,13 +79,13 @@ const renderColumnItem = (item: ColumnItem, themeColor: string = "#f97316") => {
     case 'columnImage':
       return item.image && item.image.asset && (item.image.asset._ref || item.image.asset.url) ? (
         <div key={item._key} className="mb-8">
-          <div className="relative w-full aspect-video">
+          <div className="relative w-full">
             <Image
               src={item.image.asset.url || urlFor(item.image.asset).url()}
               alt={item.image.caption || ''}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover rounded-lg shadow-md"
+              width={800}
+              height={600}
+              className="object-contain rounded-lg shadow-md w-full h-auto"
             />
           </div>
           {item.image.caption && (
@@ -98,7 +98,7 @@ const renderColumnItem = (item: ColumnItem, themeColor: string = "#f97316") => {
     
     case 'columnButtons':
       return item.links?.length ? (
-        <div key={item._key} className="mb-8 flex flex-wrap justify-center gap-4">
+        <div key={item._key} className="mb-8 flex flex-wrap justify-start gap-4">
           {item.links.map((link, index) => (
             <a
               key={index}
@@ -130,10 +130,10 @@ const renderColumnItem = (item: ColumnItem, themeColor: string = "#f97316") => {
 
 export default function TwoColumnSection({ title, leftColumn, rightColumn, themeColor = "#f97316" }: TwoColumnSectionProps) {
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-6xl pt-4">
-      <h1 className="text-4xl font-bold text-center mb-12">{title}</h1>
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
+      <h1 className="text-4xl font-bold text-center my-8">{title}</h1>
       
-      <div className="grid md:grid-cols-2 md:gap-8">
+      <div className="grid md:grid-cols-2 md:gap-8 md:items-center">
         {/* Left Column */}
         <div className="space-y-6">
           {leftColumn.map(item => renderColumnItem(item, themeColor))}

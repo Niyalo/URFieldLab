@@ -31,7 +31,8 @@ export default function Hero({
               fontFamily: 'Muli, Helvetica, Arial, sans-serif',
               fontSize: 'clamp(2.5rem, 5vw, 3.3rem)',
               lineHeight: '1.14',
-              letterSpacing: '0.9px'
+              letterSpacing: '0.9px',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
             }}
           >
             {title}

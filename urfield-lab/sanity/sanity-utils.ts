@@ -429,29 +429,11 @@ export interface Page {
   content: PortableTextBlock[];
 }
 
-export interface EventSection {
-  sectionTitle: string;
-  sectionId: {
-    current: string;
-  };
-  content?: PageContentSection[];
-  subsections?: EventSubsection[];
-}
-
-export interface EventSubsection {
-  title: string;
-  subsectionId: {
-    current: string;
-  };
-  content?: PageContentSection[];
-}
-
 export interface EventStructure {
   _id: string;
   title: string;
   year: Year;
-  description?: string;
-  sections: EventSection[];
+  content?: PageContentSection[];
 }
 
 // --- FETCH FUNCTIONS ---
@@ -1098,149 +1080,71 @@ export async function getEventStructureByYear(yearSlug: string): Promise<EventSt
       _id,
       title,
       "year": year->,
-      description,
-      sections[] {
-        sectionTitle,
-        sectionId,
-        content[] {
-          _type,
-          _key,
-          _type == "sectionTitle" => {
-            text
+      content[] {
+        _type,
+        _key,
+        _type == "sectionTitle" => {
+          text
+        },
+        _type == "subheading" => {
+          text
+        },
+        _type == "textBlock" => {
+          content
+        },
+        _type == "imageObject" => {
+          asset-> {
+            _id,
+            _ref,
+            url,
+            metadata
           },
-          _type == "subheading" => {
-            text
-          },
-          _type == "textBlock" => {
-            content
-          },
-          _type == "imageObject" => {
-            asset-> {
-              _id,
-              _ref,
-              url,
-              metadata
+          caption
+        },
+        _type == "list" => {
+          items
+        },
+        _type == "externalLinksList" => {
+          text,
+          links[] {
+            buttonText,
+            url
+          }
+        },
+        _type == "twoColumnSection" => {
+          title,
+          leftColumn[] {
+            _type,
+            _key,
+            columnText,
+            image {
+              asset-> {
+                _id,
+                _ref,
+                url
+              },
+              caption
             },
-            caption
-          },
-          _type == "list" => {
-            items
-          },
-          _type == "externalLinksList" => {
-            text,
             links[] {
               buttonText,
               url
             }
           },
-          _type == "twoColumnSection" => {
-            title,
-            leftColumn[] {
-              _type,
-              _key,
-              columnText,
-              image {
-                asset-> {
-                  _id,
-                  _ref,
-                  url
-                },
-                caption
-              },
-              links[] {
-                buttonText,
-                url
-              }
-            },
-            rightColumn[] {
-              _type,
-              _key,
-              columnText,
-              image {
-                asset-> {
-                  _id,
-                  _ref,
-                  url
-                },
-                caption
-              },
-              links[] {
-                buttonText,
-                url
-              }
-            }
-          }
-        },
-        subsections[] {
-          title,
-          subsectionId,
-          content[] {
+          rightColumn[] {
             _type,
             _key,
-            _type == "sectionTitle" => {
-              text
-            },
-            _type == "subheading" => {
-              text
-            },
-            _type == "textBlock" => {
-              content
-            },
-            _type == "imageObject" => {
+            columnText,
+            image {
               asset-> {
                 _id,
                 _ref,
-                url,
-                metadata
+                url
               },
               caption
             },
-            _type == "list" => {
-              items
-            },
-            _type == "externalLinksList" => {
-              text,
-              links[] {
-                buttonText,
-                url
-              }
-            },
-            _type == "twoColumnSection" => {
-              title,
-              leftColumn[] {
-                _type,
-                _key,
-                columnText,
-                image {
-                  asset-> {
-                    _id,
-                    _ref,
-                    url
-                  },
-                  caption
-                },
-                links[] {
-                  buttonText,
-                  url
-                }
-              },
-              rightColumn[] {
-                _type,
-                _key,
-                columnText,
-                image {
-                  asset-> {
-                    _id,
-                    _ref,
-                    url
-                  },
-                  caption
-                },
-                links[] {
-                  buttonText,
-                  url
-                }
-              }
+            links[] {
+              buttonText,
+              url
             }
           }
         }

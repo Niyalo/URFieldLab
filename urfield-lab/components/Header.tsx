@@ -17,7 +17,6 @@ const navLinks = [
   { href: "/themes", label: "THEMES", match: (path: string) => path.startsWith("/themes") },
   { href: "/people", label: "THE PEOPLE", match: (path: string) => path.startsWith("/people") },
   { href: "/outputs", label: "OUTPUTS", match: (path: string) => path.startsWith("/outputs") },
-  { href: "/urfield-labs", label: "URFIELD LABS", match: (path: string) => path.startsWith("/urfield-labs") },
 ];
 
 const Header = ({ year }: HeaderProps) => {

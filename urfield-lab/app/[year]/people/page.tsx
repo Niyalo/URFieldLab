@@ -37,7 +37,9 @@ export default async function PeoplePage({ params }: Props) {
         />
         <div className="absolute inset-0 bg-black/10 flex items-center">
           <div className="text-left text-white p-8 sm:p-12">
-            <h1 className="text-4xl sm:text-5xl font-bold">The People</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold" style={{
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>The People</h1>
           </div>
         </div>
       </div>

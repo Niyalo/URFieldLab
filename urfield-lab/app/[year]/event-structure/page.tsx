@@ -104,71 +104,19 @@ export default async function Page({ params }: Props) {
           />
           <div className="absolute inset-0 bg-black/10 flex items-center">
             <div className="text-left text-white p-8 sm:p-12">
-              <h1 className="text-4xl sm:text-5xl font-bold">
+              <h1 className="text-4xl sm:text-5xl font-bold" style={{
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>
                 {eventStructure?.title || "Event Structure"}
               </h1>
             </div>
           </div>
         </div>
 
-        {/* Description */}
-        {eventStructure?.description && (
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <p className="text-lg text-gray-700">{eventStructure.description}</p>
-          </div>
+        {/* Event Structure Content */}
+        {eventStructure?.content?.map((content, contentIndex) => 
+          renderContentSection(content, contentIndex)
         )}
-
-        {/* Navigation Menu */}
-        {eventStructure?.sections && eventStructure.sections.length > 0 && (
-          <div className="bg-gray-50 py-8">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <nav className="flex flex-wrap gap-4">
-                {eventStructure.sections.map((section, index) => (
-                  <a
-                    key={index}
-                    href={`#${section.sectionId.current}`}
-                    className="text-blue-600 hover:text-blue-800 font-medium py-2 px-4 rounded-md border border-blue-600 hover:bg-blue-50 transition-colors"
-                  >
-                    {section.sectionTitle}
-                  </a>
-                ))}
-              </nav>
-            </div>
-          </div>
-        )}
-
-        {/* Event Structure Sections */}
-        {eventStructure?.sections?.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="py-12">
-            {/* Section Header */}
-            <div id={section.sectionId.current} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                {section.sectionTitle}
-              </h2>
-            </div>
-
-            {/* Section Content */}
-            {section.content?.map((content, contentIndex) => 
-              renderContentSection(content, contentIndex)
-            )}
-
-            {/* Subsections */}
-            {section.subsections?.map((subsection, subsectionIndex) => (
-              <div key={subsectionIndex} className="mt-12">
-                <div id={subsection.subsectionId.current} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-                    {subsection.title}
-                  </h3>
-                </div>
-
-                {/* Subsection Content */}
-                {subsection.content?.map((content, contentIndex) => 
-                  renderContentSection(content, contentIndex)
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
 
         {/* Default content if no event structure is defined */}
         {!eventStructure && (

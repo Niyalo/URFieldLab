@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { getContentGroups, getWorkingGroups, getYearBySlug, urlFor } from "@/sanity/sanity-utils";
-import { Author, Door, WorkingGroup, ContentGroup, Article } from "@/sanity/sanity-utils";
+import { Author, WorkingGroup, ContentGroup, Year } from "@/sanity/sanity-utils";
 import ArticlePreview from "@/components/ArticlePreview";
 import CollapsibleSection from '@/components/CollapsibleSection';
 
 // export const revalidate = 0; // "use client" components cannot be dynamically rendered
 
 type Props = {
-  params: { year: string };
+  params: Promise<{ year: string }>;
 };
 
 // Helper for acronyms in Contents section
@@ -45,10 +45,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 */
 
 export default function OutputsPage({ params }: Props) {
-  const resolvedParams = use(params);
-  const { year: yearSlug } = resolvedParams;
-  
-  const [yearData, setYearData] = useState<any>(null);
+  const [yearSlug, setYearSlug] = useState<string>('');
+  const [yearData, setYearData] = useState<Year | null>(null);
   const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
   const [contentGroups, setContentGroups] = useState<ContentGroup[]>([]);
   const [openContents, setOpenContents] = useState<Record<string, boolean>>({});
@@ -56,6 +54,16 @@ export default function OutputsPage({ params }: Props) {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      setYearSlug(resolvedParams.year);
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!yearSlug) return;
+    
     const fetchData = async () => {
       const year = await getYearBySlug(yearSlug);
       setYearData(year);
@@ -112,14 +120,16 @@ export default function OutputsPage({ params }: Props) {
       {/* Hero Section */}
       <div className="relative h-64 sm:h-80 bg-gray-800">
         <Image
-          src={yearData.heroImageURL || (yearData.heroImage ? urlFor(yearData.heroImage).url() : "/cropped-Week-4-6-copy3-2.jpg")}
+          src={yearData?.heroImageURL || (yearData?.heroImage ? urlFor(yearData.heroImage).url() : "/cropped-Week-4-6-copy3-2.jpg")}
           alt="Team collaborating"
           fill
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/20 flex items-center">
           <div className="text-left text-white p-8 sm:p-12 md:p-16">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">Outputs</h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold" style={{
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>Outputs</h1>
           </div>
         </div>
       </div>
@@ -260,7 +270,7 @@ export default function OutputsPage({ params }: Props) {
                   >
                     <div className="max-w-7xl mx-auto">
                       <div className="space-y-20">
-                        {group.articles.map((article, articleIndex) => {
+                        {group.articles.map((article) => {
                           const isEvenGroup = (groupIndex + 1) % 2 === 0;
                           const textOrder = isEvenGroup ? "md:order-2" : "md:order-1";
                           const imageOrder = isEvenGroup ? "md:order-1" : "md:order-2";
