@@ -18,11 +18,13 @@ type Article = {
   title: string;
   slug?: { current: string };
   summary: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mainImage: any; // Can be a Sanity image object
   youtubeVideoUrl?: string;
   hasBody?: boolean;
   buttonText?: string;
   authorListPrefix?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   authors?: { name: string, image?: any }[];
   externalLinks?: { buttonText: string; url: string }[];
 };

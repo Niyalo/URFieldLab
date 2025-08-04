@@ -1,5 +1,5 @@
 import { getYearBySlug, getEventStructureByYear, urlFor, PageContentSection } from '@/sanity/sanity-utils';
-import Link from "next/link";
+// import Link from "next/link";
 import Image from "next/image";
 import SectionTitle from '../../../components/SectionTitle';
 import Subheading from '../../../components/Subheading';
@@ -10,11 +10,11 @@ import TwoColumnSection from '../../../components/TwoColumnSection';
 import { PortableText } from "@portabletext/react";
 
 type Props = {
-  params: { year: string };
+  params: Promise<{ year: string }>;
 };
 
 export default async function Page({ params }: Props) {
-    const { year: yearSlug } = params;
+    const { year: yearSlug } = await params;
     const yearData = await getYearBySlug(yearSlug);
     const eventStructure = await getEventStructureByYear(yearSlug);
     

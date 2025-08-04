@@ -5,11 +5,11 @@ import Image from "next/image";
 import PeopleClientPage from "./people-client";
 
 type Props = {
-  params: { year: string };
+  params: Promise<{ year: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { year } = params;
+  const { year } = await params;
   const yearData = await getYearBySlug(year);
 
   return {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PeoplePage({ params }: Props) {
-  const { year: yearSlug } = params;
+  const { year: yearSlug } = await params;
   const yearData = await getYearBySlug(yearSlug);
   const authors = yearData ? await getAuthorsByYear(yearData._id) : [];
 

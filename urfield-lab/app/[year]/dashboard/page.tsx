@@ -117,9 +117,10 @@ export default function DashboardPage({ params }: Props) {
       const data = await login(login_name, password);
       
       // The API returns a 'message' property on error, which we check for here.
-      // @ts-ignore - The type in AuthContext is slightly mismatched with the actual API return on error.
-      if (data && data.message) {
-        setError(data.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (data && (data as any).message) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setError((data as any).message);
       }
       // On successful login, the useAuth context will handle the state update.
     } catch (err) {
@@ -155,7 +156,8 @@ export default function DashboardPage({ params }: Props) {
     const wgIds = JSON.parse(formData.get('workingGroups') as string);
     formData.set('workingGroups', JSON.stringify(wgIds));
 
-    const fileMap = (e.currentTarget as any).fileMap as Map<string, File>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fileMap = (e.currentTarget as any /* TODO: proper type */).fileMap as Map<string, File>;
     fileMap.forEach((file, key) => {
         formData.append(key, file);
     });

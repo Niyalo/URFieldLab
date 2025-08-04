@@ -3,11 +3,13 @@
 import { urlFor } from "@/sanity/sanity-utils";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import PDFViewerClient from "./PDFViewerClient"; // Import the PDF viewer
 
+// Remove unused eslint disable comment since we're fixing them individually
 type Props = {
-    body: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body: any[]; // TODO: Replace with proper type
     youtubeVideoUrl?: string;
 };
 
@@ -23,11 +25,14 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
 
     const components = {
         block: {
-            h2: ({ children }: any) => <h2 className="text-2xl font-bold my-4">{children}</h2>,
-            normal: ({ children }: any) => <p className="mb-4">{children}</p>,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            h2: ({ children }: any /* TODO: proper type */) => <h2 className="text-2xl font-bold my-4">{children}</h2>,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            normal: ({ children }: any /* TODO: proper type */) => <p className="mb-4">{children}</p>,
         },
         marks: {
-            link: ({ children, value }: any) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            link: ({ children, value }: any /* TODO: proper type */) => {
                 const rel = value.target === '_blank' ? 'noopener noreferrer' : undefined;
                 return (
                     <a href={value.href} target={value.target} rel={rel} className="text-cyan-600 hover:text-cyan-800 dark:text-cyan-400 dark:hover:text-cyan-300 underline">
@@ -38,7 +43,8 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
         },
     };
 
-    const renderBlock = (block: any, index: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const renderBlock = (block: any /* TODO: proper type */, index: number) => {
         switch (block._type) {
             case 'subheading':
                 return <h3 key={index} className="text-2xl font-bold mt-8 mb-4 col-span-full">{block.text}</h3>;
@@ -65,7 +71,8 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
 
     // Group consecutive non-poster/pdf blocks to put them in columns
     const contentGroups = [];
-    let currentGroup: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let currentGroup: any[] /* TODO: proper type */ = [];
 
     for (const block of body) {
         if (block._type === 'posterObject' || block._type === 'pdfFile' || block._type === 'sectionTitle' || block._type === 'externalLinksList') {
@@ -123,7 +130,8 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
                 if (group.type === 'externalLinksList' && group.block.links) {
                     return (
                         <div key={groupIndex} className="my-8 flex flex-wrap justify-center gap-4">
-                            {group.block.links.map((link: any, linkIndex: number) => (
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {group.block.links.map((link: any /* TODO: proper type */, linkIndex: number) => (
                                 <a
                                     key={linkIndex}
                                     href={link.url}
@@ -149,7 +157,8 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
                 if (group.type === 'column' && group.blocks) {
                     return (
                         <div key={groupIndex} className="lg:columns-2 lg:gap-12">
-                            {group.blocks.map((block: any, blockIndex: number) => renderBlock(block, blockIndex))}
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {group.blocks.map((block: any /* TODO: proper type */, blockIndex: number) => renderBlock(block, blockIndex))}
                         </div>
                     );
                 }

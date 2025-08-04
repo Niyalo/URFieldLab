@@ -1,10 +1,10 @@
 import FeaturedCard from './FeaturedCard';
-import { PortableTextBlock } from "sanity";
+import { PortableTextBlock } from "@portabletext/types";
 
 interface FeaturedOutput {
   imageUrl?: string;
   title: string;
-  description: PortableTextBlock[];
+  description: PortableTextBlock | string;
   linkText?: string;
   linkUrl?: string;
   linkTextColor?: string;

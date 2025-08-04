@@ -2,7 +2,7 @@
 
 import * as cheerio from 'cheerio';
 import { createClient, SanityClient } from '@sanity/client';
-import type { SanityDocument, Slug } from '@sanity/types';
+import type { /*SanityDocument, Slug*/ } from '@sanity/types'; // Commented unused imports
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -59,7 +59,7 @@ export async function uploadAuthor(author: AuthorData, yearId: string): Promise<
         }
 
         // Ensure login_name is unique
-        let baseLoginName = author.name.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z0-9.]/g, '');
+        const baseLoginName = author.name.toLowerCase().replace(/\s+/g, '.').replace(/[^a-z0-9.]/g, ''); // Fixed: const instead of let
         let loginName = baseLoginName;
         let isUnique = false;
         let counter = 1;

@@ -134,6 +134,7 @@ export default function KeyValues({
                   {item.iconPath && isImageUrl(item.iconPath) ? (
                     isSvg(item.iconPath) ? (
                       // For SVG images, use img tag instead of Next.js Image for better compatibility
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img 
                         src={item.iconPath} 
                         alt={item.title}

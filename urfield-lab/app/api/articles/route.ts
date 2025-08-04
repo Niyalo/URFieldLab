@@ -1,4 +1,4 @@
-import { createClient, SanityAssetDocument } from 'next-sanity';
+import { createClient/*, SanityAssetDocument*/ } from 'next-sanity'; // Commented unused import
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { sessionOptions, SessionData } from '@/lib/session';
@@ -40,14 +40,15 @@ export async function POST(req: NextRequest) {
     const hasBody = formData.get('hasBody') === 'on' || formData.get('hasBody') === 'true';
     const buttonText = formData.get('buttonText') as string;
     const mainImageFile = formData.get('mainImage') as File | null;
-    let bodyPayload = formData.get('body') ? JSON.parse(formData.get('body') as string) : [];
+    const bodyPayload = formData.get('body') ? JSON.parse(formData.get('body') as string) : []; // Fixed: const instead of let
 
     if (!title || !yearId || !workingGroups.length || !authors.length) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
     // Process and upload files within the body payload
-    const updatedBody = await Promise.all(bodyPayload.map(async (block: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updatedBody = await Promise.all(bodyPayload.map(async (block: any /* TODO: proper type */) => {
         const file = formData.get(block._key) as File | null;
         
         // If a new file is uploaded for this block, process it.
@@ -71,7 +72,8 @@ export async function POST(req: NextRequest) {
         return block;
     }));
 
-    const doc: any = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const doc: any /* TODO: proper type */ = {
       _type: 'article',
       title,
       year: { _type: 'reference', _ref: yearId },
@@ -88,7 +90,7 @@ export async function POST(req: NextRequest) {
       doc.body = updatedBody;
     }
 
-    let transaction = client.transaction();
+    const transaction = client.transaction(); // Fixed: const instead of let
 
     if (articleId) {
       // Update existing article

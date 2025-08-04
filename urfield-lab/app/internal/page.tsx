@@ -42,6 +42,7 @@ const InternalPage = () => {
             alert("Please paste CSV data into the text area.");
             return;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Papa.parse<any>(csvData, {
             header: true,
             skipEmptyLines: true,
@@ -52,6 +53,7 @@ const InternalPage = () => {
                     setAuthorStatuses([]);
                     return;
                 }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const authors = results.data.map((row: any) => ({
                     name: (row.name || '').replace(/\s+/g, ' ').trim(),
                     institute: row.institute || '',

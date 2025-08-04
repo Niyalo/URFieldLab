@@ -34,12 +34,12 @@ export default function VideoSection({
   };
 
   // Generate hover color by darkening the theme color
-  const generateHoverColor = (color: string) => {
-    return {
-      backgroundColor: color,
-      filter: 'brightness(0.85)' // Darken by 15%
-    };
-  };
+  // const generateHoverColor = (color: string) => {
+  //   return {
+  //     backgroundColor: color,
+  //     filter: 'brightness(0.85)' // Darken by 15%
+  //   };
+  // };
 
   const sectionBgColor = generateSectionBgColor(themeColor);
 
