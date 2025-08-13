@@ -22,6 +22,7 @@ export async function POST(request: Request) {
     const email = formData.get('email') as string | null;
     const role = formData.get('role') as string | null;
     const institute = formData.get('institute') as string | null;
+    const bio = formData.get('bio') as string | null;
     const pictureFile = formData.get('picture') as File | null;
 
     if (!name || !login_name || !password || !yearId) {
@@ -61,6 +62,10 @@ export async function POST(request: Request) {
       email?: string;
       year?: { _type: string; _ref: string };
       verified: boolean;
+      role?: string;
+      institute?: string;
+      bio?: string;
+      picture?: { _type: 'image'; asset: { _type: 'reference'; _ref: string } };
     } = {
       _type: "author",
       name,
@@ -71,6 +76,7 @@ export async function POST(request: Request) {
       ...(email && { email }),
       ...(role && { role }),
       ...(institute && { institute }),
+      ...(bio && { bio }),
       ...(imageAsset && { picture: { _type: 'image', asset: { _type: 'reference', _ref: imageAsset._id } } }),
     };
 

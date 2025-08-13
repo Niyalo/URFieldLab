@@ -8,7 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (login_name: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  signup: (name: string, login_name: string, password: string, yearId: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (formData: FormData) => Promise<{ success: boolean; message?: string; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,13 +35,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, []);
 
-  const signup = async (name: string, login_name: string, password: string, yearId: string) => {
+  const signup = async (formData: FormData) => {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, login_name, password, yearId }),
+      body: formData, // Send FormData directly, no Content-Type header needed
     });
-    return res.json();
+    const data = await res.json();
+    if (res.ok) {
+      return { success: true, message: data.message };
+    }
+    return { success: false, error: data.message || 'An unknown error occurred.' };
   };
 
   const login = async (login_name: string, password: string) => {
@@ -53,8 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await res.json();
     if (res.ok) {
       setUser(data);
+      return { success: true };
     }
-    return data;
+    // On failure, return an object with the error message
+    return { success: false, error: data.message || 'An unknown error occurred.' };
   };
 
   const logout = async () => {

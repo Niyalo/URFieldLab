@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { getContentGroups, getWorkingGroups, getYearBySlug, urlFor } from "@/sanity/sanity-utils";
+import { getContentGroups, getWorkingGroups, getYearBySlug, urlFor, getAuthorsForFilter } from "@/sanity/sanity-utils";
 import { Author, WorkingGroup, ContentGroup, Year } from "@/sanity/sanity-utils";
 import ArticlePreview from "@/components/ArticlePreview";
 import CollapsibleSection from '@/components/CollapsibleSection';
+import Select from 'react-select';
+import { StylesConfig } from 'react-select';
 
 // export const revalidate = 0; // "use client" components cannot be dynamically rendered
 
@@ -52,6 +54,8 @@ export default function OutputsPage({ params }: Props) {
   const [openContents, setOpenContents] = useState<Record<string, boolean>>({});
   const [openDetails, setOpenDetails] = useState<Record<string, boolean>>({});
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [allAuthors, setAllAuthors] = useState<{ value: string; label: string }[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -70,8 +74,11 @@ export default function OutputsPage({ params }: Props) {
       if (year) {
         const wg = await getWorkingGroups(year._id);
         const cg = await getContentGroups(year._id);
+        const authors = await getAuthorsForFilter(year._id);
+        
         setWorkingGroups(wg);
         setContentGroups(cg);
+        setAllAuthors(authors.map(a => ({ value: a._id, label: a.name })));
 
         // Default all details sections to be open
         const allDetails = [...wg, ...cg].reduce((acc, group) => {
@@ -83,6 +90,30 @@ export default function OutputsPage({ params }: Props) {
     };
     fetchData();
   }, [yearSlug]);
+
+  const { filteredWorkingGroups, filteredContentGroups } = useMemo(() => {
+    if (selectedAuthors.length === 0) {
+      return { filteredWorkingGroups: workingGroups, filteredContentGroups: contentGroups };
+    }
+
+    const authorIds = new Set(selectedAuthors.map(a => a.value));
+
+    const filterGroupArticles = <T extends WorkingGroup | ContentGroup>(groups: T[]): T[] => {
+      return groups
+        .map(group => {
+          const filteredArticles = group.articles?.filter(article =>
+            article.authors?.some(author => authorIds.has((author as any)._id))
+          );
+          return { ...group, articles: filteredArticles };
+        })
+        .filter(group => (group.articles && group.articles.length > 0) || (group.doors && group.doors.length > 0)); // Keep groups if they have doors, even if articles are filtered out
+    };
+
+    return {
+      filteredWorkingGroups: filterGroupArticles(workingGroups),
+      filteredContentGroups: filterGroupArticles(contentGroups),
+    };
+  }, [selectedAuthors, workingGroups, contentGroups]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,8 +146,19 @@ export default function OutputsPage({ params }: Props) {
     { bg: 'bg-gray-800 dark:bg-gray-900', text: 'text-white', button: 'border-yellow-400 hover:bg-yellow-400/20 text-white', iconFilter: 'invert(92%) sepia(24%) saturate(3137%) hue-rotate(345deg) brightness(105%) contrast(98%)' }, // Approximates gold color for SVG
   ];
 
+  const selectStyles: StylesConfig = {
+    control: (base) => ({ ...base, backgroundColor: 'var(--select-bg)', borderColor: 'var(--select-border)', boxShadow: 'none', '&:hover': { borderColor: 'var(--select-border-hover)' } }),
+    menu: (base) => ({ ...base, backgroundColor: 'var(--select-menu-bg)' }),
+    option: (base, { isFocused, isSelected }) => ({ ...base, backgroundColor: isSelected ? 'var(--select-option-selected-bg)' : isFocused ? 'var(--select-option-hover-bg)' : 'transparent', color: 'var(--select-option-color)', ':active': { backgroundColor: 'var(--select-option-selected-bg)' } }),
+    multiValue: (base) => ({ ...base, backgroundColor: 'var(--select-multi-bg)' }),
+    multiValueLabel: (base) => ({ ...base, color: 'var(--select-multi-label-color)' }),
+    multiValueRemove: (base) => ({ ...base, color: 'var(--select-multi-remove-color)', ':hover': { backgroundColor: 'var(--select-multi-remove-hover-bg)', color: 'var(--select-multi-remove-hover-color)' } }),
+    input: (base) => ({ ...base, color: 'var(--select-input-color)' }),
+    placeholder: (base) => ({ ...base, color: 'var(--select-placeholder-color)' }),
+  };
+
   return (
-    <div className="font-sans">
+    <div className="font-sans [--select-bg:white] [--select-border:hsl(0,0%,80%)] [--select-border-hover:hsl(0,0%,70%)] [--select-menu-bg:white] [--select-option-hover-bg:#deebff] [--select-option-selected-bg:#2684ff] [--select-option-color:inherit] [--select-multi-bg:#e6e6e6] [--select-multi-label-color:inherit] [--select-multi-remove-color:#8c8c8c] [--select-multi-remove-hover-bg:#ff8f8f] [--select-multi-remove-hover-color:white] [--select-input-color:inherit] [--select-placeholder-color:hsl(0,0%,50%)] dark:[--select-bg:#2d3748] dark:[--select-border:#4a5568] dark:[--select-border-hover:#718096] dark:[--select-menu-bg:#2d3748] dark:[--select-option-hover-bg:#4a5568] dark:[--select-option-selected-bg:#4299e1] dark:[--select-multi-bg:#4a5568] dark:[--select-multi-label-color:white] dark:[--select-multi-remove-color:#a0aec0] dark:[--select-multi-remove-hover-bg:#e53e3e] dark:[--select-multi-remove-hover-color:white] dark:[--select-input-color:white] dark:[--select-placeholder-color:#a0aec0]">
       {/* Hero Section */}
       <div className="relative h-64 sm:h-80 bg-gray-800">
         <Image
@@ -146,8 +188,21 @@ export default function OutputsPage({ params }: Props) {
             <h2 className="hidden lg:block text-2xl font-bold uppercase tracking-wider mb-6 text-gray-700 dark:text-gray-300 text-center">
               Contents
             </h2>
+            <div className="mb-6 px-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" htmlFor="author-filter-select">Filter by Author</label>
+              <Select
+                instanceId="author-filter-select"
+                isMulti
+                options={allAuthors}
+                value={selectedAuthors}
+                onChange={(selected) => setSelectedAuthors(selected as any)}
+                placeholder="All Authors"
+                styles={selectStyles}
+                className="text-sm"
+              />
+            </div>
             {/* Working Groups Contents */}
-            {workingGroups.map((group) => (
+            {filteredWorkingGroups.map((group) => (
               <CollapsibleSection
                 key={group._id}
                 isOpen={!!openContents[group._id]}
@@ -193,7 +248,7 @@ export default function OutputsPage({ params }: Props) {
             ))}
 
             {/* Content Groups Contents */}
-            {contentGroups.map((group) => (
+            {filteredContentGroups.map((group) => (
               <CollapsibleSection
                 key={group._id}
                 isOpen={!!openContents[group._id]}
@@ -253,7 +308,7 @@ export default function OutputsPage({ params }: Props) {
         <div className="lg:col-span-8 xl:col-span-9 py-16">
           {/* Output Details Section - Working Groups */}
           <div className="space-y-8">
-            {workingGroups.map((group, groupIndex) => (
+            {filteredWorkingGroups.map((group, groupIndex) => (
               group.articles && group.articles.length > 0 && (
                 <section key={group._id} id={`wg-${group.slug.current}`} className="bg-white dark:bg-gray-900/95 rounded-lg shadow-sm overflow-hidden">
                   <CollapsibleSection
@@ -295,7 +350,7 @@ export default function OutputsPage({ params }: Props) {
 
           {/* Output Details Section - Content Groups */}
           <div className="mt-16 space-y-8">
-            {contentGroups.map((group) => (
+            {filteredContentGroups.map((group) => (
               (group.articles && group.articles.length > 0) || (group.doors && group.doors.length > 0) ? (
                 <div key={group._id} id={`cg-${group.slug.current}`} className="bg-white dark:bg-gray-900/95 rounded-lg shadow-sm overflow-hidden">
                   <CollapsibleSection

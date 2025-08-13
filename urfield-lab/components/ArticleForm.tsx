@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Select from 'react-select';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
@@ -9,6 +9,18 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from '@dnd-kit/utilities';
 import { Author, Article, WorkingGroup } from '@/sanity/sanity-utils';
 import { SessionData } from '@/lib/session';
+import ArticlePreview from './ArticlePreview';
+import ArticleBody from './ArticleBody';
+import { urlFor } from '@/sanity/sanity-utils';
+import RichTextEditor from './RichTextEditor';
+
+// A local, more flexible Article type for previewing purposes
+type PreviewArticle = Omit<Article, 'mainImage' | 'authors' | 'year'> & {
+    mainImage: any; // Can be a Sanity image object or a preview URL string
+    authors: { name: string, image?: any }[];
+    year: any;
+    externalLinks?: { buttonText: string; url: string }[];
+};
 
 // Props definition for the form component
 interface ArticleFormProps {
@@ -16,6 +28,7 @@ interface ArticleFormProps {
   availableAuthors: Author[];
   availableWGs: WorkingGroup[];
   user: SessionData | null;
+  yearSlug: string; // Add yearSlug for preview link
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   onCancel: () => void;
   isPublishing: boolean;
@@ -40,6 +53,27 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
     };
     
     const newFile = fileMap.get(id);
+    // State for image preview URL
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        let objectUrl: string | null = null;
+        if (newFile) {
+            objectUrl = URL.createObjectURL(newFile);
+            setPreviewUrl(objectUrl);
+        } else if (block.asset?.url) {
+            setPreviewUrl(block.asset.url);
+        } else {
+            setPreviewUrl(null);
+        }
+
+        return () => {
+            if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+            }
+        };
+    }, [newFile, block.asset?.url]);
+
 
     return (
       <div ref={setNodeRef} style={style} {...attributes} className="p-3 border rounded-md bg-gray-50 dark:bg-gray-700">
@@ -52,7 +86,10 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
                     <input type="text" placeholder="Section Title" value={block.text || ''} onChange={e => updateBlock(index, { text: e.target.value })} className="w-full text-2xl font-bold text-center bg-transparent border-b dark:border-gray-500" />
                 )}
                 {block._type === 'textBlock' && (
-                    <textarea placeholder="Text content..." value={block.content?.[0]?.children?.[0]?.text || ''} onChange={e => updateBlock(index, { content: [{ _type: 'block', style: 'normal', children: [{ _type: 'span', text: e.target.value }] }] })} className="w-full h-24 bg-transparent border rounded-md p-2 dark:border-gray-500" />
+                    <RichTextEditor 
+                        value={block.content} 
+                        onChange={newContent => updateBlock(index, { content: newContent })} 
+                    />
                 )}
                 {block._type === 'list' && (
                     <div className="space-y-1">
@@ -107,9 +144,12 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
                             onChange={e => updateBlock(index, {}, e.target.files?.[0])} 
                             className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         />
-                        {newFile && <p className="text-xs text-green-500">New file selected: {newFile.name}</p>}
+                        {previewUrl && block._type !== 'pdfFile' && (
+                            <img src={previewUrl} alt="Preview" className="mt-2 max-h-40 rounded-md shadow-sm" />
+                        )}
+                        {newFile && <p className="text-xs text-green-500 mt-1">New file selected: {newFile.name}</p>}
                         {!newFile && block.asset?.originalFilename && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 mt-1">
                                 Current file: <a href={block.asset.url} target="_blank" rel="noopener noreferrer" className="underline">{block.asset.originalFilename}</a>.
                                 <br/>
                                 Upload a new one to replace it.
@@ -131,10 +171,17 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
 }
 
 // The main Article Form Component
-export default function ArticleForm({ article, availableAuthors, availableWGs, user, onSubmit, onCancel, isPublishing }: ArticleFormProps) {
+export default function ArticleForm({ article, availableAuthors, availableWGs, user, yearSlug, onSubmit, onCancel, isPublishing }: ArticleFormProps) {
+    const formRef = useRef<HTMLFormElement>(null);
     const [hasBody, setHasBody] = useState(article?.hasBody || false);
     const [title, setTitle] = useState(article?.title || '');
+    const [mainImagePreview, setMainImagePreview] = useState<string | null>(article?.mainImage ? urlFor(article.mainImage).url() : null);
+    const [externalLinks, setExternalLinks] = useState(article?.externalLinks || []);
     
+    // State for the preview modal
+    const [previewData, setPreviewData] = useState<PreviewArticle | null>(null);
+    const [previewType, setPreviewType] = useState<'preview' | 'body' | null>(null);
+
     const authorOptions = availableAuthors.filter(a => a._id !== user?._id).map(a => ({ value: a._id, label: a.name }));
     const wgOptions = availableWGs.map(wg => ({ value: wg._id, label: wg.title }));
     
@@ -230,13 +277,113 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
         });
     };
 
+    const handleShowPreview = (type: 'preview' | 'body') => {
+        if (!formRef.current || !user) return;
+
+        const formData = new FormData(formRef.current);
+        const currentUserAuthor = { name: user.name, image: user.pictureURL ? { asset: { url: user.pictureURL } } : undefined };
+        const selectedAuthorDetails = selectedAuthors.map(opt => {
+            const authorData = availableAuthors.find(a => a._id === opt.value);
+            return { name: opt.label, image: authorData?.pictureURL ? { asset: { url: authorData.pictureURL } } : undefined };
+        });
+
+        // Create a version of the body with temporary URLs for new images
+        const previewBody = body.map(block => {
+            if ((block._type === 'imageObject' || block._type === 'posterObject') && fileMap.has(block._key)) {
+                const file = fileMap.get(block._key);
+                if (file) {
+                    // Create a temporary URL for the preview
+                    return { ...block, asset: { url: URL.createObjectURL(file), metadata: { dimensions: { width: 800, height: 600 } } } };
+                }
+            }
+            return block;
+        });
+
+        const constructedArticle: PreviewArticle = {
+            _id: article?._id || 'new-article',
+            _type: 'article',
+            title: formData.get('title') as string,
+            summary: formData.get('summary') as string,
+            mainImage: mainImagePreview, // Use the preview URL
+            youtubeVideoUrl: formData.get('youtubeVideoUrl') as string,
+            hasBody: hasBody,
+            buttonText: formData.get('buttonText') as string,
+            authorListPrefix: formData.get('authorListPrefix') as string,
+            authors: [currentUserAuthor, ...selectedAuthorDetails],
+            slug: { current: slugify(title, { lower: true, strict: true }) },
+            body: previewBody,
+            externalLinks: externalLinks,
+            // Dummy data for non-essential fields
+            year: article?.year || { _id: '', _type: 'year', year: new Date().getFullYear(), title: '', slug: { current: yearSlug } },
+            // Add other required fields from Article that are not in PreviewArticle with dummy data if needed
+            workingGroups: [], // Example dummy data
+            contentGroups: [], // Example dummy data
+        };
+
+        setPreviewData(constructedArticle);
+        setPreviewType(type);
+    };
+
+    const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setMainImagePreview(URL.createObjectURL(file));
+        }
+    };
+
+    const PreviewModal = () => {
+        if (!previewData || !previewType) return null;
+
+        return (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4" onClick={() => setPreviewType(null)}>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl h-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+                    <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
+                        <h3 className="text-lg font-bold">{previewType === 'preview' ? 'Article Preview' : 'Article Body Preview'}</h3>
+                        <button onClick={() => setPreviewType(null)} className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 text-2xl font-bold">&times;</button>
+                    </div>
+                    <div className="p-6 overflow-y-auto flex-grow">
+                        {previewType === 'preview' && previewData && (
+                            <ArticlePreview article={previewData} yearSlug={yearSlug} imageOrder="md:order-last" textOrder="md:order-first" />
+                        )}
+                        {previewType === 'body' && previewData && (
+                            <ArticleBody body={previewData.body || []} youtubeVideoUrl={previewData.youtubeVideoUrl} />
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="w-full max-w-4xl p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <h2 className="text-2xl font-bold text-center">{article ? 'Edit Article' : 'Create New Article'}</h2>
+            <PreviewModal />
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">{article ? 'Edit Article' : 'Create New Article'}</h2>
+                <div className="flex gap-2">
+                    <button type="button" onClick={() => handleShowPreview('preview')} className="py-2 px-4 text-sm bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500">
+                        Show Preview
+                    </button>
+                    {hasBody && (
+                        <button type="button" onClick={() => handleShowPreview('body')} className="py-2 px-4 text-sm bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500">
+                            Show Body
+                        </button>
+                    )}
+                </div>
+            </div>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <form onSubmit={onSubmit} className="space-y-6" ref={form => { if (form) (form as any).fileMap = fileMap; }}>
+            <form 
+                onSubmit={(e) => {
+                    // Attach the fileMap to the form element so the parent handler can access it
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (e.currentTarget as any).fileMap = fileMap;
+                    onSubmit(e);
+                }} 
+                ref={formRef} 
+                className="space-y-6"
+            >
                 <input type="hidden" name="authors" value={JSON.stringify(selectedAuthors.map(opt => opt.value))} />
                 <input type="hidden" name="workingGroups" value={JSON.stringify(selectedWGs.map(opt => opt.value))} />
+                <input type="hidden" name="externalLinks" value={JSON.stringify(externalLinks)} />
                 {hasBody && <input type="hidden" name="body" value={JSON.stringify(getBodyForSubmission())} />}
 
                 <div>
@@ -245,8 +392,15 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                 </div>
                 <div>
                     <label className="block text-sm font-medium">Main Cover Image</label>
-                    <input name="mainImage" type="file" accept="image/*" required={!article} className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                    {article?.mainImage && <p className="text-xs mt-1">Current image is set. Upload a new one to replace it.</p>}
+                    <input name="mainImage" type="file" accept="image/*" required={!article} onChange={handleMainImageChange} className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                    {mainImagePreview ? (
+                        <div className="mt-2">
+                            <img src={mainImagePreview} alt="Main image preview" className="max-h-40 rounded-md" />
+                            <p className="text-xs mt-1">{article?.mainImage ? "Current image is set. Upload a new one to replace it." : "New image selected."}</p>
+                        </div>
+                    ) : (
+                       <p className="text-xs mt-1">A cover image is required.</p>
+                    )}
                 </div>
                 <div>
                     <label className="block text-sm font-medium">Themes</label>
@@ -261,6 +415,29 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                 <div>
                     <label className="block text-sm font-medium">Summary</label>
                     <textarea name="summary" required defaultValue={article?.summary} className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
+                </div>
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium">External Links (for Preview Card)</label>
+                    {(externalLinks || []).map((link: { buttonText: string, url: string }, i: number) => (
+                        <div key={i} className="flex items-center gap-2 p-2 border rounded-md">
+                            <input type="text" placeholder="Button Text" value={link.buttonText} onChange={e => {
+                                const newLinks = [...(externalLinks || [])];
+                                newLinks[i] = { ...newLinks[i], buttonText: e.target.value };
+                                setExternalLinks(newLinks);
+                            }} className="w-1/2 bg-transparent border-b" />
+                            <input type="url" placeholder="https://example.com" value={link.url} onChange={e => {
+                                const newLinks = [...(externalLinks || [])];
+                                newLinks[i] = { ...newLinks[i], url: e.target.value };
+                                setExternalLinks(newLinks);
+                            }} className="w-1/2 bg-transparent border-b" />
+                            <button type="button" onClick={() => {
+                                const newLinks = [...(externalLinks || [])];
+                                newLinks.splice(i, 1);
+                                setExternalLinks(newLinks);
+                            }} className="ml-2 text-red-500 text-xs">X</button>
+                        </div>
+                    ))}
+                    <button type="button" onClick={() => setExternalLinks([...(externalLinks || []), { buttonText: '', url: '' }])} className="text-sm text-blue-500">+ Add Link</button>
                 </div>
                 <div>
                     <label className="block text-sm font-medium">YouTube Video URL (Optional)</label>

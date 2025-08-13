@@ -57,9 +57,10 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
                     </ul>
                 );
             case 'imageObject':
+                if (!block.asset) return null; // Don't render if there's no image asset
                 return (
                     <figure key={index} className="mb-4 break-inside-avoid">
-                        <Image src={urlFor(block.asset).url()} alt={block.caption || 'Article image'} width={block.asset.metadata.dimensions.width} height={block.asset.metadata.dimensions.height} className="rounded-lg" />
+                        <Image src={block.asset.url || urlFor(block.asset).url()} alt={block.caption || 'Article image'} width={block.asset.metadata?.dimensions?.width || 800} height={block.asset.metadata?.dimensions?.height || 600} className="rounded-lg" />
                         {block.caption && <figcaption className="text-sm text-center text-gray-500 mt-2">{block.caption}</figcaption>}
                     </figure>
                 );
@@ -123,7 +124,7 @@ export default function ArticleBody({ body, youtubeVideoUrl }: Props) {
                 if (group.type === 'posterObject' && group.block.asset) {
                     return (
                         <div key={groupIndex} className="my-8">
-                            <Image src={urlFor(group.block.asset).url()} alt="Poster image" width={group.block.asset.metadata.dimensions.width} height={group.block.asset.metadata.dimensions.height} className="w-full h-auto rounded-lg shadow-lg" />
+                            <Image src={group.block.asset.url || urlFor(group.block.asset).url()} alt="Poster image" width={group.block.asset.metadata?.dimensions?.width || 1200} height={group.block.asset.metadata?.dimensions?.height || 600} className="w-full h-auto rounded-lg shadow-lg" />
                         </div>
                     );
                 }

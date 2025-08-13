@@ -24,6 +24,7 @@ export async function POST(request: Request) {
         login_name,
         password,
         verified,
+        isAdmin,
         "pictureURL": picture.asset->url
       }`,
       { login_name }
@@ -58,6 +59,7 @@ export async function POST(request: Request) {
     session.login_name = author.login_name;
     session.pictureURL = author.pictureURL || undefined;
     session.isLoggedIn = true;
+    session.isAdmin = author.isAdmin || false; // Add this line
     await session.save();
 
     // Return a subset of author data to the client (excluding password)

@@ -315,6 +315,7 @@ export interface Author {
     role?: string;
     institute?: string;
     bio?: string;
+    isAdmin?: boolean;
     articles?: {
         _id: string;
         title: string;
@@ -398,9 +399,11 @@ export interface Article {
   hasBody?: boolean;
   buttonText?: string;
   youtubeVideoUrl?: string;
+  externalLinks?: { buttonText: string; url: string }[];
   authors?: Author[];
   workingGroups?: WorkingGroup[];
   contentGroups?: ContentGroup[];
+  verified?: boolean;
   // The body can contain various content blocks
   body?: ContentBlock[];
 }
@@ -806,9 +809,38 @@ export async function getAuthorById(authorId: string): Promise<Author | null> {
         email,
         role,
         institute,
+        isAdmin,
         "pictureURL": picture.asset->url
       }`,
     { authorId }
+  );
+}
+
+export async function getUnverifiedArticles(yearId: string): Promise<Article[]> {
+  return client.fetch(
+    groq`*[_type == "article" && year._ref == $yearId && verified != true] {
+      ...,
+      "mainImage": mainImage.asset->{_id, url},
+      "authors": authors[]->{_id, name},
+      body[]{
+        ...,
+        _type == "imageObject" || _type == "posterObject" || _type == "pdfFile" => {
+          "asset": asset->{_id, url, originalFilename, metadata}
+        }
+      }
+    }`,
+    { yearId }
+  );
+}
+
+export async function getUnverifiedAuthors(yearId: string): Promise<Author[]> {
+  return client.fetch(
+    groq`*[_type == "author" && year._ref == $yearId && verified != true] {
+      _id,
+      name,
+      "pictureURL": picture.asset->url
+    }`,
+    { yearId }
   );
 }
 
@@ -899,10 +931,10 @@ export async function getWorkingGroups(
     groq`*[_type == "workingGroup" && year._ref == $yearId] | order(order asc, title asc) {
       ...,
       icon { asset->{ url } },
-      "articles": *[_type == "article" && references(^._id)] | order(order asc, title asc) {
+      "articles": *[_type == "article" && references(^._id) && verified == true] | order(order asc, title asc) {
         ...,
         mainImage { "asset": asset-> },
-        authors[]-> { name, image }
+        authors[]-> { _id, name, image }
       }
     }`,
     { yearId }
@@ -917,10 +949,10 @@ export async function getContentGroups(
     groq`*[_type == "contentGroup" && year._ref == $yearId] | order(order asc, title asc) {
       ...,
       icon { asset->{ url } },
-      "articles": *[_type == "article" && references(^._id)] | order(order asc, title asc) {
+      "articles": *[_type == "article" && references(^._id) && verified == true] | order(order asc, title asc) {
         ...,
         mainImage { "asset": asset-> },
-        authors[]-> { name, image }
+        authors[]-> { _id, name, image }
       },
       "doors": *[_type == "door" && references(^._id)] | order(title asc) {
         _id,
@@ -930,6 +962,17 @@ export async function getContentGroups(
         icon { asset-> { _ref, url } },
         externalLinks
       }
+    }`,
+    { yearId }
+  );
+}
+
+export async function getAuthorsForFilter(yearId: string): Promise<{ _id: string; name: string }[]> {
+  if (!yearId) return [];
+  return client.fetch(
+    groq`*[_type == "author" && _id in *[_type=="article" && year._ref == $yearId && verified == true].authors[]._ref] | order(name asc) {
+      _id,
+      name
     }`,
     { yearId }
   );

@@ -19,7 +19,7 @@ type Article = {
   slug?: { current: string };
   summary: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mainImage: any; // Can be a Sanity image object
+  mainImage?: any; // Can be a Sanity image object or a preview URL string
   youtubeVideoUrl?: string;
   hasBody?: boolean;
   buttonText?: string;
@@ -38,6 +38,7 @@ type Props = {
 
 export default function ArticlePreview({ article, yearSlug, imageOrder, textOrder }: Props) {
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
+  const imageUrl = article.mainImage ? (typeof article.mainImage === 'string' ? article.mainImage : urlFor(article.mainImage).width(800).url()) : null;
 
   return (
     <>
@@ -90,8 +91,8 @@ export default function ArticlePreview({ article, yearSlug, imageOrder, textOrde
           </div>
         </div>
         <div className={imageOrder}>
-          {videoId && article.youtubeVideoUrl ? (
-            <a href={article.youtubeVideoUrl} target="_blank" rel="noopener noreferrer" className="relative w-full aspect-video block rounded-lg shadow-lg overflow-hidden group">
+          {videoId ? (
+            <a href={article.youtubeVideoUrl} target="_blank" rel="noopener noreferrer" className="block relative group aspect-video rounded-lg shadow-lg overflow-hidden">
               <Image
                 src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
                 alt={`Video thumbnail for ${article.title}`}
@@ -104,9 +105,9 @@ export default function ArticlePreview({ article, yearSlug, imageOrder, textOrde
                 </svg>
               </div>
             </a>
-          ) : article.mainImage && (
+          ) : imageUrl && (
             <Image
-              src={urlFor(article.mainImage).width(800).url()}
+              src={imageUrl}
               alt={`Cover image for ${article.title}`}
               width={800}
               height={0}

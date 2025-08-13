@@ -2,13 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { getYearBySlug, getWorkingGroups, getAuthorsByYear, getArticlesByAuthor, WorkingGroup, Author, Article, getAuthorById, getUnverifiedArticles, getUnverifiedAuthors } from '@/sanity/sanity-utils';
+import { getYearBySlug, getWorkingGroups, getAuthorsByYear, getArticlesByAuthor, WorkingGroup, Author, Article, getAuthorById } from '@/sanity/sanity-utils';
 import Image from 'next/image';
 import React from 'react';
 import ArticleForm from '@/components/ArticleForm'; // Import the new component
 import Link from 'next/link';
-import ArticlePreview from '@/components/ArticlePreview';
-import ArticleBody from '@/components/ArticleBody';
 
 type Props = {
     params: Promise<{ year: string }>;
@@ -28,19 +26,13 @@ export default function DashboardPage({ params }: Props) {
     const signupFormRef = useRef<HTMLFormElement>(null);
 
     // State for article management
-    const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm' | 'verifyArticles' | 'verifyAuthors'>('dashboard');
+    const [view, setView] = useState<'dashboard' | 'create' | 'editList' | 'editForm'>('dashboard');
     const [userArticles, setUserArticles] = useState<Article[]>([]);
     const [editingArticle, setEditingArticle] = useState<Article | null>(null);
     const [availableWGs, setAvailableWGs] = useState<WorkingGroup[]>([]);
     const [availableAuthors, setAvailableAuthors] = useState<Author[]>([]);
     const [isPublishing, setIsPublishing] = useState(false); // New state for loading
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
-    // Admin state
-    const [unverifiedArticles, setUnverifiedArticles] = useState<Article[]>([]);
-    const [unverifiedAuthors, setUnverifiedAuthors] = useState<Author[]>([]);
-    const [previewData, setPreviewData] = useState<Article | null>(null);
-    const [previewType, setPreviewType] = useState<'preview' | 'body' | null>(null);
      
     useEffect(() => {
         if (unwrappedParams.year) {
@@ -60,18 +52,10 @@ export default function DashboardPage({ params }: Props) {
             if (view === 'editList') {
                 getArticlesByAuthor(user._id).then(setUserArticles);
             }
-            if (authorProfile?.isAdmin && yearData) {
-                if (view === 'verifyArticles') {
-                    getUnverifiedArticles(yearData._id).then(setUnverifiedArticles);
-                }
-                if (view === 'verifyAuthors') {
-                    getUnverifiedAuthors(yearData._id).then(setUnverifiedAuthors);
-                }
-            }
         } else {
             setAuthorProfile(null);
         }
-    }, [view, user, authorProfile?.isAdmin, yearData]);
+    }, [view, user]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -100,16 +84,24 @@ export default function DashboardPage({ params }: Props) {
     }
     formData.append('yearId', yearData._id);
 
-    const result = await signup(formData);
-
-    if (result.success) {
-        setMessage(result.message || 'Signup successful!');
-        signupFormRef.current?.reset();
-        setIsSigningUp(false); // Go back to login view
-    } else {
-        setError(result.error || 'An unknown error occurred.');
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        body: formData, // Send FormData directly
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage(data.message);
+        setIsSigningUp(false);
+        loginFormRef.current?.reset();
+      } else {
+        setError(data.message || 'An error occurred during signup.');
+      }
+    } catch {
+      setError('An unexpected error occurred.');
+    } finally {
+        setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,135 +113,88 @@ export default function DashboardPage({ params }: Props) {
     const login_name = formData.get('login_name') as string;
     const password = formData.get('password') as string;
 
-    const result = await login(login_name, password);
-
-    if (result.success) {
-      setMessage('Login successful!');
-      loginFormRef.current?.reset();
-    } else {
-      setError(result.error || 'An unknown error occurred.');
+    try {
+      const data = await login(login_name, password);
+      
+      // The API returns a 'message' property on error, which we check for here.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (data && (data as any).message) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setError((data as any).message);
+      }
+      // On successful login, the useAuth context will handle the state update.
+    } catch (err) {
+      // This will catch network errors or if the login function throws an exception.
+      setError('An unexpected error occurred during login.');
+      console.error(err);
+    } finally {
+        setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
-  const handlePublishArticle = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError('');
-        setMessage('');
-        setIsPublishing(true);
+    const handlePublishArticle = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setIsPublishing(true);
 
-        if (!yearData || !user) {
-            setError("Cannot publish: Missing user or year information.");
-            setIsPublishing(false);
-            return;
-        }
+    if (!yearData || !user) {
+        setError("Cannot publish article: missing year or user data.");
+        setIsPublishing(false);
+        return;
+    }
 
-        const formData = new FormData(e.currentTarget);
-        formData.append('yearId', yearData._id);
-        
-        // Ensure the current user is always in the author list
-        const authorIds = JSON.parse(formData.get('authors') as string);
-        if (!authorIds.includes(user._id)) {
-            authorIds.unshift(user._id);
-        }
-        formData.set('authors', JSON.stringify(authorIds));
+    const formData = new FormData(e.currentTarget);
+    formData.append('yearId', yearData._id);
+    
+    const authorIds = JSON.parse(formData.get('authors') as string);
+    if (!authorIds.includes(user._id)) {
+        authorIds.unshift(user._id);
+    }
+    formData.set('authors', JSON.stringify(authorIds));
 
-        // Add existing article ID if editing
-        if (editingArticle?._id) {
-            formData.append('articleId', editingArticle._id);
-        }
-        
-        // The fileMap is attached to the form element in ArticleForm.tsx
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const fileMap = (e.currentTarget as any).fileMap as Map<string, File>;
-        if (fileMap) {
-            // Append files using their block _key as the field name, which the API expects
-            fileMap.forEach((file, key) => {
-                formData.append(key, file, file.name);
-            });
-        }
+    const wgIds = JSON.parse(formData.get('workingGroups') as string);
+    formData.set('workingGroups', JSON.stringify(wgIds));
 
-        try {
-            // Use the correct API endpoint
-            const response = await fetch('/api/articles', {
-                method: 'POST',
-                body: formData,
-            });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fileMap = (e.currentTarget as any /* TODO: proper type */).fileMap as Map<string, File>;
+    fileMap.forEach((file, key) => {
+        formData.append(key, file);
+    });
 
-            const result = await response.json();
+    const bodyContent = formData.get('body');
+    if (bodyContent) {
+        formData.set('body', bodyContent);
+    }
 
-            if (!response.ok) {
-                // Use the error message from the API response
-                throw new Error(result.message || 'Failed to publish article');
-            }
+    if (editingArticle) {
+        formData.append('articleId', editingArticle._id);
+    }
 
-            setMessage('Article published successfully!');
+    try {
+        const res = await fetch('/api/articles', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setMessage(data.message);
             setView('dashboard');
             setEditingArticle(null);
-            // Refresh user articles
-            const updatedArticles = await getArticlesByAuthor(user._id);
-            setUserArticles(updatedArticles);
-
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred during publishing.');
-        } finally {
-            setIsPublishing(false);
-        }
-    };
-
-  const handleVerifyDocument = async (documentId: string, type: 'author' | 'article') => {
-    setMessage('');
-    setError('');
-    try {
-        const res = await fetch('/api/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ documentId, type }),
-        });
-
-        if (!res.ok) {
-            const data = await res.json();
-            throw new Error(data.message || 'Verification failed');
-        }
-
-        setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} verified successfully!`);
-        if (type === 'article') {
-            setUnverifiedArticles(prev => prev.filter(a => a._id !== documentId));
         } else {
-            setUnverifiedAuthors(prev => prev.filter(a => a._id !== documentId));
+            setError(data.message || 'An error occurred during publishing.');
+            // Keep the form open on error so the user can see what went wrong
         }
-    } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+    } catch {
+        setError('An unexpected error occurred.');
+    } finally {
+        setIsPublishing(false);
     }
   };
-
   const openEditForm = (article: Article) => {
     setEditingArticle(article);
     setView('editForm');
   }
-
-  const PreviewModal = () => {
-    if (!previewData || !previewType) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4" onClick={() => setPreviewData(null)}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl h-full max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
-                <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
-                    <h3 className="text-lg font-bold">{previewType === 'preview' ? 'Article Preview' : 'Article Body Preview'}</h3>
-                    <button onClick={() => setPreviewData(null)} className="text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 text-2xl font-bold">&times;</button>
-                </div>
-                <div className="p-6 overflow-y-auto flex-grow">
-                    {previewType === 'preview' && (
-                        <ArticlePreview article={previewData} yearSlug={unwrappedParams.year} imageOrder="md:order-last" textOrder="md:order-first" />
-                    )}
-                    {previewType === 'body' && (
-                        <ArticleBody body={previewData.body || []} youtubeVideoUrl={previewData.youtubeVideoUrl} />
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-  };
 
   // Custom Navbar for Dashboard
   const DashboardNav = () => (
@@ -313,7 +258,6 @@ export default function DashboardPage({ params }: Props) {
   return (
     <div>
       <DashboardNav />
-      <PreviewModal />
       <main className="max-w-7xl mx-auto p-8 sm:p-12">
         {!user ? (
           <div className="flex justify-center">
@@ -346,10 +290,6 @@ export default function DashboardPage({ params }: Props) {
                   <div className="mb-4">
                       <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="institute">Institute (Optional)</label>
                       <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="institute" name="institute" type="text" placeholder="Institute" />
-                  </div>
-                  <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bio">Bio (Optional)</label>
-                      <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24" id="bio" name="bio" placeholder="A short biography..."></textarea>
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="picture">Profile Picture (Optional)</label>
@@ -397,15 +337,9 @@ export default function DashboardPage({ params }: Props) {
                     <p>This is your dashboard. What would you like to do?</p>
                     {message && <p className="my-4 text-center text-green-500">{message}</p>}
                     {error && <p className="my-4 text-center text-red-500">{error}</p>}
-                    <div className="mt-8 flex gap-4 flex-wrap">
+                    <div className="mt-8 flex gap-4">
                         <button onClick={() => { setView('create'); setMessage(''); setError(''); }} className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create Article</button>
                         <button onClick={() => setView('editList')} className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700">Edit My Articles</button>
-                        {authorProfile?.isAdmin && (
-                            <>
-                                <button onClick={() => setView('verifyArticles')} className="py-2 px-4 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Verify Articles</button>
-                                <button onClick={() => setView('verifyAuthors')} className="py-2 px-4 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">Verify Authors</button>
-                            </>
-                        )}
                     </div>
                 </div>
             )}
@@ -440,51 +374,6 @@ export default function DashboardPage({ params }: Props) {
                             ))
                         ) : (
                             <p>You have not been listed as an author on any articles for this year.</p>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {view === 'verifyArticles' && authorProfile?.isAdmin && (
-                 <div>
-                    <h2 className="text-2xl font-bold">Verify Articles</h2>
-                    <button onClick={() => setView('dashboard')} className="text-sm text-blue-600 hover:underline mt-2 mb-4">Back to Dashboard</button>
-                    <div className="space-y-4">
-                        {unverifiedArticles.length > 0 ? (
-                            unverifiedArticles.map(article => (
-                                <div key={article._id} className="p-4 border rounded-md flex justify-between items-center">
-                                    <span>{article.title}</span>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => { setPreviewData(article); setPreviewType('preview'); }} className="py-1 px-3 bg-gray-500 text-white rounded-md text-sm hover:bg-gray-600">Preview</button>
-                                        {article.hasBody && <button onClick={() => { setPreviewData(article); setPreviewType('body'); }} className="py-1 px-3 bg-gray-500 text-white rounded-md text-sm hover:bg-gray-600">Body</button>}
-                                        <button onClick={() => handleVerifyDocument(article._id, 'article')} className="py-1 px-3 bg-green-500 text-white rounded-md text-sm hover:bg-green-600">Verify</button>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No unverified articles found for this year.</p>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {view === 'verifyAuthors' && authorProfile?.isAdmin && (
-                 <div>
-                    <h2 className="text-2xl font-bold">Verify Authors</h2>
-                    <button onClick={() => setView('dashboard')} className="text-sm text-blue-600 hover:underline mt-2 mb-4">Back to Dashboard</button>
-                    <div className="space-y-4">
-                        {unverifiedAuthors.length > 0 ? (
-                            unverifiedAuthors.map(author => (
-                                <div key={author._id} className="p-4 border rounded-md flex justify-between items-center">
-                                    <div className="flex items-center gap-3">
-                                        <Image src={author.pictureURL || '/default profile pic.webp'} alt={author.name} width={40} height={40} className="rounded-full" />
-                                        <span>{author.name}</span>
-                                    </div>
-                                    <button onClick={() => handleVerifyDocument(author._id, 'author')} className="py-1 px-3 bg-green-500 text-white rounded-md text-sm hover:bg-green-600">Verify</button>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No unverified authors found for this year.</p>
                         )}
                     </div>
                 </div>

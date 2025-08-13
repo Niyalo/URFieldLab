@@ -211,6 +211,13 @@ export const article = defineType({
       description: 'A number to determine the order of articles within a working group. Lower numbers appear first.',
     }),
     defineField({
+      name: 'verified',
+      title: 'Verified',
+      type: 'boolean',
+      description: 'Admin-verified articles will be publicly visible.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'body',
       title: 'Page Content',
       type: 'array',

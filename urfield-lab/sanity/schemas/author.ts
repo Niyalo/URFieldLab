@@ -64,6 +64,13 @@ export const author = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'isAdmin',
+      title: 'Is Admin',
+      type: 'boolean',
+      description: 'Admins have extra permissions in the dashboard.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'year',
       title: 'Year',
       type: 'reference',
