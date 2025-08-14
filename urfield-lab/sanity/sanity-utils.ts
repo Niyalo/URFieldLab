@@ -5,7 +5,7 @@ import { PortableTextBlock } from "sanity";
 
 // This is a placeholder. Remember to replace it with your actual client configuration.
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your-project-id",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: "2024-01-01",
   useCdn: true,
@@ -356,7 +356,7 @@ export interface WorkingGroup {
     _id: string;
     title: string;
     slug?: { current: string };
-    authors?: { name: string }[];
+    authors?: { _id: string; name: string }[];
     summary: string;
     mainImage: { asset: { _ref: string; url: string } };
     authorListPrefix?: string;

@@ -8,11 +8,11 @@ import path from 'path';
 
 // --- Sanity Client for Writing ---
 const writeClient: SanityClient = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id',
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
     apiVersion: '2024-01-01',
     useCdn: false,
-    token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN || 'placeholder-token',
+    token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN || "",
 });
 
 

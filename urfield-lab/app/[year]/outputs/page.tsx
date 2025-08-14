@@ -102,7 +102,7 @@ export default function OutputsPage({ params }: Props) {
       return groups
         .map(group => {
           const filteredArticles = group.articles?.filter(article =>
-            article.authors?.some(author => authorIds.has((author as any)._id))
+            article.authors?.some(author => authorIds.has(author._id))
           );
           return { ...group, articles: filteredArticles };
         })
@@ -195,7 +195,7 @@ export default function OutputsPage({ params }: Props) {
                 isMulti
                 options={allAuthors}
                 value={selectedAuthors}
-                onChange={(selected) => setSelectedAuthors(selected as any)}
+                onChange={(selected) => setSelectedAuthors((selected || []) as { value: string; label: string }[])}
                 placeholder="All Authors"
                 styles={selectStyles}
                 className="text-sm"

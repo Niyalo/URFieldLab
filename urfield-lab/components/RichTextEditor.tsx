@@ -4,17 +4,50 @@ import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import React, { useEffect } from 'react';
 
+// --- Types ---
+interface PortableTextSpan {
+  _type: 'span';
+  text: string;
+  marks?: string[];
+}
+
+interface PortableTextBlock {
+  _type: 'block';
+  style?: string;
+  children: PortableTextSpan[];
+  markDefs?: unknown[];
+  listItem?: string;
+  level?: number;
+}
+
+interface TipTapTextNode {
+  type: 'text';
+  text: string;
+  marks?: { type: string }[];
+}
+
+interface TipTapNode {
+  type: string;
+  content?: (TipTapNode | TipTapTextNode)[];
+  text?: string;
+  marks?: { type: string }[];
+}
+
+interface TipTapDocument {
+  type: 'doc';
+  content: TipTapNode[];
+}
+
 // --- Data Conversion Functions ---
 
 // Converts Sanity's Portable Text to TipTap's JSON format
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toTipTap = (blocks: any[]): any => {
+const toTipTap = (blocks: PortableTextBlock[]): TipTapDocument => {
   if (!blocks || blocks.length === 0) {
     return { type: 'doc', content: [] };
   }
   const content = blocks.map(block => {
     if (block._type === 'block') {
-      const blockContent = block.children.map((span: { text: string, marks: string[] }) => ({
+      const blockContent = block.children.map((span: PortableTextSpan) => ({
         type: 'text',
         text: span.text,
         marks: (span.marks || []).map(mark => ({ type: mark })),
@@ -60,47 +93,68 @@ const toTipTap = (blocks: any[]): any => {
 };
 
 // Converts TipTap's JSON to Sanity's Portable Text format
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toPortableText = (doc: any): any[] => {
-    if (!doc || !doc.content) return [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return doc.content.flatMap((node: any) => {
+const toPortableText = (doc: unknown): PortableTextBlock[] => {
+    const document = doc as TipTapDocument;
+    if (!document || !document.content) return [];
+    
+    const processedBlocks: PortableTextBlock[] = [];
+    
+    for (const node of document.content) {
         if (node.type === 'paragraph') {
-            const children = (node.content || []).map((textNode: { text: string, marks?: any[] }) => ({
-                _type: 'span',
-                text: textNode.text,
-                marks: (textNode.marks || []).map((mark: { type: string }) => mark.type),
-            }));
-            return [{ _type: 'block', style: 'normal', children, markDefs: [] }];
-        }
-        if (node.type === 'bulletList' || node.type === 'orderedList') {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return (node.content || []).flatMap((listItem: any) => 
-                (listItem.content || []).map((paragraph: { content: any[]; }) => {
-                    const children = (paragraph.content || []).map((textNode: { text: string, marks?: any[] }) => ({
-                        _type: 'span',
-                        text: textNode.text,
-                        marks: (textNode.marks || []).map((mark: { type: string }) => mark.type),
-                    }));
+            const children = (node.content || [])
+                .filter((textNode): textNode is TipTapTextNode => 
+                    'text' in textNode && typeof textNode.text === 'string'
+                )
+                .map((textNode) => ({
+                    _type: 'span' as const,
+                    text: textNode.text,
+                    marks: (textNode.marks || []).map((mark) => mark.type),
+                }));
+            processedBlocks.push({ _type: 'block', style: 'normal', children, markDefs: [] });
+        } else if (node.type === 'bulletList' || node.type === 'orderedList') {
+            const listBlocks = (node.content || []).flatMap((listItem) => {
+                if (!('content' in listItem)) return [];
+                return (listItem.content || []).map((paragraph) => {
+                    if (!('content' in paragraph)) {
+                        return { 
+                            _type: 'block' as const, 
+                            style: 'normal', 
+                            level: 1, 
+                            listItem: node.type === 'bulletList' ? 'bullet' : 'number', 
+                            children: [], 
+                            markDefs: [] 
+                        };
+                    }
+                    const children = (paragraph.content || [])
+                        .filter((textNode): textNode is TipTapTextNode => 
+                            'text' in textNode && typeof textNode.text === 'string'
+                        )
+                        .map((textNode) => ({
+                            _type: 'span' as const,
+                            text: textNode.text,
+                            marks: (textNode.marks || []).map((mark: { type: string }) => mark.type),
+                        }));
                     return {
-                        _type: 'block',
+                        _type: 'block' as const,
                         style: 'normal',
                         level: 1,
                         listItem: node.type === 'bulletList' ? 'bullet' : 'number',
                         children,
                         markDefs: [],
                     };
-                })
-            );
+                });
+            });
+            processedBlocks.push(...listBlocks);
         }
-        return [];
-    });
+    }
+    
+    return processedBlocks;
 };
 
 
 interface RichTextEditorProps {
-  value: any[] | undefined;
-  onChange: (value: any[]) => void;
+  value: PortableTextBlock[] | undefined;
+  onChange: (value: PortableTextBlock[]) => void;
 }
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {

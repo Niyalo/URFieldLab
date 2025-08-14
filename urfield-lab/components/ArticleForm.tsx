@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import Select from 'react-select';
 import { nanoid } from 'nanoid';
 import slugify from 'slugify';
@@ -16,9 +17,9 @@ import RichTextEditor from './RichTextEditor';
 
 // A local, more flexible Article type for previewing purposes
 type PreviewArticle = Omit<Article, 'mainImage' | 'authors' | 'year'> & {
-    mainImage: any; // Can be a Sanity image object or a preview URL string
-    authors: { name: string, image?: any }[];
-    year: any;
+    mainImage: string | { asset: { _ref: string; url: string } } | null; // Can be a Sanity image object or a preview URL string
+    authors: { name: string, image?: { asset: { url: string; _ref?: string } } | null }[];
+    year: { _id: string; slug: { current: string }; _type?: string; year?: number; title?: string } | null;
     externalLinks?: { buttonText: string; url: string }[];
 };
 
@@ -145,7 +146,7 @@ function SortableItem({ id, block, index, updateBlock, removeBlock, fileMap }: {
                             className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         />
                         {previewUrl && block._type !== 'pdfFile' && (
-                            <img src={previewUrl} alt="Preview" className="mt-2 max-h-40 rounded-md shadow-sm" />
+                            <Image src={previewUrl} alt="Preview" width={160} height={160} className="mt-2 max-h-40 rounded-md shadow-sm object-contain" />
                         )}
                         {newFile && <p className="text-xs text-green-500 mt-1">New file selected: {newFile.name}</p>}
                         {!newFile && block.asset?.originalFilename && (
@@ -370,12 +371,10 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                     )}
                 </div>
             </div>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <form 
                 onSubmit={(e) => {
                     // Attach the fileMap to the form element so the parent handler can access it
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (e.currentTarget as any).fileMap = fileMap;
+                    (e.currentTarget as HTMLFormElement & { fileMap: Map<string, File> }).fileMap = fileMap;
                     onSubmit(e);
                 }} 
                 ref={formRef} 
@@ -395,7 +394,7 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
                     <input name="mainImage" type="file" accept="image/*" required={!article} onChange={handleMainImageChange} className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                     {mainImagePreview ? (
                         <div className="mt-2">
-                            <img src={mainImagePreview} alt="Main image preview" className="max-h-40 rounded-md" />
+                            <Image src={mainImagePreview} alt="Main image preview" width={160} height={160} className="max-h-40 rounded-md object-contain" />
                             <p className="text-xs mt-1">{article?.mainImage ? "Current image is set. Upload a new one to replace it." : "New image selected."}</p>
                         </div>
                     ) : (
