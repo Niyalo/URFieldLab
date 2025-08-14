@@ -15,8 +15,8 @@ type Props = {
 };
 
 export default function DashboardPage({ params }: Props) {
-    const unwrappedParams = React.use(params);
-    const { user, isLoading, login, logout } = useAuth();
+  const unwrappedParams = React.use(params);
+  const { user, isLoading, login, logout, signup } = useAuth();
     const [isSigningUp, setIsSigningUp] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
