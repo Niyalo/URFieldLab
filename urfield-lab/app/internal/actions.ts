@@ -12,7 +12,7 @@ const writeClient: SanityClient = createClient({
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
     apiVersion: '2024-01-01',
     useCdn: false,
-    token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN,
+    token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN || 'placeholder-token',
 });
 
 

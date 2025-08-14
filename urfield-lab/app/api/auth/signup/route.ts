@@ -5,11 +5,11 @@ import { SanityImageAssetDocument } from "next-sanity";
 
 // Client with write access
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'placeholder-project-id',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: "2024-01-01",
   useCdn: false, // Must be false to ensure fresh data and for mutations
-  token: process.env.SANITY_API_WRITE_TOKEN,
+  token: process.env.SANITY_API_WRITE_TOKEN || 'placeholder-token',
 });
 
 export async function POST(request: Request) {
