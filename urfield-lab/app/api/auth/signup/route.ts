@@ -33,8 +33,8 @@ export async function POST(request: Request) {
     }
 
     const existingAuthor = await client.fetch(
-      `*[_type == "author" && login_name == $login_name][0]`,
-      { login_name }
+      `*[_type == "author" && login_name == $login_name && year._ref == $yearId][0]`,
+      { login_name, yearId }
     );
 
     if (existingAuthor) {

@@ -14,11 +14,15 @@ const client = createClient({
 
 export async function POST(request: Request) {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-  const { login_name, password } = await request.json();
+  const { login_name, password, yearId } = await request.json();
+
+  if (!yearId) {
+    return NextResponse.json({ message: "Year information is missing." }, { status: 400 });
+  }
 
   try {
     const author = await client.fetch(
-      `*[_type == "author" && login_name == $login_name][0]{
+      `*[_type == "author" && login_name == $login_name && year._ref == $yearId][0]{
         _id,
         name,
         login_name,
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
         isAdmin,
         "pictureURL": picture.asset->url
       }`,
-      { login_name }
+      { login_name, yearId }
     );
 
     if (!author) {
@@ -59,7 +63,8 @@ export async function POST(request: Request) {
     session.login_name = author.login_name;
     session.pictureURL = author.pictureURL || undefined;
     session.isLoggedIn = true;
-    session.isAdmin = author.isAdmin || false; // Add this line
+    session.isAdmin = author.isAdmin || false;
+    session.yearId = yearId; // <-- Add this line
     await session.save();
 
     // Return a subset of author data to the client (excluding password)

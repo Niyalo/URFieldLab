@@ -7,6 +7,7 @@ export interface SessionData {
   login_name: string;
   pictureURL?: string;
   isAdmin?: boolean;
+  yearId?: string;
 }
 
 export const sessionOptions: SessionOptions = {

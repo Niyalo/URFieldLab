@@ -19,6 +19,7 @@ export async function GET() {
     login_name: session.login_name,
     pictureURL: session.pictureURL,
     isLoggedIn: session.isLoggedIn,
-    isAdmin: session.isAdmin, // Add this line
+    isAdmin: session.isAdmin,
+    yearId: session.yearId, // <-- Add this line
   });
 }

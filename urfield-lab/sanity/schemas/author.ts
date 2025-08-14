@@ -15,7 +15,30 @@ export const author = defineType({
       name: 'login_name',
       title: 'Login Name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom(async (loginName, context) => {
+          const {getClient, document} = context
+          // If we don't have the document context, we can't perform validation
+          if (!document) {
+            return true
+          }
+          // Add a type assertion for the year field
+          const yearRef = (document.year as { _ref?: string })?._ref
+
+          if (!yearRef || !loginName) {
+            return true // Let the required rule handle empty fields
+          }
+          const client = getClient({apiVersion: '2024-01-01'})
+          const params = {
+            loginName,
+            yearRef: yearRef,
+            documentId: document._id.replace('drafts.', ''),
+          }
+          const query = `!defined(*[_type == "author" && login_name == $loginName && year._ref == $yearRef && _id != $documentId][0]._id)`
+          const isUnique = await client.fetch(query, params)
+
+          return isUnique ? true : 'Login name must be unique for this year.'
+        }),
     }),
     defineField({
       name: 'email',

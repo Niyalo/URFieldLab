@@ -121,7 +121,13 @@ export default function DashboardPage({ params }: Props) {
     const login_name = formData.get('login_name') as string;
     const password = formData.get('password') as string;
 
-    const result = await login(login_name, password);
+    if (!yearData) {
+      setError("Could not determine the event year. Please try again later.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const result = await login(login_name, password, yearData._id);
 
     if (result.success) {
       setMessage('Login successful!');
