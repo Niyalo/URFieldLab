@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
                 alt="Site Logo"
                 width={120}
                 height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
+                className={`transition-filter duration-500 ${isLight ? 'invert-0' : 'invert'}`}
               />
             </Link>
           </div>
@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
                 alt="Site Logo"
                 width={120}
                 height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
+                className={`transition-filter duration-500 ${isLight ? 'invert-0' : 'invert'}`}
               />
             </Link>
             <button onClick={toggleMobileMenu} className="hamburger-button z-10" aria-label="Open menu">

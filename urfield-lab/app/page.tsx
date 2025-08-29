@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef, type CSSProperties } from 'react';
-import { motion, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import React, { useState, useEffect, useMemo, type CSSProperties } from 'react';
+import { motion, useScroll, useTransform, useSpring, type MotionValue, type Variants } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CloudParallax from './components/CloudParallax';
 
-// --- HELPER HOOKS & FUNCTIONS (Updated) ---
+// --- HELPER HOOKS & FUNCTIONS ---
 
 const mapRange = (value: number, inMin: number, inMax: number, outMin: number, outMax: number): number => {
   if (inMin === inMax) return outMin;
@@ -113,24 +113,124 @@ const mobileSettings = {
   }
 } as const;
 
-const arrowVariants = {
+const arrowVariants: Variants = {
   rest: { y: '0vw', opacity: 1 },
   hover: {
     y: ['0vw', '1.5vw', '-1.5vw', '0vw'],
     opacity: [1, 0, 0, 1],
     transition: {
       duration: 0.7,
-      delay: 0.3, // Start slightly before line finishes or as it finishes
-      times: [0, 0.3, 0.6, 1], // Adjust timing of keyframes
-      ease: "easeInOut" // cubic-bezier equivalent of easeInOut
+      delay: 0.3,
+      times: [0, 0.3, 0.6, 1],
+      ease: "easeInOut"
     }
   }
-} as const;
+};
 
-const plusVariants = {
+const plusVariants: Variants = {
   rest: { rotate: 0 },
   hover: { rotate: 90, transition: { duration: 0.3, ease: "easeOut" } }
 } as const;
+
+// --- DEDICATED TEXT BLOCK COMPONENT ---
+type TextBlockConfig = typeof desktopSettings.textBlocks[keyof typeof desktopSettings.textBlocks] | typeof mobileSettings.textBlocks[keyof typeof mobileSettings.textBlocks];
+
+type TextBlockProps = {
+    config: TextBlockConfig;
+    content: { [key: string]: string | undefined };
+    isHero: boolean;
+    scrollY: MotionValue<number>;
+    scrollInputRangeEnd: number;
+    isMobile: boolean;
+    parallaxIntensity: number;
+    currentGlobalTopMarginPx: number;
+    referenceWidth: number;
+};
+
+const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth }) => {
+    const y = useParallaxTransform(scrollY, config.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity);
+
+    const blockStyle: CSSProperties & { '--text-scale': number } = {
+        position: 'absolute',
+        top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
+        left: config.left,
+        right: config.right,
+        textAlign: config.textAlign,
+        color: config.textColor,
+        '--text-scale': config.textScale,
+    };
+
+    return (
+        <motion.div
+            className={`pointer-events-auto box-border p-[1.2vw] ${isHero ? 'text-center' : ''}`}
+            style={{ ...blockStyle, y }}
+            {...config.animation}
+        >
+            {isHero ? (
+                <>
+                    <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.pre || ''}</p>
+                    <h1 className="text-[5.5vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(5.5vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
+                    <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
+                    <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
+                    <motion.a href="#explore" className="inline-block mt-[2vw] text-[1vw] tracking-wider relative group" whileHover="hover" initial="rest" style={{ fontSize: `calc(1vw * var(--text-scale))` }}>
+                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-px after:bg-current after:bottom-[-2px] after:left-0 after:origin-right after:scale-x-100 group-hover:after:origin-left group-hover:after:animate-[strike-and-disappear_0.6s_forwards]">{content.cta || ''}</span>
+                        <motion.span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-lg" variants={arrowVariants}>↓</motion.span>
+                    </motion.a>
+                </>
+            ) : (
+                <div className={`max-w-[35vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
+                    <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
+                    <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
+                    <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
+                    <motion.a 
+                        href="#" 
+                        className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]" 
+                        whileHover="hover" 
+                        initial="rest" 
+                        style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                    >
+                        <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
+                            <motion.span variants={plusVariants}>+</motion.span>
+                        </span>
+                        <span>{content.cta || ''}</span>
+                    </motion.a>
+                </div>
+            )}
+        </motion.div>
+    );
+};
+
+
+// --- IMAGE COMPONENT ---
+type ImageConfig = typeof desktopImages[0] | typeof mobileImages[0];
+
+type ParallaxImageProps = {
+    img: ImageConfig;
+    scrollY: MotionValue<number>;
+    scrollInputRangeEnd: number;
+    isMobile: boolean;
+    parallaxIntensity: number;
+    currentGlobalTopMarginPx: number;
+    referenceWidth: number;
+};
+
+const ParallaxImage: React.FC<ParallaxImageProps> = ({ img, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth }) => {
+    const effectiveTopPx = img.top + currentGlobalTopMarginPx;
+    const imageY = useParallaxTransform(scrollY, img.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity, 500);
+
+    return (
+        <motion.img
+            className="absolute left-0 w-screen h-auto object-cover"
+            src={img.src}
+            alt={img.id}
+            style={{
+                top: `${(effectiveTopPx / referenceWidth) * 100}vw`,
+                zIndex: img.zIndex,
+                y: imageY,
+            }}
+        />
+    );
+};
 
 
 // --- MAIN PAGE COMPONENT ---
@@ -171,13 +271,13 @@ export default function AnimatedPage() {
 
   const { hero, damsAndDiversions, ecosystems, cleanGreen, healthyRivers, saveBlueHeart } = currentSettings.textBlocks;
 
-  const textBlockConfigs = [
-    { config: hero, y: useParallaxTransform(scrollY, hero.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { pre: "THE MARTIAN TRUTH", h1: "ALL ALIENS ARE GOOFY", sub: "(AND SO ARE THE SPACESHIPS THEY FLY)", desc: "Goofy aliens are the only 'extraterrestrial' life form sending rovers to sleep, misplacing keys globally, and contributing to cosmic giggles.", cta: "START SCANNING (THE TRUTH)" } },
-    { config: damsAndDiversions, y: useParallaxTransform(scrollY, damsAndDiversions.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { h2: "ANTENNAS & XRAY MACHINES", h3: "WHICH IS WORSE?", p: "Antennas and XRAY machines are both startling to unsuspecting humans and the cows who graze among them. On Mars, 91% of the more than 3,000 'first contact' attempts involve small, wiggly antennas...", cta: "GET XRAYED" } },
-    { config: ecosystems, y: useParallaxTransform(scrollY, ecosystems.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { h2: "MARTIAN LANDSCAPES AND THEIR ANCIENT SECRETS UNCOVERED", h3: "WHAT LIES BENEATH THE SAND", p: "What really goes on under the crimson dust? We've uncovered evidence of elaborate alien tunnel systems... small enough for a Martian to fit through, as well as their strange exotic pets with mysterious origins. They also seem to really like icy treats, which is a bit concerning...", cta: "UNEARTH ANOMALIES" } },
-    { config: cleanGreen, y: useParallaxTransform(scrollY, cleanGreen.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS", h3: "THE MYTH OF THE BENEVOLENT ALIEN", p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.", cta: "QUESTION MOTIVES" } },
-    { config: healthyRivers, y: useParallaxTransform(scrollY, healthyRivers.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { h2: "WE NEED HAPPY MARTIANS", h3: "THE BENEFITS OF REGULAR SNACKS", p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!", cta: "OFFER A CHEESE PUFF" } },
-    { config: saveBlueHeart, y: useParallaxTransform(scrollY, saveBlueHeart.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity), content: { h2: "SAVE THE RED PLANET", h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)", p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...", cta: "DONATE YOUR SOCKS" } },
+  const textBlockData = [
+    { config: hero, content: { pre: "THE MARTIAN TRUTH", h1: "ALL ALIENS ARE GOOFY", sub: "(AND SO ARE THE SPACESHIPS THEY FLY)", desc: "Goofy aliens are the only 'extraterrestrial' life form sending rovers to sleep, misplacing keys globally, and contributing to cosmic giggles.", cta: "START SCANNING (THE TRUTH)" } },
+    { config: damsAndDiversions, content: { h2: "ANTENNAS & XRAY MACHINES", h3: "WHICH IS WORSE?", p: "Antennas and XRAY machines are both startling to unsuspecting humans and the cows who graze among them. On Mars, 91% of the more than 3,000 'first contact' attempts involve small, wiggly antennas...", cta: "GET XRAYED" } },
+    { config: ecosystems, content: { h2: "MARTIAN LANDSCAPES AND THEIR ANCIENT SECRETS UNCOVERED", h3: "WHAT LIES BENEATH THE SAND", p: "What really goes on under the crimson dust? We've uncovered evidence of elaborate alien tunnel systems... small enough for a Martian to fit through, as well as their strange exotic pets with mysterious origins. They also seem to really like icy treats, which is a bit concerning...", cta: "UNEARTH ANOMALIES" } },
+    { config: cleanGreen, content: { h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS", h3: "THE MYTH OF THE BENEVOLENT ALIEN", p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.", cta: "QUESTION MOTIVES" } },
+    { config: healthyRivers, content: { h2: "WE NEED HAPPY MARTIANS", h3: "THE BENEFITS OF REGULAR SNACKS", p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!", cta: "OFFER A CHEESE PUFF" } },
+    { config: saveBlueHeart, content: { h2: "SAVE THE RED PLANET", h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)", p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...", cta: "DONATE YOUR SOCKS" } },
   ];
 
   return (
@@ -190,78 +290,34 @@ export default function AnimatedPage() {
       >
         {clouds.map(cloud => <CloudParallax key={cloud.id} {...cloud} referenceWidth={referenceWidth} />)}
         
-        {imagesToDisplay.map(img => {
-          const effectiveTopPx = img.top + currentGlobalTopMarginPx;
-          const imageY = useParallaxTransform(scrollY, img.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity, 500);
-          return (
-            <motion.img
+        {imagesToDisplay.map(img => (
+            <ParallaxImage
               key={img.id}
-              className="absolute left-0 w-screen h-auto object-cover"
-              src={img.src}
-              alt={img.id}
-              style={{
-                top: `${(effectiveTopPx / referenceWidth) * 100}vw`,
-                zIndex: img.zIndex,
-                y: imageY,
-              }}
+              img={img}
+              scrollY={scrollY}
+              scrollInputRangeEnd={scrollInputRangeEnd}
+              isMobile={isMobile}
+              parallaxIntensity={parallaxIntensity}
+              currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+              referenceWidth={referenceWidth}
             />
-          );
-        })}
+        ))}
       </motion.div>
 
       <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
-        {textBlockConfigs.map(({ config, y, content }, index) => {
-          const isHero = index === 0;
-          const blockStyle: CSSProperties = {
-            position: 'absolute',
-            top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
-            left: config.left,
-            right: config.right,
-            textAlign: config.textAlign,
-            color: config.textColor,
-            ['--text-scale' as any]: config.textScale,
-          };
-
-          return (
-            <motion.div
-              key={index}
-              className={`pointer-events-auto box-border p-[1.2vw] ${isHero ? 'text-center' : ''}`}
-              style={{ ...blockStyle, y }}
-              {...config.animation}
-            >
-              {isHero ? (
-                <>
-                  <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: 'calc(1.2vw * var(--text-scale))' }}>{content.pre}</p>
-                  <h1 className="text-[5.5vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: 'calc(5.5vw * var(--text-scale))' }}>{content.h1}</h1>
-                  <p className="text-[1.5vw] uppercase" style={{ fontSize: 'calc(1.5vw * var(--text-scale))' }}>{content.sub}</p>
-                  <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: 'calc(1.1vw * var(--text-scale))' }}>{content.desc}</p>
-                  <motion.a href="#explore" className="inline-block mt-[2vw] text-[1vw] tracking-wider relative group" whileHover="hover" initial="rest" style={{ fontSize: 'calc(1vw * var(--text-scale))' }}>
-                    <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-px after:bg-current after:bottom-[-2px] after:left-0 after:origin-right after:scale-x-100 group-hover:after:origin-left group-hover:after:animate-[strike-and-disappear_0.6s_forwards]">{content.cta}</span>
-
-                  </motion.a>
-                </>
-              ) : (
-                <div className={`max-w-[35vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
-                  <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: 'calc(2.5vw * var(--text-scale))' }}>{content.h2}</h2>
-                  <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: 'calc(1.5vw * var(--text-scale))' }}>{content.h3}</h3>
-                  <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: 'calc(1.1vw * var(--text-scale))' }}>{content.p}</p>
-                  <motion.a 
-                    href="#" 
-                    className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white rounded-full px-4 py-2 transition-colors duration-300 hover:bg-white hover:text-[#FF8C00] border-2 border-transparent hover:border-[#FF8C00]" 
-                    whileHover="hover" 
-                    initial="rest" 
-                    style={{ fontSize: 'calc(1vw * var(--text-scale))' }}
-                  >
-                    <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
-                      <motion.span variants={plusVariants}>+</motion.span>
-                    </span>
-                    <span>{content.cta}</span>
-                  </motion.a>
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
+        {textBlockData.map((data, index) => (
+          <TextBlock
+            key={index}
+            {...data}
+            isHero={index === 0}
+            scrollY={scrollY}
+            scrollInputRangeEnd={scrollInputRangeEnd}
+            isMobile={isMobile}
+            parallaxIntensity={parallaxIntensity}
+            currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+            referenceWidth={referenceWidth}
+          />
+        ))}
       </div>
 
       <Footer />
