@@ -127,5 +127,89 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: #F2F1EA;
+    margin: 0;
   }
+}
+
+/* Define custom fonts if you have them hosted, or use fallbacks */
+@font-face {
+  font-family: 'Futura Passata';
+  /* src: url('/fonts/FuturaPassata.woff2') format('woff2'); */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Keyframes for animations */
+@keyframes strike-and-disappear {
+  0% { width: 0%; left: 0%; }
+  50% { width: 100%; left: 0%; }
+  100% { width: 0%; left: 100%; }
+}
+
+@keyframes strike-through-appear-disappear {
+  0% { transform: scaleX(0); transform-origin: left; }
+  50% { transform: scaleX(1); transform-origin: left; }
+  50.1% { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+@keyframes underline-appear-right-to-left {
+  0% { transform: scaleX(0); transform-origin: right; }
+  100% { transform: scaleX(1); transform-origin: right; }
+}
+
+
+/* Link animation styles */
+.link-animated {
+  position: relative;
+  text-decoration: none;
+}
+.link-animated::before, .link-animated::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  left: 0;
+  transition: transform 0.3s ease-out;
+}
+.link-animated::before {
+  top: 50%;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.link-animated::after {
+  bottom: -2px;
+  transform: scaleX(1);
+  transform-origin: right;
+}
+.link-animated:hover::before {
+  animation: strike-through-appear-disappear 0.6s forwards;
+}
+.link-animated:hover::after {
+  animation: underline-appear-right-to-left 0.4s forwards;
+  transform-origin: left;
+}
+.link-animated.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Hamburger Menu */
+.hamburger-button {
+  width: 24px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.hamburger-button span {
+  width: 100%;
+  height: 2px;
+  /* background color is set inline via className */
+  border-radius: 1px;
 }
