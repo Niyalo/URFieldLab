@@ -6,6 +6,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import CloudParallax from './components/CloudParallax';
 import PercentageDataViewer from './components/PercentageDataViewer';
+import QuotesBlock from './components/QuotesBlock';
+import ArticlePreviewViewer from './components/ArticlePreviewViewer';
 
 // --- HELPER HOOKS & FUNCTIONS ---
 
@@ -74,62 +76,53 @@ const pageSections = [
     id: 'hero',
     type: 'textBlock' as const, // Use 'as const' for type safety
     content: {
-      pre: "UNDERSTANDING RISK",
-      h1: "UR FIELD LAB",
+      pre: "",
+      h1: "UNDERSTANDING RISK FIELD LABS",
       sub: "",
-      desc: "UR Field Labs are month-long un-conferences that explore critical design practices in disaster and climate risk management-related topics",
-      cta: "START EXPLORING"
+      desc: "The Understanding Risk (UR) Field Labs are collaborative, unstructured, un-conferences that bring together people to produce creative approaches to address today's most pressing climate and disaster risk management issues.",
+      cta: "START EXPLORING",
+      ctaUrl: "/UR2024"
     },
-    desktopConfig: { top: 320, left: '20%', right: '20%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
+    desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
     mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
+  },
+  {
+    id: 'theFieldLabExperience',
+    type: 'textBlock' as const,
+    content: {
+      h2: "The Field Lab experience",
+      h3: "",
+      p: "Over four weeks, participants from around the world co-design a schedule and form working groups to develop projects, ranging from art to research.",
+      cta: "THE SCHEDULE",
+      ctaUrl: "/UR2024/event-structure"
+    },
+    desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
     id: 'whyTheFieldLab',
     type: 'textBlock' as const,
     content: {
-      h2: "Why the Field Lab",
+      h2: "The Field Lab experience",
       h3: "",
-      p: "In a world where climate change is the new normal, traditional conferences just don't cut it anymore. We need hands-on, minds-on, and feet-in-the-mud experiences to tackle the complex challenges of our time. Enter the UR Field Lab: a dynamic, month-long un-conference that breaks the mold. Here, experts, enthusiasts, and everyday citizens come together to share ideas, test solutions, and build resilient communities. It's not just about talking; it's about doing. Because when it comes to climate risk management, action speaks louder than words.",
-      cta: "Event Format"
+      p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
+      cta: "HOW TO RUN A FIELD LAB",
+      ctaUrl: "/UR2024/event-structure"
     },
-    desktopConfig: { top: 1150, left: '10%', right: '60%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+    desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
-    id: 'cleanGreen',
+    id: 'locations',
     type: 'textBlock' as const,
     content: {
-      h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS",
+      h2: "GLOBAL LOCATIONS",
       h3: "THE MYTH OF THE BENEVOLENT ALIEN",
-      p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.",
-      cta: "QUESTION MOTIVES"
+      p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
+      
     },
-    desktopConfig: { top: 2780, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 2400, left: '5%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'healthyRivers',
-    type: 'textBlock' as const,
-    content: {
-      h2: "WE NEED HAPPY MARTIANS",
-      h3: "THE BENEFITS OF REGULAR SNACKS",
-      p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!",
-      cta: "OFFER A CHEESE PUFF"
-    },
-    desktopConfig: { top: 3330, left: '10%', right: '58%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 1.0, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 6700, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'saveBlueHeart',
-    type: 'textBlock' as const,
-    content: {
-      h2: "SAVE THE RED PLANET",
-      h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)",
-      p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...",
-      cta: "DONATE YOUR SOCKS"
-    },
-    desktopConfig: { top: 4530, left: '15%', right: '15%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 0.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 8550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
   // --- NEW PERCENTAGE DATA VIEWER SECTION ---
   {
@@ -174,8 +167,36 @@ const pageSections = [
       ]
     },
     // Positioned where 'ecosystems' was, with 25% side gaps and black text.
-    desktopConfig: { top: 1960, left: '25%', right: '25%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 3400, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  // --- NEW QUOTES BLOCK SECTION ---
+  {
+    id: 'participantFeedback',
+    type: 'quotesBlock' as const,
+    content: {
+      title: "Feedback from the surveys & interviews",
+      quotes: [
+        { id: 'q1', text: "The UR Field Lab was a transformative experience, fostering collaboration and innovation in a way I've never seen before.", author: "Elena", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q2', text: "A truly unique 'un-conference' that breaks down barriers and allows for genuine co-creation. Highly recommended.", author: "Marcus", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q3', text: "I left with not just new ideas, but a new network of passionate colleagues from around the world.", author: "Aisha", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q4', text: "The hands-on, project-based approach meant we were creating tangible solutions from day one. Incredible.", author: "David", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q5', text: "It's a powerful reminder of what can be achieved when diverse minds come together with a shared purpose.", author: "Priya", avatarSrc: "/images/avatars/avatar1.png" },
+      ]
+    },
+    desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
+    mobileConfig: { top: 4500, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
+  },
+  {
+    id: 'articlePreviews',
+    type: 'articlePreviewViewer' as const,
+    content: {
+      title: "Outputs",
+      yearSlug: "UR2024"
+    },
+    // Config is used for positioning the entire block
+    desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
+    mobileConfig: { top: 5200, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -192,29 +213,45 @@ const pageSections = [
 ];
 
 // --- DATA FOR IMAGES, TEXT, AND ANIMATIONS ---
-// ... existing data is now replaced by the pageSections array above ...
-// ... DELETING desktopSettings, mobileSettings, and textBlockData ...
-// ... keeping desktopImages, mobileImages, and clouds as they are part of the background collage ...
+// Add optional opacity property to image configs
+interface BaseImageConfig {
+  id: string;
+  src: string;
+  top: number;
+  zIndex: number;
+  refHeight: number;
+  parallaxFactor: number;
+  opacity?: number;
+  leftGapPercent?: number;
+  rightGapPercent?: number;
+  blendMode?: React.CSSProperties['mixBlendMode']; // NEW
+}
 
-const desktopImages = [
-  //{ id: 'D_Image7', src: '/images/truth/dams/water.jpg', top: 1647, zIndex: 0, refHeight: 800, parallaxFactor: 0.1 },
-  { id: 'D_Image1', src: '/images/truth/dirty/mountain.png', top: 573, zIndex: 2, refHeight: 700, parallaxFactor: 0.1 },
-  { id: 'D_Image4', src: '/images/truth/dirty/trees-right.png', top: 646, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'D_Image2', src: '/images/truth/dirty/water.png', top: 984, zIndex: 4, refHeight: 500, parallaxFactor: 0.1 },
-  { id: 'D_Image3', src: '/images/truth/dirty/trees-left.png', top: 674, zIndex: 5, refHeight: 600, parallaxFactor: 0.3 },
-  { id: 'D_Image6', src: '/images/truth/dirty/trees-front.png', top: 887, zIndex: 6, refHeight: 700, parallaxFactor: 0.5 },
-  { id: 'D_Image8', src: '/images/truth/dams/farm.png', top: 1602, zIndex: 7, refHeight: 600, parallaxFactor: 1.0 },
-  { id: 'D_Image5', src: '/images/truth/dams/dam.png', top: 933, zIndex: 8, refHeight: 800, parallaxFactor: 0.8 },
-  { id: 'D_Image9', src: '/images/truth/myth/rock-right.png', top: 2803, zIndex: 9, refHeight: 700, parallaxFactor: 0.5 },
-  { id: 'D_Image10', src: '/images/truth/healthy/river-complex.png', top: 2869, zIndex: 10, refHeight: 900, parallaxFactor: 0.5 },
-  { id: 'D_Image11', src: '/images/truth/healthy/woman.png', top: 4000, zIndex: 11, refHeight: 700, parallaxFactor: 0.9 },
-  { id: 'D_Image12', src: '/images/truth/action/bridge.png', top: 4300, zIndex: 12, refHeight: 800, parallaxFactor: 1.1 },
-  { id: 'D_Image13', src: '/images/truth/action/mountains.png', top: 4553, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'D_Image14', src: '/images/truth/action/ladies.png', top: 4800, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+// Use this type for your arrays:
+const desktopImages: BaseImageConfig[] = [
+  { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: 370, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
+
+  { id: 'Trees left', src: '/images/URFieldLabMainPage/trees-left.png', top: 624, zIndex: 2, refHeight: 600, parallaxFactor: 0.2 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/trees-right.png', top: 646, zIndex: 3, refHeight: 600, parallaxFactor: 0.3 },
+
+  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
+
+  { id: 'water 1', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1500, zIndex: 2, refHeight: 600, parallaxFactor: 0.1, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'water 2', src: '/images/URFieldLabMainPage/Blue stuff cropped.png', top: 1600, zIndex: 2, refHeight: 600, parallaxFactor: 0.2, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 3', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1700, zIndex: 2, refHeight: 600, parallaxFactor: 0.3, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 4', src: '/images/URFieldLabMainPage/Blue stuff cropped 2.png', top: 1800, zIndex: 2, refHeight: 600, parallaxFactor: 0.4, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2400, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 30, rightGapPercent: 0 },
+
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+
 ];
 
-const mobileImages = [
-  { id: 'M_Image_SetDam', src: '/images/truth/mobile/set-dam.png', top: 590, zIndex: 2, refHeight: 2677, parallaxFactor: 0 },
+const mobileImages: BaseImageConfig[] = [
+  { id: 'M_Image_SetDam', src: '/images/truth/mobile/set-dam.png', top: 590, zIndex: 2, refHeight: 2677, parallaxFactor: 0, opacity: 0.8 },
   { id: 'M_Image_WaterLong', src: '/images/truth/mobile/water-long.jpg', top: 2883, zIndex: 0, refHeight: 4449, parallaxFactor: 0 },
   { id: 'M_Image_Houses', src: '/images/truth/mobile/houses.png', top: 4169, zIndex: 3, refHeight: 1116, parallaxFactor: 0 },
   { id: 'M_Image_HealthySet', src: '/images/truth/mobile/healthy-set.png', top: 6073, zIndex: 4, refHeight: 3104, parallaxFactor: 0 },
@@ -289,31 +326,45 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
             {isHero ? (
                 <>
                     <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.pre || ''}</p>
-                    <h1 className="text-[5.5vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(5.5vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
+                    <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
                     <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
-                    <motion.a href="#explore" className="inline-block mt-[2vw] text-[1vw] tracking-wider relative group" whileHover="hover" initial="rest" style={{ fontSize: `calc(1vw * var(--text-scale))` }}>
-                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-px after:bg-current after:bottom-[-2px] after:left-0 after:origin-right after:scale-x-100 group-hover:after:origin-left group-hover:after:animate-[strike-and-disappear_0.6s_forwards]">{content.cta || ''}</span>
-                        <motion.span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-lg" variants={arrowVariants}>↓</motion.span>
-                    </motion.a>
+                    {content.cta && (
+                        <div className="inline-block relative mt-[2vw]">
+                            <motion.a
+                                href={content.ctaUrl || '#'}
+                                className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                                style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                            >
+                                <span>{content.cta}</span>
+                            </motion.a>
+                            <motion.div
+                                className="absolute left-1/2 -translate-x-1/2 top-full mt-4"
+                                variants={arrowVariants}
+                                initial="rest"
+                                whileHover="hover"
+                            >
+                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 12L0 0L20 0L10 12Z" fill="#FF8C00"/>
+                                </svg>
+                            </motion.div>
+                        </div>
+                    )}
                 </>
             ) : (
                 <div className={`max-w-[35vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
                     <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
                     <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
-                    <motion.a
-                        href="#"
-                        className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
-                        whileHover="hover"
-                        initial="rest"
-                        style={{ fontSize: `calc(1vw * var(--text-scale))` }}
-                    >
-                        <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
-                            <motion.span variants={plusVariants}>+</motion.span>
-                        </span>
-                        <span>{content.cta || ''}</span>
-                    </motion.a>
+                    {content.cta && (
+                        <motion.a
+                            href={content.ctaUrl || '#'}
+                            className="inline-block mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                            style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                        >
+                            <span>{content.cta}</span>
+                        </motion.a>
+                    )}
                 </div>
             )}
         </motion.div>
@@ -334,8 +385,9 @@ const ImageGroupBlock: React.FC<any> = ({ config, content, ...props }) => {
 
 
 // --- IMAGE COMPONENT ---
-type ImageConfig = typeof desktopImages[0] | typeof mobileImages[0];
+type ImageConfig = BaseImageConfig;
 
+// --- IMAGE COMPONENT ---
 type ParallaxImageProps = {
     img: ImageConfig;
     scrollY: MotionValue<number>;
@@ -346,19 +398,36 @@ type ParallaxImageProps = {
     referenceWidth: number;
 };
 
-const ParallaxImage: React.FC<ParallaxImageProps> = ({ img, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth }) => {
+const ParallaxImage: React.FC<ParallaxImageProps> = ({
+    img,
+    scrollY,
+    scrollInputRangeEnd,
+    isMobile,
+    parallaxIntensity,
+    currentGlobalTopMarginPx,
+    referenceWidth
+}) => {
     const effectiveTopPx = img.top + currentGlobalTopMarginPx;
     const imageY = useParallaxTransform(scrollY, img.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity, 500);
+    const imageOpacity = typeof img.opacity === 'number' ? img.opacity : 1;
+    const leftGap = typeof img.leftGapPercent === 'number' ? img.leftGapPercent : 0;
+    const rightGap = typeof img.rightGapPercent === 'number' ? img.rightGapPercent : 0;
+    const blendMode = img.blendMode ?? 'normal';
 
     return (
         <motion.img
-            className="absolute left-0 w-screen h-auto object-cover"
+            className="absolute h-auto object-cover"
             src={img.src}
             alt={img.id}
             style={{
                 top: `${(effectiveTopPx / referenceWidth) * 100}vw`,
+                left: `calc(${leftGap}%)`,
+                width: `calc(100vw - ${leftGap}% - ${rightGap}%)`,
                 zIndex: img.zIndex,
                 y: imageY,
+                opacity: imageOpacity,
+                position: 'absolute',
+                mixBlendMode: blendMode, // NEW
             }}
         />
     );
@@ -391,11 +460,19 @@ export default function AnimatedPage() {
   const imagesToDisplay = isMobile ? mobileImages : desktopImages;
 
   const containerHeightVw = useMemo(() => {
-    if (!imagesToDisplay.length) return 50;
-    const lastImage = imagesToDisplay[imagesToDisplay.length - 1];
+    if (!imagesToDisplay.length && pageSections.length === 0) return 100;
+
+    const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
+    const lastSection = pageSections.length > 0 ? pageSections[pageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
+    
+    const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
+    const lastSectionTop = lastSectionConfig.top || 0;
+
     const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
-    return ((lastImageAdjustedTop + lastImage.refHeight) / referenceWidth) * 100;
-  }, [imagesToDisplay, referenceWidth, currentGlobalTopMarginPx]);
+    const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500); // Add buffer for section height
+
+    return (lastElementTop / referenceWidth) * 100;
+  }, [imagesToDisplay, pageSections, isMobile, referenceWidth, currentGlobalTopMarginPx]);
 
   const scrollInputRangeEnd = useMemo(() => {
     return (containerHeightVw / 100) * referenceWidth * 1.5;
@@ -467,7 +544,44 @@ export default function AnimatedPage() {
                   isMobile={isMobile}
                   referenceWidth={referenceWidth}
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
                 />
+              );
+            
+            case 'quotesBlock':
+              return (
+                <QuotesBlock
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  isMobile={isMobile}
+                  referenceWidth={referenceWidth}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
+                />
+              );
+
+            case 'articlePreviewViewer':
+              return (
+                <div
+                  key={section.id}
+                  style={{
+                    position: 'absolute',
+                    top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
+                    left: config.left,
+                    width: `calc(100% - ${config.left} - ${config.right})`,
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  <ArticlePreviewViewer
+                    yearSlug={section.content.yearSlug}
+                    title={section.content.title}
+                  />
+                </div>
               );
 
             // case 'imageGroup':

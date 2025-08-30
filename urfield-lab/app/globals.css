@@ -132,7 +132,13 @@
     background-repeat: repeat-y;  
     background-color: #F2F1EA;  
     margin: 0;
+    font-family: var(--font-sans);
   }
+}
+
+/* Add a new font-family for script/handwriting text */
+.font-script {
+  font-family: "Comic Sans MS", "Chalkboard SE", "cursive";
 }
 
 /* Define custom fonts if you have them hosted, or use fallbacks */

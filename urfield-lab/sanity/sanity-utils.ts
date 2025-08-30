@@ -1070,6 +1070,22 @@ export async function getArticlesByAuthor(
   );
 }
 
+export async function getArticlesByYearSlug(yearSlug: string): Promise<Article[]> {
+  if (!yearSlug) return [];
+  return client.fetch(
+    groq`*[_type == "article" && year->slug.current == $yearSlug && verified == true] | order(order asc, title asc) {
+      _id,
+      title,
+      slug,
+      summary,
+      mainImage { asset-> },
+      youtubeVideoUrl,
+      "authors": authors[]->{name}
+    }`,
+    { yearSlug }
+  );
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   const query = groq`*[_type == "article" && slug.current == $slug][0] {
         _id,
