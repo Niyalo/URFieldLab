@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import CloudParallax from './components/CloudParallax';
 import PercentageDataViewer from './components/PercentageDataViewer';
 import QuotesBlock from './components/QuotesBlock';
+import ArticlePreviewViewer from './components/ArticlePreviewViewer';
 
 // --- HELPER HOOKS & FUNCTIONS ---
 
@@ -186,6 +187,17 @@ const pageSections = [
     desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
     mobileConfig: { top: 4500, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
   },
+  {
+    id: 'articlePreviews',
+    type: 'articlePreviewViewer' as const,
+    content: {
+      title: "Outputs",
+      yearSlug: "UR2024"
+    },
+    // Config is used for positioning the entire block
+    desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
+    mobileConfig: { top: 5200, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+  },
   //
   // --- DEVELOPER NOTE ---
   // To add a new section (e.g., an image gallery), add its data object here.
@@ -232,9 +244,9 @@ const desktopImages: BaseImageConfig[] = [
 
   { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2400, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 30, rightGapPercent: 0 },
 
-  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
-  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
 
 ];
 
@@ -551,6 +563,25 @@ export default function AnimatedPage() {
                   scrollInputRangeEnd={scrollInputRangeEnd}
                   parallaxIntensity={parallaxIntensity}
                 />
+              );
+
+            case 'articlePreviewViewer':
+              return (
+                <div
+                  key={section.id}
+                  style={{
+                    position: 'absolute',
+                    top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
+                    left: config.left,
+                    width: `calc(100% - ${config.left} - ${config.right})`,
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  <ArticlePreviewViewer
+                    yearSlug={section.content.yearSlug}
+                    title={section.content.title}
+                  />
+                </div>
               );
 
             // case 'imageGroup':
