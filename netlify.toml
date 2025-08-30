@@ -7,7 +7,6 @@ remote_images = [
 [build]
 base = "urfield-lab"
 command = "npm run build"
-publish = ".next"
 
   [build.environment]
   NODE_VERSION = "20"
