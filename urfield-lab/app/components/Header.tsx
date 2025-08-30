@@ -34,9 +34,9 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const navLink1Text = "MARTIAN SECRETS";
-  const navLink2Text = "AREA 51 FUNFAIR";
-  const actionButtonText = "ABDUCT ME (TO THE CONTENT MANAGER)";
+  const navLink1Text = "URFIELD LAB 2019";
+  const navLink2Text = "URFIELD LAB 2024";
+  const actionButtonText = "CONTENT MANAGER";
 
   return (
     <>
@@ -44,10 +44,10 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
         <div className="flex justify-between items-center h-[70px] max-w-full mx-auto px-[30px]">
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#" className="text-sm tracking-wider font-futura-passata link-animated is-active">
+            <Link href="/chiangmai2019" className="text-sm tracking-wider font-futura-passata link-animated is-active">
               {navLink1Text}
             </Link>
-            <Link href="#" className="text-sm tracking-wider font-futura-passata link-animated">
+            <Link href="/UR2024" className="text-sm tracking-wider font-futura-passata link-animated">
               {navLink2Text}
             </Link>
           </nav>
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
                 alt="Site Logo"
                 width={120}
                 height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert-0' : 'invert'}`}
+                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
               />
             </Link>
           </div>
@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
                 alt="Site Logo"
                 width={120}
                 height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert-0' : 'invert'}`}
+                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
               />
             </Link>
             <button onClick={toggleMobileMenu} className="hamburger-button z-10" aria-label="Open menu">
@@ -122,8 +122,8 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
         <div className="fixed inset-0 bg-black/90 z-40 flex flex-col items-center justify-center md:hidden">
           <button onClick={toggleMobileMenu} className="absolute top-5 right-5 text-white text-4xl" aria-label="Close menu">&times;</button>
           <nav className="flex flex-col items-center gap-8">
-            <Link href="#" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink1Text}</Link>
-            <Link href="#" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink2Text}</Link>
+            <Link href="/chiangmai2019" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink1Text}</Link>
+            <Link href="/UR2024" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink2Text}</Link>
             {/* Mobile Year Selector */}
             <div className="text-center">
               <h3 className="text-gray-400 text-lg mb-2">Select Year</h3>

@@ -135,8 +135,8 @@
 /* Define custom fonts if you have them hosted, or use fallbacks */
 @font-face {
   font-family: 'Futura Passata';
-  /* src: url('/fonts/FuturaPassata.woff2') format('woff2'); */
-  font-weight: normal;
+  src: url('/futura-passata-bold.ttf') format('truetype');
+  font-weight: bold;
   font-style: normal;
 }
 

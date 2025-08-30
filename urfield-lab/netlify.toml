@@ -1,0 +1,39 @@
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_PUBLIC_SANITY_PROJECT_ID = "1p9zvv6x"
+  NEXT_PUBLIC_SANITY_DATASET = "production"
+  SANITY_API_READ_TOKEN = "sklAnnHD4u4alDv6BagbW3fB3AV601anhH8abyzx1LEAtTTLuRFwas5iSYBmmSo7GyB1woroVi6BNefA6QaEvuTrlUsyZ6bR0rstSCYNZrevTObM3CmBFEByHq5jtDVpKKelbe7BN31LVKlNpPUmZALuQD0BXDEhQwg3vlKvLSwDYQpiQveN"
+  SANITY_API_WRITE_TOKEN = "skdeqIycVbglofwWXh2i6uUTtR0tVUzUsx1CXnwvxml8gfiuRK7ObYv7XXS05m9MJwLZxPJwwKGnone5QJT5QDF6bkakIjJ8sSf3I8MKhjfHn9SyxT6PmHkq9zaOkABwkfzAw0FpkUqqO10vP9XHVotQcKIBIwVvByVJcSfMIVGli58gqMH7"
+  SESSION_SECRET = "oi36oioup145douidopy3d1p3516pfgtt316ghsbdoumtsnopy;dscr4oi14o.4424qui21di1xqxzo-sTL_St-oi-oyd4it3o3py1iy3dyi"
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
