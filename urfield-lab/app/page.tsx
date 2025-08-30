@@ -74,62 +74,50 @@ const pageSections = [
     id: 'hero',
     type: 'textBlock' as const, // Use 'as const' for type safety
     content: {
-      pre: "UNDERSTANDING RISK",
-      h1: "UR FIELD LAB",
+      pre: "",
+      h1: "UNDERSTANDING RISK FIELD LABS",
       sub: "",
-      desc: "UR Field Labs are month-long un-conferences that explore critical design practices in disaster and climate risk management-related topics",
+      desc: "The Understanding Risk (UR) Field Labs are collaborative, unstructured, un-conferences that bring together people to produce creative approaches to address today's most pressing climate and disaster risk management issues.",
       cta: "START EXPLORING"
     },
-    desktopConfig: { top: 320, left: '20%', right: '20%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
+    desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
     mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
+  },
+  {
+    id: 'theFieldLabExperience',
+    type: 'textBlock' as const,
+    content: {
+      h2: "The Field Lab experience",
+      h3: "",
+      p: "Over four weeks, participants from around the world co-design a schedule and form working groups to develop projects, ranging from art to research.",
+      cta: "THE SCHEDULE"
+    },
+    desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
     id: 'whyTheFieldLab',
     type: 'textBlock' as const,
     content: {
-      h2: "Why the Field Lab",
+      h2: "The Field Lab experience",
       h3: "",
-      p: "In a world where climate change is the new normal, traditional conferences just don't cut it anymore. We need hands-on, minds-on, and feet-in-the-mud experiences to tackle the complex challenges of our time. Enter the UR Field Lab: a dynamic, month-long un-conference that breaks the mold. Here, experts, enthusiasts, and everyday citizens come together to share ideas, test solutions, and build resilient communities. It's not just about talking; it's about doing. Because when it comes to climate risk management, action speaks louder than words.",
-      cta: "Event Format"
+      p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
+      cta: "HOW TO RUN A FIELD LAB"
     },
-    desktopConfig: { top: 1150, left: '10%', right: '60%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+    desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
-    id: 'cleanGreen',
+    id: 'locations',
     type: 'textBlock' as const,
     content: {
-      h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS",
+      h2: "GLOBAL LOCATIONS",
       h3: "THE MYTH OF THE BENEVOLENT ALIEN",
-      p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.",
-      cta: "QUESTION MOTIVES"
+      p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
+      cta: "EXPLORE LOCATIONS"
     },
-    desktopConfig: { top: 2780, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 2200, left: '5%', right: '65%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'healthyRivers',
-    type: 'textBlock' as const,
-    content: {
-      h2: "WE NEED HAPPY MARTIANS",
-      h3: "THE BENEFITS OF REGULAR SNACKS",
-      p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!",
-      cta: "OFFER A CHEESE PUFF"
-    },
-    desktopConfig: { top: 3330, left: '10%', right: '58%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 1.0, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 6700, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'saveBlueHeart',
-    type: 'textBlock' as const,
-    content: {
-      h2: "SAVE THE RED PLANET",
-      h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)",
-      p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...",
-      cta: "DONATE YOUR SOCKS"
-    },
-    desktopConfig: { top: 4530, left: '15%', right: '15%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 0.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 8550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
   // --- NEW PERCENTAGE DATA VIEWER SECTION ---
   {
@@ -174,7 +162,7 @@ const pageSections = [
       ]
     },
     // Positioned where 'ecosystems' was, with 25% side gaps and black text.
-    desktopConfig: { top: 1960, left: '25%', right: '25%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 2900, left: '25%', right: '25%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 3400, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
   //
@@ -192,29 +180,49 @@ const pageSections = [
 ];
 
 // --- DATA FOR IMAGES, TEXT, AND ANIMATIONS ---
-// ... existing data is now replaced by the pageSections array above ...
-// ... DELETING desktopSettings, mobileSettings, and textBlockData ...
-// ... keeping desktopImages, mobileImages, and clouds as they are part of the background collage ...
+// Add optional opacity property to image configs
+interface BaseImageConfig {
+  id: string;
+  src: string;
+  top: number;
+  zIndex: number;
+  refHeight: number;
+  parallaxFactor: number;
+  opacity?: number;
+  leftGapPercent?: number;
+  rightGapPercent?: number;
+  blendMode?: React.CSSProperties['mixBlendMode']; // NEW
+}
 
-const desktopImages = [
-  //{ id: 'D_Image7', src: '/images/truth/dams/water.jpg', top: 1647, zIndex: 0, refHeight: 800, parallaxFactor: 0.1 },
-  { id: 'D_Image1', src: '/images/truth/dirty/mountain.png', top: 573, zIndex: 2, refHeight: 700, parallaxFactor: 0.1 },
-  { id: 'D_Image4', src: '/images/truth/dirty/trees-right.png', top: 646, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'D_Image2', src: '/images/truth/dirty/water.png', top: 984, zIndex: 4, refHeight: 500, parallaxFactor: 0.1 },
-  { id: 'D_Image3', src: '/images/truth/dirty/trees-left.png', top: 674, zIndex: 5, refHeight: 600, parallaxFactor: 0.3 },
-  { id: 'D_Image6', src: '/images/truth/dirty/trees-front.png', top: 887, zIndex: 6, refHeight: 700, parallaxFactor: 0.5 },
-  { id: 'D_Image8', src: '/images/truth/dams/farm.png', top: 1602, zIndex: 7, refHeight: 600, parallaxFactor: 1.0 },
+// Use this type for your arrays:
+const desktopImages: BaseImageConfig[] = [
+  { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: 370, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
+
+  { id: 'Trees left', src: '/images/URFieldLabMainPage/trees-left.png', top: 624, zIndex: 2, refHeight: 600, parallaxFactor: 0.2 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/trees-right.png', top: 646, zIndex: 3, refHeight: 600, parallaxFactor: 0.3 },
+
+  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
+
+  { id: 'water 1', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1500, zIndex: 2, refHeight: 600, parallaxFactor: 0.1, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'water 2', src: '/images/URFieldLabMainPage/Blue stuff cropped.png', top: 1600, zIndex: 2, refHeight: 600, parallaxFactor: 0.2, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 3', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1700, zIndex: 2, refHeight: 600, parallaxFactor: 0.3, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 4', src: '/images/URFieldLabMainPage/Blue stuff cropped 2.png', top: 1800, zIndex: 2, refHeight: 600, parallaxFactor: 0.4, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2200, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
+
+  /*{ id: 'D_Image8', src: '/images/truth/dams/farm.png', top: 1602, zIndex: 7, refHeight: 600, parallaxFactor: 1.0 },
   { id: 'D_Image5', src: '/images/truth/dams/dam.png', top: 933, zIndex: 8, refHeight: 800, parallaxFactor: 0.8 },
-  { id: 'D_Image9', src: '/images/truth/myth/rock-right.png', top: 2803, zIndex: 9, refHeight: 700, parallaxFactor: 0.5 },
+  { id: 'D_Image9', src: '/images/truth/my`th/rock-right.png', top: 2803, zIndex: 9, refHeight: 700, parallaxFactor: 0.5 },
   { id: 'D_Image10', src: '/images/truth/healthy/river-complex.png', top: 2869, zIndex: 10, refHeight: 900, parallaxFactor: 0.5 },
   { id: 'D_Image11', src: '/images/truth/healthy/woman.png', top: 4000, zIndex: 11, refHeight: 700, parallaxFactor: 0.9 },
   { id: 'D_Image12', src: '/images/truth/action/bridge.png', top: 4300, zIndex: 12, refHeight: 800, parallaxFactor: 1.1 },
   { id: 'D_Image13', src: '/images/truth/action/mountains.png', top: 4553, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'D_Image14', src: '/images/truth/action/ladies.png', top: 4800, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'D_Image14', src: '/images/truth/action/ladies.png', top: 4800, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },*/
 ];
 
-const mobileImages = [
-  { id: 'M_Image_SetDam', src: '/images/truth/mobile/set-dam.png', top: 590, zIndex: 2, refHeight: 2677, parallaxFactor: 0 },
+const mobileImages: BaseImageConfig[] = [
+  { id: 'M_Image_SetDam', src: '/images/truth/mobile/set-dam.png', top: 590, zIndex: 2, refHeight: 2677, parallaxFactor: 0, opacity: 0.8 },
   { id: 'M_Image_WaterLong', src: '/images/truth/mobile/water-long.jpg', top: 2883, zIndex: 0, refHeight: 4449, parallaxFactor: 0 },
   { id: 'M_Image_Houses', src: '/images/truth/mobile/houses.png', top: 4169, zIndex: 3, refHeight: 1116, parallaxFactor: 0 },
   { id: 'M_Image_HealthySet', src: '/images/truth/mobile/healthy-set.png', top: 6073, zIndex: 4, refHeight: 3104, parallaxFactor: 0 },
@@ -289,7 +297,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
             {isHero ? (
                 <>
                     <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.pre || ''}</p>
-                    <h1 className="text-[5.5vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(5.5vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
+                    <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
                     <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
                     <motion.a href="#explore" className="inline-block mt-[2vw] text-[1vw] tracking-wider relative group" whileHover="hover" initial="rest" style={{ fontSize: `calc(1vw * var(--text-scale))` }}>
@@ -334,8 +342,9 @@ const ImageGroupBlock: React.FC<any> = ({ config, content, ...props }) => {
 
 
 // --- IMAGE COMPONENT ---
-type ImageConfig = typeof desktopImages[0] | typeof mobileImages[0];
+type ImageConfig = BaseImageConfig;
 
+// --- IMAGE COMPONENT ---
 type ParallaxImageProps = {
     img: ImageConfig;
     scrollY: MotionValue<number>;
@@ -346,19 +355,36 @@ type ParallaxImageProps = {
     referenceWidth: number;
 };
 
-const ParallaxImage: React.FC<ParallaxImageProps> = ({ img, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth }) => {
+const ParallaxImage: React.FC<ParallaxImageProps> = ({
+    img,
+    scrollY,
+    scrollInputRangeEnd,
+    isMobile,
+    parallaxIntensity,
+    currentGlobalTopMarginPx,
+    referenceWidth
+}) => {
     const effectiveTopPx = img.top + currentGlobalTopMarginPx;
     const imageY = useParallaxTransform(scrollY, img.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity, 500);
+    const imageOpacity = typeof img.opacity === 'number' ? img.opacity : 1;
+    const leftGap = typeof img.leftGapPercent === 'number' ? img.leftGapPercent : 0;
+    const rightGap = typeof img.rightGapPercent === 'number' ? img.rightGapPercent : 0;
+    const blendMode = img.blendMode ?? 'normal';
 
     return (
         <motion.img
-            className="absolute left-0 w-screen h-auto object-cover"
+            className="absolute h-auto object-cover"
             src={img.src}
             alt={img.id}
             style={{
                 top: `${(effectiveTopPx / referenceWidth) * 100}vw`,
+                left: `calc(${leftGap}%)`,
+                width: `calc(100vw - ${leftGap}% - ${rightGap}%)`,
                 zIndex: img.zIndex,
                 y: imageY,
+                opacity: imageOpacity,
+                position: 'absolute',
+                mixBlendMode: blendMode, // NEW
             }}
         />
     );
