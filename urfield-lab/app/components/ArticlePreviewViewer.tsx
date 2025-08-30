@@ -73,7 +73,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scale, opa
   );
 };
 
-// --- NEW: Internal Scroller Component ---
+// --- Scroller Component ---
 type ScrollerProps = {
   articles: Article[];
   yearSlug: string;
@@ -83,33 +83,51 @@ const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollXProgress } = useScroll({ container: scrollRef });
 
+  // Create individual transforms for each possible article index (up to 20)
+  const total = Math.max(articles.length, 1);
+
+  // Article 0
+  const scale0 = useTransform(scrollXProgress, [0/total - 0.1, 0/total, 1/total, 1/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity0 = useTransform(scrollXProgress, [0/total - 0.1, 0/total, 1/total, 1/total + 0.1], [0.7, 1, 0.7, 0.7]);
+
+  // Article 1
+  const scale1 = useTransform(scrollXProgress, [1/total - 0.1, 1/total, 2/total, 2/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity1 = useTransform(scrollXProgress, [1/total - 0.1, 1/total, 2/total, 2/total + 0.1], [0.7, 1, 0.7, 0.7]);
+
+  // Article 2
+  const scale2 = useTransform(scrollXProgress, [2/total - 0.1, 2/total, 3/total, 3/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity2 = useTransform(scrollXProgress, [2/total - 0.1, 2/total, 3/total, 3/total + 0.1], [0.7, 1, 0.7, 0.7]);
+
+  // Article 3
+  const scale3 = useTransform(scrollXProgress, [3/total - 0.1, 3/total, 4/total, 4/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity3 = useTransform(scrollXProgress, [3/total - 0.1, 3/total, 4/total, 4/total + 0.1], [0.7, 1, 0.7, 0.7]);
+
+  // Article 4
+  const scale4 = useTransform(scrollXProgress, [4/total - 0.1, 4/total, 5/total, 5/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity4 = useTransform(scrollXProgress, [4/total - 0.1, 4/total, 5/total, 5/total + 0.1], [0.7, 1, 0.7, 0.7]);
+
+  // Create arrays of transforms
+  const scales = [scale0, scale1, scale2, scale3, scale4];
+  const opacities = [opacity0, opacity1, opacity2, opacity3, opacity4];
+
   return (
-    <div
-      ref={scrollRef}
-      className="w-full h-[500px] flex overflow-x-auto snap-x snap-mandatory scrollbar-hide py-10" // Added py-10 for vertical space for scaling
-      style={{ perspective: '1000px' }}
-    >
-      {/* Spacer to center first item */}
-      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
+    <div className="w-full overflow-hidden">
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-8"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {articles.map((article, i) => {
+          const scale = scales[i] || scale0; // Fallback to first transform
+          const opacity = opacities[i] || opacity0;
 
-      {articles.map((article, i) => {
-        const total = articles.length;
-        const start = i / total;
-        const end = (i + 1) / total;
-        
-        // Create a transform that maps the card's scroll progress to a scale value
-        const scale = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.8, 1.2, 0.8, 0.8]);
-        const opacity = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.7, 1, 0.7, 0.7]);
-
-        return (
-          <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
-            <ArticleCard article={article} yearSlug={yearSlug} scale={scale} opacity={opacity} />
-          </div>
-        );
-      })}
-
-      {/* Spacer to center last item */}
-      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
+          return (
+            <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
+              <ArticleCard article={article} yearSlug={yearSlug} scale={scale} opacity={opacity} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -280,11 +280,6 @@ const arrowVariants: Variants = {
   }
 };
 
-const plusVariants: Variants = {
-  rest: { rotate: 0 },
-  hover: { rotate: 90, transition: { duration: 0.3, ease: "easeOut" } }
-} as const;
-
 // --- DEDICATED TEXT BLOCK COMPONENT ---
 // This component is now more generic and receives its data from the main page loop.
 
@@ -472,7 +467,7 @@ export default function AnimatedPage() {
     const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500); // Add buffer for section height
 
     return (lastElementTop / referenceWidth) * 100;
-  }, [imagesToDisplay, pageSections, isMobile, referenceWidth, currentGlobalTopMarginPx]);
+  }, [imagesToDisplay, isMobile, referenceWidth, currentGlobalTopMarginPx]);
 
   const scrollInputRangeEnd = useMemo(() => {
     return (containerHeightVw / 100) * referenceWidth * 1.5;
