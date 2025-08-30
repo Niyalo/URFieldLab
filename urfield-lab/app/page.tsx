@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import CloudParallax from './components/CloudParallax';
 import PercentageDataViewer from './components/PercentageDataViewer';
+import QuotesBlock from './components/QuotesBlock';
 
 // --- HELPER HOOKS & FUNCTIONS ---
 
@@ -104,7 +105,7 @@ const pageSections = [
       p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
       cta: "HOW TO RUN A FIELD LAB"
     },
-    desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
@@ -116,7 +117,7 @@ const pageSections = [
       p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
       cta: "EXPLORE LOCATIONS"
     },
-    desktopConfig: { top: 2200, left: '5%', right: '65%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 2400, left: '5%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
   // --- NEW PERCENTAGE DATA VIEWER SECTION ---
@@ -162,8 +163,25 @@ const pageSections = [
       ]
     },
     // Positioned where 'ecosystems' was, with 25% side gaps and black text.
-    desktopConfig: { top: 2900, left: '25%', right: '25%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 3400, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  // --- NEW QUOTES BLOCK SECTION ---
+  {
+    id: 'participantFeedback',
+    type: 'quotesBlock' as const,
+    content: {
+      title: "Feedback from the surveys & interviews",
+      quotes: [
+        { id: 'q1', text: "The UR Field Lab was a transformative experience, fostering collaboration and innovation in a way I've never seen before.", author: "Elena", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q2', text: "A truly unique 'un-conference' that breaks down barriers and allows for genuine co-creation. Highly recommended.", author: "Marcus", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q3', text: "I left with not just new ideas, but a new network of passionate colleagues from around the world.", author: "Aisha", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q4', text: "The hands-on, project-based approach meant we were creating tangible solutions from day one. Incredible.", author: "David", avatarSrc: "/images/avatars/avatar1.png" },
+        { id: 'q5', text: "It's a powerful reminder of what can be achieved when diverse minds come together with a shared purpose.", author: "Priya", avatarSrc: "/images/avatars/avatar1.png" },
+      ]
+    },
+    desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
+    mobileConfig: { top: 4500, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -209,16 +227,12 @@ const desktopImages: BaseImageConfig[] = [
   { id: 'water 3', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1700, zIndex: 2, refHeight: 600, parallaxFactor: 0.3, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
   { id: 'water 4', src: '/images/URFieldLabMainPage/Blue stuff cropped 2.png', top: 1800, zIndex: 2, refHeight: 600, parallaxFactor: 0.4, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
 
-  { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2200, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
+  { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2400, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 30, rightGapPercent: 0 },
 
-  /*{ id: 'D_Image8', src: '/images/truth/dams/farm.png', top: 1602, zIndex: 7, refHeight: 600, parallaxFactor: 1.0 },
-  { id: 'D_Image5', src: '/images/truth/dams/dam.png', top: 933, zIndex: 8, refHeight: 800, parallaxFactor: 0.8 },
-  { id: 'D_Image9', src: '/images/truth/my`th/rock-right.png', top: 2803, zIndex: 9, refHeight: 700, parallaxFactor: 0.5 },
-  { id: 'D_Image10', src: '/images/truth/healthy/river-complex.png', top: 2869, zIndex: 10, refHeight: 900, parallaxFactor: 0.5 },
-  { id: 'D_Image11', src: '/images/truth/healthy/woman.png', top: 4000, zIndex: 11, refHeight: 700, parallaxFactor: 0.9 },
-  { id: 'D_Image12', src: '/images/truth/action/bridge.png', top: 4300, zIndex: 12, refHeight: 800, parallaxFactor: 1.1 },
-  { id: 'D_Image13', src: '/images/truth/action/mountains.png', top: 4553, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'D_Image14', src: '/images/truth/action/ladies.png', top: 4800, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },*/
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+
 ];
 
 const mobileImages: BaseImageConfig[] = [
@@ -310,18 +324,20 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
                     <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
-                    <motion.a
-                        href="#"
-                        className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
-                        whileHover="hover"
-                        initial="rest"
-                        style={{ fontSize: `calc(1vw * var(--text-scale))` }}
-                    >
-                        <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
-                            <motion.span variants={plusVariants}>+</motion.span>
-                        </span>
-                        <span>{content.cta || ''}</span>
-                    </motion.a>
+                    {content.cta && (
+                        <motion.a
+                            href="#"
+                            className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                            whileHover="hover"
+                            initial="rest"
+                            style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                        >
+                            <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
+                                <motion.span variants={plusVariants}>+</motion.span>
+                            </span>
+                            <span>{content.cta}</span>
+                        </motion.a>
+                    )}
                 </div>
             )}
         </motion.div>
@@ -417,11 +433,19 @@ export default function AnimatedPage() {
   const imagesToDisplay = isMobile ? mobileImages : desktopImages;
 
   const containerHeightVw = useMemo(() => {
-    if (!imagesToDisplay.length) return 50;
-    const lastImage = imagesToDisplay[imagesToDisplay.length - 1];
+    if (!imagesToDisplay.length && pageSections.length === 0) return 100;
+
+    const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
+    const lastSection = pageSections.length > 0 ? pageSections[pageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
+    
+    const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
+    const lastSectionTop = lastSectionConfig.top || 0;
+
     const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
-    return ((lastImageAdjustedTop + lastImage.refHeight) / referenceWidth) * 100;
-  }, [imagesToDisplay, referenceWidth, currentGlobalTopMarginPx]);
+    const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500); // Add buffer for section height
+
+    return (lastElementTop / referenceWidth) * 100;
+  }, [imagesToDisplay, pageSections, isMobile, referenceWidth, currentGlobalTopMarginPx]);
 
   const scrollInputRangeEnd = useMemo(() => {
     return (containerHeightVw / 100) * referenceWidth * 1.5;
@@ -493,6 +517,24 @@ export default function AnimatedPage() {
                   isMobile={isMobile}
                   referenceWidth={referenceWidth}
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
+                />
+              );
+            
+            case 'quotesBlock':
+              return (
+                <QuotesBlock
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  isMobile={isMobile}
+                  referenceWidth={referenceWidth}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
                 />
               );
 

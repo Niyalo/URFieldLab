@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useSpring, useTransform, type MotionValue } from 'framer-motion';
 import IconPersonOutline from './icons/IconPersonOutline';
 import IconPersonFilled from './icons/IconPersonFilled';
 
@@ -33,6 +33,7 @@ type BlockConfig = {
   textColor: string;
   textScale: number;
   animation: object; // was 'any'
+  parallaxFactor?: number; // Add optional parallaxFactor
 };
 
 type PercentageDataViewerProps = {
@@ -41,9 +42,41 @@ type PercentageDataViewerProps = {
   isMobile: boolean;
   referenceWidth: number;
   currentGlobalTopMarginPx: number;
+  // Add parallax-related props
+  scrollY: MotionValue<number>;
+  scrollInputRangeEnd: number;
+  parallaxIntensity: number;
 };
 
-// --- HELPER ---
+// --- HELPERS ---
+
+// Re-usable mapRange function
+const mapRange = (value: number, inMin: number, inMax: number, outMin: number, outMax: number): number => {
+  if (inMin === inMax) return outMin;
+  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+};
+
+// Re-usable parallax hook
+const useParallaxTransform = (
+  scrollY: MotionValue<number>,
+  parallaxFactor: number | undefined,
+  scrollInputRangeEnd: number,
+  isMobile: boolean,
+  parallaxIntensity: number,
+  parallaxMagnitudeConstant: number = 300
+) => {
+  const yTarget = useTransform(
+    scrollY,
+    (latestScrollY: number) => {
+      if (isMobile || !parallaxFactor || parallaxFactor === 0) return 0;
+      const outputTarget = -parallaxFactor * parallaxIntensity * parallaxMagnitudeConstant;
+      if (scrollInputRangeEnd === 0) return 0;
+      return mapRange(latestScrollY, 0, scrollInputRangeEnd, 0, outputTarget);
+    }
+  );
+  return useSpring(yTarget, { stiffness: 200, damping: 20, restDelta: 0.1 });
+};
+
 
 // This function determines the color for each icon based on the active statement's percentages
 const getIconColor = (index: number, percentages: Percentage[]): string | null => {
@@ -103,10 +136,16 @@ const PercentageDataViewer: React.FC<PercentageDataViewerProps> = ({
   isMobile,
   referenceWidth,
   currentGlobalTopMarginPx,
+  scrollY,
+  scrollInputRangeEnd,
+  parallaxIntensity,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [textHeight, setTextHeight] = useState(0);
   const textContentRef = useRef<HTMLDivElement>(null);
+
+  // Apply parallax transformation
+  const y = useParallaxTransform(scrollY, config.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity);
 
   // Use a layout effect and resize observer to measure the text content height
   useLayoutEffect(() => {
@@ -139,7 +178,7 @@ const PercentageDataViewer: React.FC<PercentageDataViewerProps> = ({
   return (
     <motion.div
       className="w-full flex flex-col box-border p-[1.2vw]"
-      style={blockStyle}
+      style={{ ...blockStyle, y }}
       {...config.animation}
     >
       {/* Centered Title and Subtitle */}
@@ -223,6 +262,7 @@ const PercentageDataViewer: React.FC<PercentageDataViewerProps> = ({
           >
             <div
               // Always a 10x10 grid. On mobile, the container size is reduced, scaling the grid down.
+              // On desktop, it's a square that fills the available width of its new, smaller parent.
               className="grid grid-cols-10 grid-rows-10 gap-1"
               style={{
                 // On desktop, the grid's size is linked to the text block's height.
