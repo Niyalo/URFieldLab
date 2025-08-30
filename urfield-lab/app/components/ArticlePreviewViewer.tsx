@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getArticlesByYearSlug, type Article } from '@/sanity/sanity-utils';
+import { getArticlesByYearSlug, getYearsWithArticles, type Article } from '@/sanity/sanity-utils';
 import { urlFor } from '@/sanity/sanity-utils';
 
 // Helper to get YouTube thumbnail
@@ -117,37 +117,80 @@ const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
 
 // --- Main Viewer Component ---
 type ArticlePreviewViewerProps = {
-  yearSlug: string;
+  yearSlug: string; // This will be the initial year
   title: string;
 };
 
 const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ yearSlug, title }) => {
+  // State for the list of years with articles
+  const [availableYears, setAvailableYears] = useState<{ _id: string; year: number; title: string; slug: string; }[]>([]);
+  // State for the currently selected year slug
+  const [selectedYearSlug, setSelectedYearSlug] = useState(yearSlug);
+  // State for the articles of the selected year
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Effect to fetch the list of available years ONCE on mount
+  useEffect(() => {
+    const fetchYears = async () => {
+      const years = await getYearsWithArticles();
+      setAvailableYears(years);
+    };
+    fetchYears();
+  }, []);
+
+  // Effect to fetch articles whenever the selectedYearSlug changes
   useEffect(() => {
     const fetchArticles = async () => {
+      setIsLoading(true);
       try {
-        const fetchedArticles = await getArticlesByYearSlug(yearSlug);
+        const fetchedArticles = await getArticlesByYearSlug(selectedYearSlug);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
+        setArticles([]); // Clear articles on error
       } finally {
         setIsLoading(false);
       }
     };
-    fetchArticles();
-  }, [yearSlug]);
+    if (selectedYearSlug) {
+        fetchArticles();
+    }
+  }, [selectedYearSlug]);
+
+  const handleYearSelect = (slug: string) => {
+    setSelectedYearSlug(slug);
+  };
 
   return (
     <div className="relative w-full py-16 z-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{title}</h2>
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{title}</h2>
+      
+      {/* Year Selector Buttons */}
+      <div className="flex justify-center items-center gap-4 mb-8">
+        {availableYears.map((year) => (
+          <button
+            key={year._id}
+            onClick={() => handleYearSelect(year.slug)}
+            disabled={selectedYearSlug === year.slug}
+            className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-300
+              ${selectedYearSlug === year.slug
+                ? 'bg-orange-700 text-white cursor-not-allowed' // Active/disabled style
+                : 'bg-[#FF8C00] text-white hover:bg-orange-600' // Default style
+              }
+            `}
+          >
+            {year.year}
+          </button>
+        ))}
+      </div>
+
       {isLoading ? (
         <div className="w-full h-[500px] flex items-center justify-center">
           <p>Loading articles...</p>
         </div>
       ) : articles.length > 0 ? (
-        <Scroller articles={articles} yearSlug={yearSlug} />
+        <Scroller articles={articles} yearSlug={selectedYearSlug} />
       ) : (
         <div className="w-full h-[500px] flex items-center justify-center">
           <p>No articles found for this year.</p>
