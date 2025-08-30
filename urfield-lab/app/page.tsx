@@ -192,7 +192,9 @@ const pageSections = [
     type: 'articlePreviewViewer' as const,
     content: {
       title: "Outputs",
-      yearSlug: "UR2024"
+      yearSlug: "UR2024",
+      // Adding empty properties to match the structure of other content objects
+      pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
     },
     // Config is used for positioning the entire block
     desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
@@ -285,11 +287,12 @@ const arrowVariants: Variants = {
 
 // Extracting config types for cleaner props
 type TextBlockConfig = typeof pageSections[0]['desktopConfig'] | typeof pageSections[0]['mobileConfig'];
-type TextBlockContent = typeof pageSections[0]['content'];
+// Making the content prop more flexible to accommodate different section types
+type SectionContent = typeof pageSections[number]['content'];
 
 type TextBlockProps = {
     config: TextBlockConfig;
-    content: TextBlockContent;
+    content: SectionContent;
     isHero: boolean;
     scrollY: MotionValue<number>;
     scrollInputRangeEnd: number;
@@ -573,8 +576,8 @@ export default function AnimatedPage() {
                   }}
                 >
                   <ArticlePreviewViewer
-                    yearSlug={section.content.yearSlug}
-                    title={section.content.title}
+                    yearSlug={section.content.yearSlug!}
+                    title={section.content.title!}
                   />
                 </div>
               );

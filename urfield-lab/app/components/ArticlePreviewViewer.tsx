@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getArticlesByYearSlug, type Article } from '@/sanity/sanity-utils';
+import { getArticlesByYearSlug, getYearsWithArticles, type Article } from '@/sanity/sanity-utils';
 import { urlFor } from '@/sanity/sanity-utils';
 
 // Helper to get YouTube thumbnail
@@ -19,11 +19,18 @@ const getYouTubeVideoId = (url: string) => {
 type ArticleCardProps = {
   article: Article;
   yearSlug: string;
-  scale: MotionValue<number>;
-  opacity: MotionValue<number>;
+  scrollXProgress: MotionValue<number>;
+  index: number;
+  total: number;
 };
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scale, opacity }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scrollXProgress, index, total }) => {
+  // This is now the correct place for the hooks
+  const start = index / total;
+  const end = (index + 1) / total;
+  const scale = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.7, 1, 0.7, 0.7]);
+
   // Determine image source
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
   const imageUrl = videoId
@@ -73,7 +80,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scale, opa
   );
 };
 
-// --- Scroller Component ---
+// --- NEW: Internal Scroller Component ---
 type ScrollerProps = {
   articles: Article[];
   yearSlug: string;
@@ -83,51 +90,29 @@ const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollXProgress } = useScroll({ container: scrollRef });
 
-  // Create individual transforms for each possible article index (up to 20)
-  const total = Math.max(articles.length, 1);
-
-  // Article 0
-  const scale0 = useTransform(scrollXProgress, [0/total - 0.1, 0/total, 1/total, 1/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity0 = useTransform(scrollXProgress, [0/total - 0.1, 0/total, 1/total, 1/total + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Article 1
-  const scale1 = useTransform(scrollXProgress, [1/total - 0.1, 1/total, 2/total, 2/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity1 = useTransform(scrollXProgress, [1/total - 0.1, 1/total, 2/total, 2/total + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Article 2
-  const scale2 = useTransform(scrollXProgress, [2/total - 0.1, 2/total, 3/total, 3/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity2 = useTransform(scrollXProgress, [2/total - 0.1, 2/total, 3/total, 3/total + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Article 3
-  const scale3 = useTransform(scrollXProgress, [3/total - 0.1, 3/total, 4/total, 4/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity3 = useTransform(scrollXProgress, [3/total - 0.1, 3/total, 4/total, 4/total + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Article 4
-  const scale4 = useTransform(scrollXProgress, [4/total - 0.1, 4/total, 5/total, 5/total + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity4 = useTransform(scrollXProgress, [4/total - 0.1, 4/total, 5/total, 5/total + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Create arrays of transforms
-  const scales = [scale0, scale1, scale2, scale3, scale4];
-  const opacities = [opacity0, opacity1, opacity2, opacity3, opacity4];
-
   return (
-    <div className="w-full overflow-hidden">
-      <div
-        ref={scrollRef}
-        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-8"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {articles.map((article, i) => {
-          const scale = scales[i] || scale0; // Fallback to first transform
-          const opacity = opacities[i] || opacity0;
+    <div
+      ref={scrollRef}
+      className="w-full h-[500px] flex overflow-x-auto snap-x snap-mandatory scrollbar-hide py-10" // Added py-10 for vertical space for scaling
+      style={{ perspective: '1000px' }}
+    >
+      {/* Spacer to center first item */}
+      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
 
-          return (
-            <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
-              <ArticleCard article={article} yearSlug={yearSlug} scale={scale} opacity={opacity} />
-            </div>
-          );
-        })}
-      </div>
+      {articles.map((article, i) => (
+        <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
+          <ArticleCard
+            article={article}
+            yearSlug={yearSlug}
+            scrollXProgress={scrollXProgress}
+            index={i}
+            total={articles.length}
+          />
+        </div>
+      ))}
+
+      {/* Spacer to center last item */}
+      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
     </div>
   );
 };
@@ -135,37 +120,80 @@ const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
 
 // --- Main Viewer Component ---
 type ArticlePreviewViewerProps = {
-  yearSlug: string;
+  yearSlug: string; // This will be the initial year
   title: string;
 };
 
 const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ yearSlug, title }) => {
+  // State for the list of years with articles
+  const [availableYears, setAvailableYears] = useState<{ _id: string; year: number; title: string; slug: string; }[]>([]);
+  // State for the currently selected year slug
+  const [selectedYearSlug, setSelectedYearSlug] = useState(yearSlug);
+  // State for the articles of the selected year
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Effect to fetch the list of available years ONCE on mount
+  useEffect(() => {
+    const fetchYears = async () => {
+      const years = await getYearsWithArticles();
+      setAvailableYears(years);
+    };
+    fetchYears();
+  }, []);
+
+  // Effect to fetch articles whenever the selectedYearSlug changes
   useEffect(() => {
     const fetchArticles = async () => {
+      setIsLoading(true);
       try {
-        const fetchedArticles = await getArticlesByYearSlug(yearSlug);
+        const fetchedArticles = await getArticlesByYearSlug(selectedYearSlug);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch articles:", error);
+        setArticles([]); // Clear articles on error
       } finally {
         setIsLoading(false);
       }
     };
-    fetchArticles();
-  }, [yearSlug]);
+    if (selectedYearSlug) {
+        fetchArticles();
+    }
+  }, [selectedYearSlug]);
+
+  const handleYearSelect = (slug: string) => {
+    setSelectedYearSlug(slug);
+  };
 
   return (
     <div className="relative w-full py-16 z-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{title}</h2>
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{title}</h2>
+      
+      {/* Year Selector Buttons */}
+      <div className="flex justify-center items-center gap-4 mb-8">
+        {availableYears.map((year) => (
+          <button
+            key={year._id}
+            onClick={() => handleYearSelect(year.slug)}
+            disabled={selectedYearSlug === year.slug}
+            className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-300
+              ${selectedYearSlug === year.slug
+                ? 'bg-orange-700 text-white cursor-not-allowed' // Active/disabled style
+                : 'bg-[#FF8C00] text-white hover:bg-orange-600' // Default style
+              }
+            `}
+          >
+            {year.year}
+          </button>
+        ))}
+      </div>
+
       {isLoading ? (
         <div className="w-full h-[500px] flex items-center justify-center">
           <p>Loading articles...</p>
         </div>
       ) : articles.length > 0 ? (
-        <Scroller articles={articles} yearSlug={yearSlug} />
+        <Scroller articles={articles} yearSlug={selectedYearSlug} />
       ) : (
         <div className="w-full h-[500px] flex items-center justify-center">
           <p>No articles found for this year.</p>

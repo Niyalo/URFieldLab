@@ -884,6 +884,18 @@ export async function getAuthorDetails(authorId: string): Promise<Author | null>
 
     return client.fetch(query, { authorId });
 }
+
+export async function getYearsWithArticles(): Promise<{ _id: string; year: number; title: string; slug: string; }[]> {
+  return client.fetch(
+    groq`*[_type == "year" && count(*[_type == "article" && references(^._id) && verified == true]) > 0] | order(year desc) {
+      _id,
+      year,
+      title,
+      "slug": slug.current
+    }`
+  );
+}
+
 /*export async function getWorkingGroups(yearId?: string): Promise<WorkingGroup[]> {
     const params: { yearId?: string } = {};
     let query = `*[_type == "workingGroup"`;
