@@ -14,12 +14,14 @@ type Percentage = {
 
 type DataStatement = {
   id: string;
+  title?: string; // Optional title for each statement
   text: string;
   percentages: Percentage[];
 };
 
 type PercentageDataViewerContent = {
   title: string;
+  subtitle?: string; // Optional subtitle for the whole component
   statements: DataStatement[];
 };
 
@@ -136,100 +138,126 @@ const PercentageDataViewer: React.FC<PercentageDataViewerProps> = ({
 
   return (
     <motion.div
-      className="w-full flex flex-col md:flex-row gap-8 md:gap-12 box-border p-[1.2vw]"
+      className="w-full flex flex-col box-border p-[1.2vw]"
       style={blockStyle}
       {...config.animation}
     >
-      {/* Left Side: Title and Statements */}
-      <div className="w-full md:w-1/2" ref={textContentRef}>
+      {/* Centered Title and Subtitle */}
+      <div className="text-center mb-8 md:mb-12">
         <h2
-          className="font-bold uppercase leading-tight mb-[2vw]"
+          className="font-bold uppercase leading-tight"
           style={{
-            // use a clamp on mobile to ensure a readable minimum size, fallback to vw-based for desktop
-            fontSize: isMobile ? 'clamp(18px, 4.5vw, 26px)' : `calc(2.5vw * var(--text-scale))`
+            fontSize: isMobile ? 'clamp(22px, 5.5vw, 30px)' : `calc(2.8vw * var(--text-scale))`
           }}
         >
           {content.title}
         </h2>
-        <div className="flex flex-col gap-4">
-          {content.statements.map((statement, index) => (
-            <motion.div
-              key={statement.id}
-              onMouseEnter={() => setActiveIndex(index)}
-              className="relative cursor-pointer p-4 border-l-4"
-              initial="rest"
-              animate={activeIndex === index ? 'active' : 'rest'}
-              variants={{
-                rest: { borderColor: config.textColor === '#FFFFFF' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)' },
-                active: { borderColor: '#FF8C00' },
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="absolute top-0 left-0 h-full bg-[#FF8C00]/10"
-                variants={{
-                  rest: { width: '0%' },
-                  active: { width: '100%' },
-                }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
-              />
-              <p
-                className="relative leading-relaxed"
-                style={{
-                  // slightly larger, clamped sizes on mobile; desktop uses vw scaling as before
-                  fontSize: isMobile ? 'clamp(14px, 3.6vw, 16px)' : `calc(1.1vw * var(--text-scale))`
-                }}
-              >
-                {formatStatementText(statement.text, statement.percentages)}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right Side: Icon Grid (wrapped for centering and sizing) */}
-      <div className="w-full md:w-1/2 flex items-center justify-center">
-        <div
-          // On mobile, this wrapper div is now 50% width, constraining the grid inside.
-          // On desktop, it's full-width within its half of the flex container.
-          className="w-1/2 md:w-full"
-        >
-          <div
-            // Always a 10x10 grid. On mobile, the container size is reduced, scaling the grid down.
-            className="grid grid-cols-10 grid-rows-10 gap-1"
+        {content.subtitle && (
+          <p
+            className="relative leading-relaxed mt-2 opacity-80"
             style={{
-              // On desktop, the grid's size is linked to the text block's height.
-              // On mobile, it's a square that fills the available width of its new, smaller parent.
-              width: isMobile ? '100%' : `min(${textHeight}px, 100%)`,
-              height: isMobile ? 'auto' : `min(${textHeight}px, 100%)`,
-              aspectRatio: '1 / 1', // Ensures the grid is always a perfect square
-              gridAutoRows: '1fr'
+              fontSize: isMobile ? 'clamp(14px, 3.6vw, 16px)' : `calc(1.2vw * var(--text-scale))`
             }}
           >
-            {Array.from({ length: 100 }).map((_, i) => {
-              const color = getIconColor(i, activePercentages);
-              return (
-                <div key={i} className="relative w-full h-full p-0.5">
-                  <IconPersonOutline className="absolute inset-0 w-full h-full text-black/20" />
-                  <AnimatePresence>
-                    {color && (
-                      <motion.div
-                        className="absolute inset-0 w-full h-full"
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                          transition: { duration: 0.3 },
-                        }}
-                        exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                      >
-                        <IconPersonFilled style={{ color }} className="w-full h-full" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
+            {content.subtitle}
+          </p>
+        )}
+      </div>
+
+      {/* Main content area with statements and grid */}
+      <div className="w-full flex flex-col md:flex-row gap-8 md:gap-12">
+        {/* Left Side: Statements List */}
+        <div className="w-full md:w-1/2" ref={textContentRef}>
+          <div className="flex flex-col gap-4">
+            {content.statements.map((statement, index) => (
+              <motion.div
+                key={statement.id}
+                onMouseEnter={() => setActiveIndex(index)}
+                className="relative cursor-pointer p-4 border-l-4"
+                initial="rest"
+                animate={activeIndex === index ? 'active' : 'rest'}
+                variants={{
+                  rest: { borderColor: config.textColor === '#FFFFFF' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)' },
+                  active: { borderColor: '#FF8C00' },
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="absolute top-0 left-0 h-full bg-[#FF8C00]/10"
+                  variants={{
+                    rest: { width: '0%' },
+                    active: { width: '100%' },
+                  }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                />
+                {/* Render statement title if it exists */}
+                {statement.title && (
+                  <h3
+                    className="relative font-bold uppercase text-sm mb-2 tracking-wider"
+                    style={{
+                      fontSize: isMobile ? 'clamp(12px, 3vw, 14px)' : `calc(0.9vw * var(--text-scale))`
+                    }}
+                  >
+                    {statement.title}
+                  </h3>
+                )}
+                <p
+                  className="relative leading-relaxed"
+                  style={{
+                    fontSize: isMobile ? 'clamp(14px, 3.6vw, 16px)' : `calc(1.1vw * var(--text-scale))`
+                  }}
+                >
+                  {formatStatementText(statement.text, statement.percentages)}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side: Icon Grid (wrapped for centering and sizing) */}
+        <div className="w-full md:w-1/2 flex items-center justify-center">
+          <div
+            // On mobile, this wrapper div is now 50% width, constraining the grid inside.
+            // On desktop, it's full-width within its half of the flex container.
+            className="w-1/2 md:w-full"
+          >
+            <div
+              // Always a 10x10 grid. On mobile, the container size is reduced, scaling the grid down.
+              className="grid grid-cols-10 grid-rows-10 gap-1"
+              style={{
+                // On desktop, the grid's size is linked to the text block's height.
+                // On mobile, it's a square that fills the available width of its new, smaller parent.
+                width: isMobile ? '100%' : `min(${textHeight}px, 100%)`,
+                height: isMobile ? 'auto' : `min(${textHeight}px, 100%)`,
+                aspectRatio: '1 / 1', // Ensures the grid is always a perfect square
+                gridAutoRows: '1fr'
+              }}
+            >
+              {Array.from({ length: 100 }).map((_, i) => {
+                const color = getIconColor(i, activePercentages);
+                return (
+                  <div key={i} className="relative w-full h-full p-0.5">
+                    <IconPersonOutline className="absolute inset-0 w-full h-full text-black/20" />
+                    <AnimatePresence>
+                      {color && (
+                        <motion.div
+                          className="absolute inset-0 w-full h-full"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{
+                            opacity: 1,
+                            scale: 1,
+                            transition: { duration: 0.3 },
+                          }}
+                          exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+                        >
+                          <IconPersonFilled style={{ color }} className="w-full h-full" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

@@ -74,23 +74,23 @@ const pageSections = [
     id: 'hero',
     type: 'textBlock' as const, // Use 'as const' for type safety
     content: {
-      pre: "THE MARTIAN TRUTH",
-      h1: "ALL ALIENS ARE GOOFY",
-      sub: "(AND SO ARE THE SPACESHIPS THEY FLY)",
-      desc: "Goofy aliens are the only 'extraterrestrial' life form sending rovers to sleep, misplacing keys globally, and contributing to cosmic giggles.",
-      cta: "START SCANNING (THE TRUTH)"
+      pre: "UNDERSTANDING RISK",
+      h1: "UR FIELD LAB",
+      sub: "",
+      desc: "UR Field Labs are month-long un-conferences that explore critical design practices in disaster and climate risk management-related topics",
+      cta: "START EXPLORING"
     },
     desktopConfig: { top: 320, left: '20%', right: '20%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
     mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
   },
   {
-    id: 'damsAndDiversions',
+    id: 'whyTheFieldLab',
     type: 'textBlock' as const,
     content: {
-      h2: "ANTENNAS & XRAY MACHINES",
-      h3: "WHICH IS WORSE?",
-      p: "Antennas and XRAY machines are both startling to unsuspecting humans and the cows who graze among them. On Mars, 91% of the more than 3,000 'first contact' attempts involve small, wiggly antennas...",
-      cta: "GET XRAYED"
+      h2: "Why the Field Lab",
+      h3: "",
+      p: "In a world where climate change is the new normal, traditional conferences just don't cut it anymore. We need hands-on, minds-on, and feet-in-the-mud experiences to tackle the complex challenges of our time. Enter the UR Field Lab: a dynamic, month-long un-conference that breaks the mold. Here, experts, enthusiasts, and everyday citizens come together to share ideas, test solutions, and build resilient communities. It's not just about talking; it's about doing. Because when it comes to climate risk management, action speaks louder than words.",
+      cta: "Event Format"
     },
     desktopConfig: { top: 1150, left: '10%', right: '60%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -133,28 +133,43 @@ const pageSections = [
   },
   // --- NEW PERCENTAGE DATA VIEWER SECTION ---
   {
-    id: 'alienSurvey',
+    id: 'exitSurvey2024',
     type: 'percentageDataViewer' as const,
     content: {
-      title: "Alien Encounter Stats",
+      title: "Exit Survey 2024",
+      subtitle: "Results of the exit survey from the 2024 Kathmandu Field Lab of the 50 responding participants",
       statements: [
         {
           id: 's1',
-          text: "Initial surveys show 30% of abductees report improved cooking skills after returning.",
-          percentages: [{ value: 30, color: '#346339' }] // Green
+          title: "Field Lab Experience",
+          text: "86% gave the Field Lab experience 4-5 stars out of 5",
+          percentages: [{ value: 86, color: '#c63810ff' }] // Deep red
         },
         {
           id: 's2',
-          text: "Of those, 20% claim they can now communicate with squirrels, while a total of 55% developed a sudden craving for cosmic ice cream.",
+          title: "Impact on Career",
+          text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
           percentages: [
-            { value: 20, color: '#e68027ff' }, // Amber
-            { value: 55, color: '#818CF8' }  // Indigo
+            { value: 80, color: '#4caeecff' }, // Blue
+            { value: 50, color: '#4451c5ff' }  // Indigo
           ]
         },
         {
           id: 's3',
-          text: "A staggering 90% of all contacted individuals were simply asked for directions to the nearest black hole.",
-          percentages: [{ value: 90, color: '#ff0000ff' }] // Red
+          title: "During Field Lab",
+          text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
+          percentages: [
+            { value: 90, color: '#a2d330ff' }, 
+            { value: 18, color: '#107213ff' }] 
+        },
+        {
+          id: 's4',
+          title: "Continuation of Project",
+          text: "64% have kept on working on something they initiated at the Field Lab",
+          percentages: [
+            { value: 64, color: '#e68027ff' }, 
+
+          ]
         }
       ]
     },
