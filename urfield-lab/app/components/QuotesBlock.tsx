@@ -103,40 +103,50 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
 
       {/* Quotes Grid */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {content.quotes.map((quote, index) => (
-          <motion.div
-            key={quote.id}
-            className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg"
-            custom={index}
-            variants={quoteVariants}
-          >
-            <p
-              className="text-left mb-4"
-              style={{
-                fontSize: isMobile ? 'clamp(14px, 3.5vw, 16px)' : `calc(0.9vw * var(--text-scale))`,
-              }}
+        {content.quotes.map((quote, index) => {
+          // For mobile, alternate margin left/right
+          const mobileStaggerStyle: CSSProperties = isMobile
+            ? (index % 2 === 0
+                ? { marginRight: '12vw' }
+                : { marginLeft: '12vw' })
+            : {};
+
+          return (
+            <motion.div
+              key={quote.id}
+              className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg"
+              custom={index}
+              variants={quoteVariants}
+              style={mobileStaggerStyle}
             >
-              “{quote.text}”
-            </p>
-            <div className="flex items-center gap-3 mt-auto">
-              <Image
-                src={quote.avatarSrc}
-                alt={quote.author}
-                width={isMobile ? 32 : 40}
-                height={isMobile ? 32 : 40}
-                className="rounded-full"
-              />
-              <span
-                className="font-script"
+              <p
+                className="text-left mb-4"
                 style={{
-                  fontSize: isMobile ? 'clamp(16px, 4vw, 20px)' : `calc(1.5vw * var(--text-scale))`,
+                  fontSize: isMobile ? 'clamp(14px, 3.5vw, 16px)' : `calc(0.9vw * var(--text-scale))`,
                 }}
               >
-                {quote.author}
-              </span>
-            </div>
-          </motion.div>
-        ))}
+                “{quote.text}”
+              </p>
+              <div className="flex items-center gap-3 mt-auto">
+                <Image
+                  src={quote.avatarSrc}
+                  alt={quote.author}
+                  width={isMobile ? 32 : 40}
+                  height={isMobile ? 32 : 40}
+                  className="rounded-full"
+                />
+                <span
+                  className="font-script"
+                  style={{
+                    fontSize: isMobile ? 'clamp(16px, 4vw, 20px)' : `calc(1.5vw * var(--text-scale))`,
+                  }}
+                >
+                  {quote.author}
+                </span>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </motion.div>
   );

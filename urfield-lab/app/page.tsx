@@ -84,7 +84,7 @@ const pageSections = [
       ctaUrl: "/UR2024"
     },
     desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
-    mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
+    mobileConfig: { top: -100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
   },
   {
     id: 'theFieldLabExperience',
@@ -97,32 +97,32 @@ const pageSections = [
       ctaUrl: "/UR2024/event-structure"
     },
     desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+    mobileConfig: { top: 1100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 1.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
     id: 'whyTheFieldLab',
     type: 'textBlock' as const,
     content: {
-      h2: "The Field Lab experience",
+      h2: "Why The Field Lab?",
       h3: "",
       p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
       cta: "HOW TO RUN A FIELD LAB",
       ctaUrl: "/UR2024/event-structure"
     },
     desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+    mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
   },
   {
     id: 'locations',
     type: 'textBlock' as const,
     content: {
       h2: "GLOBAL LOCATIONS",
-      h3: "THE MYTH OF THE BENEVOLENT ALIEN",
+      h3: "",
       p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
       
     },
     desktopConfig: { top: 2400, left: '5%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+    mobileConfig: { top: 3600, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.8, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 2.5, ease: "easeOut" } } as MotionProps }
   },
   // --- NEW PERCENTAGE DATA VIEWER SECTION ---
   {
@@ -143,8 +143,8 @@ const pageSections = [
           title: "Impact on Career",
           text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
           percentages: [
-            { value: 80, color: '#4caeecff' }, // Blue
-            { value: 50, color: '#4451c5ff' }  // Indigo
+            { value: 80, color: '#ff8e59ff' }, // Blue
+            { value: 50, color: '#c63810ff' }  // Indigo
           ]
         },
         {
@@ -152,15 +152,15 @@ const pageSections = [
           title: "During Field Lab",
           text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
           percentages: [
-            { value: 90, color: '#a2d330ff' }, 
-            { value: 18, color: '#107213ff' }] 
+            { value: 90, color: '#ff8e59ff' }, 
+            { value: 18, color: '#c63810ff' }] 
         },
         {
           id: 's4',
           title: "Continuation of Project",
           text: "64% have kept on working on something they initiated at the Field Lab",
           percentages: [
-            { value: 64, color: '#e68027ff' }, 
+            { value: 64, color: '#c63810ff' }, 
 
           ]
         }
@@ -168,7 +168,7 @@ const pageSections = [
     },
     // Positioned where 'ecosystems' was, with 25% side gaps and black text.
     desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 3400, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+    mobileConfig: { top: 5200, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
   // --- NEW QUOTES BLOCK SECTION ---
   {
@@ -185,7 +185,7 @@ const pageSections = [
       ]
     },
     desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
-    mobileConfig: { top: 4500, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
+    mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
   },
   {
     id: 'articlePreviews',
@@ -198,7 +198,7 @@ const pageSections = [
     },
     // Config is used for positioning the entire block
     desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-    mobileConfig: { top: 5200, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+    mobileConfig: { top: 11300, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -253,13 +253,30 @@ const desktopImages: BaseImageConfig[] = [
 ];
 
 const mobileImages: BaseImageConfig[] = [
-  { id: 'M_Image_SetDam', src: '/images/truth/mobile/set-dam.png', top: 590, zIndex: 2, refHeight: 2677, parallaxFactor: 0, opacity: 0.8 },
-  { id: 'M_Image_WaterLong', src: '/images/truth/mobile/water-long.jpg', top: 2883, zIndex: 0, refHeight: 4449, parallaxFactor: 0 },
-  { id: 'M_Image_Houses', src: '/images/truth/mobile/houses.png', top: 4169, zIndex: 3, refHeight: 1116, parallaxFactor: 0 },
-  { id: 'M_Image_HealthySet', src: '/images/truth/mobile/healthy-set.png', top: 6073, zIndex: 4, refHeight: 3104, parallaxFactor: 0 },
-  { id: 'M_Image_Woman', src: '/images/truth/mobile/woman.png', top: 7638, zIndex: 5, refHeight: 959, parallaxFactor: 0 },
-  { id: 'M_Image_ActionSet', src: '/images/truth/mobile/action-set.png', top: 8330, zIndex: 6, refHeight: 1291, parallaxFactor: 0 },
-  { id: 'M_Image_Ladies', src: '/images/truth/mobile/ladies.png', top: 9179, zIndex: 7, refHeight: 463, parallaxFactor: 0 },
+  { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: -400, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
+
+  { id: 'Trees left', src: '/images/URFieldLabMainPage/trees-left.png', top: 380, zIndex: 2, refHeight: 600, parallaxFactor: 0.2 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/trees-right.png', top: 400, zIndex: 3, refHeight: 600, parallaxFactor: 0.3 },
+
+  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1800, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 10, rightGapPercent: 10 },
+
+  
+  
+  { id: 'water 1', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 2200, zIndex: 2, refHeight: 600, parallaxFactor: 0.1, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'water 2', src: '/images/URFieldLabMainPage/Blue stuff cropped.png', top: 2350, zIndex: 2, refHeight: 600, parallaxFactor: 0.2, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 3', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 2600, zIndex: 2, refHeight: 600, parallaxFactor: 0.3, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 4', src: '/images/URFieldLabMainPage/Blue stuff cropped 2.png', top: 2700, zIndex: 2, refHeight: 600, parallaxFactor: 0.4, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 5', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 2800, zIndex: 2, refHeight: 600, parallaxFactor: 0.3, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+  { id: 'water 6', src: '/images/URFieldLabMainPage/Blue stuff cropped 2.png', top: 3000, zIndex: 2, refHeight: 600, parallaxFactor: 0.4, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
+
+  { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 4200, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 0, rightGapPercent: 0 },
+
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 13400, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 13600, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 13700, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+
+  
 ];
 
 const clouds = [
@@ -350,7 +367,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     )}
                 </>
             ) : (
-                <div className={`max-w-[35vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
+                <div className={`max-w-[60vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
                     <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
                     <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
