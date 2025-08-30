@@ -19,11 +19,18 @@ const getYouTubeVideoId = (url: string) => {
 type ArticleCardProps = {
   article: Article;
   yearSlug: string;
-  scale: MotionValue<number>;
-  opacity: MotionValue<number>;
+  scrollXProgress: MotionValue<number>;
+  index: number;
+  total: number;
 };
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scale, opacity }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scrollXProgress, index, total }) => {
+  // This is now the correct place for the hooks
+  const start = index / total;
+  const end = (index + 1) / total;
+  const scale = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.8, 1.2, 0.8, 0.8]);
+  const opacity = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.7, 1, 0.7, 0.7]);
+
   // Determine image source
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
   const imageUrl = videoId
@@ -92,21 +99,17 @@ const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
       {/* Spacer to center first item */}
       <div className="flex-shrink-0 w-[calc(50%-150px)]" />
 
-      {articles.map((article, i) => {
-        const total = articles.length;
-        const start = i / total;
-        const end = (i + 1) / total;
-        
-        // Create a transform that maps the card's scroll progress to a scale value
-        const scale = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.8, 1.2, 0.8, 0.8]);
-        const opacity = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.7, 1, 0.7, 0.7]);
-
-        return (
-          <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
-            <ArticleCard article={article} yearSlug={yearSlug} scale={scale} opacity={opacity} />
-          </div>
-        );
-      })}
+      {articles.map((article, i) => (
+        <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
+          <ArticleCard
+            article={article}
+            yearSlug={yearSlug}
+            scrollXProgress={scrollXProgress}
+            index={i}
+            total={articles.length}
+          />
+        </div>
+      ))}
 
       {/* Spacer to center last item */}
       <div className="flex-shrink-0 w-[calc(50%-150px)]" />
