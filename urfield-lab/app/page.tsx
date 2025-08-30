@@ -79,7 +79,8 @@ const pageSections = [
       h1: "UNDERSTANDING RISK FIELD LABS",
       sub: "",
       desc: "The Understanding Risk (UR) Field Labs are collaborative, unstructured, un-conferences that bring together people to produce creative approaches to address today's most pressing climate and disaster risk management issues.",
-      cta: "START EXPLORING"
+      cta: "START EXPLORING",
+      ctaUrl: "/UR2024"
     },
     desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
     mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
@@ -91,7 +92,8 @@ const pageSections = [
       h2: "The Field Lab experience",
       h3: "",
       p: "Over four weeks, participants from around the world co-design a schedule and form working groups to develop projects, ranging from art to research.",
-      cta: "THE SCHEDULE"
+      cta: "THE SCHEDULE",
+      ctaUrl: "/UR2024/event-structure"
     },
     desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -103,7 +105,8 @@ const pageSections = [
       h2: "The Field Lab experience",
       h3: "",
       p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
-      cta: "HOW TO RUN A FIELD LAB"
+      cta: "HOW TO RUN A FIELD LAB",
+      ctaUrl: "/UR2024/event-structure"
     },
     desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -115,7 +118,7 @@ const pageSections = [
       h2: "GLOBAL LOCATIONS",
       h3: "THE MYTH OF THE BENEVOLENT ALIEN",
       p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
-      cta: "EXPLORE LOCATIONS"
+      
     },
     desktopConfig: { top: 2400, left: '5%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
@@ -314,10 +317,27 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
                     <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
-                    <motion.a href="#explore" className="inline-block mt-[2vw] text-[1vw] tracking-wider relative group" whileHover="hover" initial="rest" style={{ fontSize: `calc(1vw * var(--text-scale))` }}>
-                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-px after:bg-current after:bottom-[-2px] after:left-0 after:origin-right after:scale-x-100 group-hover:after:origin-left group-hover:after:animate-[strike-and-disappear_0.6s_forwards]">{content.cta || ''}</span>
-                        <motion.span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-lg" variants={arrowVariants}>↓</motion.span>
-                    </motion.a>
+                    {content.cta && (
+                        <div className="inline-block relative mt-[2vw]">
+                            <motion.a
+                                href={content.ctaUrl || '#'}
+                                className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                                style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                            >
+                                <span>{content.cta}</span>
+                            </motion.a>
+                            <motion.div
+                                className="absolute left-1/2 -translate-x-1/2 top-full mt-4"
+                                variants={arrowVariants}
+                                initial="rest"
+                                whileHover="hover"
+                            >
+                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 12L0 0L20 0L10 12Z" fill="#FF8C00"/>
+                                </svg>
+                            </motion.div>
+                        </div>
+                    )}
                 </>
             ) : (
                 <div className={`max-w-[35vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
@@ -326,15 +346,10 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
                     {content.cta && (
                         <motion.a
-                            href="#"
-                            className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
-                            whileHover="hover"
-                            initial="rest"
+                            href={content.ctaUrl || '#'}
+                            className="inline-block mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
                             style={{ fontSize: `calc(1vw * var(--text-scale))` }}
                         >
-                            <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
-                                <motion.span variants={plusVariants}>+</motion.span>
-                            </span>
                             <span>{content.cta}</span>
                         </motion.a>
                     )}
