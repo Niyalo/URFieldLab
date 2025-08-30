@@ -126,8 +126,11 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    background-color: #F2F1EA;
+    @apply text-foreground; 
+    background-image: url('/images/BG/siteBG.png');
+    background-size: 100vw auto; 
+    background-repeat: repeat-y;  
+    background-color: #F2F1EA;  
     margin: 0;
   }
 }

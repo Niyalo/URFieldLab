@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, type CSSProperties } from 'react';
-import { motion, useScroll, useTransform, useSpring, type MotionValue, type Variants } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, type MotionValue, type Variants, type MotionProps } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CloudParallax from './components/CloudParallax';
+import PercentageDataViewer from './components/PercentageDataViewer';
 
 // --- HELPER HOOKS & FUNCTIONS ---
 
@@ -54,11 +55,135 @@ const useParallaxTransform = (
 };
 
 
+// ===================================================================================
+//
+// PAGE CONTENT & CONFIGURATION
+//
+// This is the new, unified structure for all page content.
+// Each object in the `pageSections` array represents a distinct section on the page.
+//
+// To add new content (like a text block, image group, etc.):
+// 1. Define its data here in the `pageSections` array.
+// 2. Ensure you have a corresponding component to render it.
+// 3. Add a case for its `type` in the main render loop below.
+//
+// ===================================================================================
+
+const pageSections = [
+  {
+    id: 'hero',
+    type: 'textBlock' as const, // Use 'as const' for type safety
+    content: {
+      pre: "THE MARTIAN TRUTH",
+      h1: "ALL ALIENS ARE GOOFY",
+      sub: "(AND SO ARE THE SPACESHIPS THEY FLY)",
+      desc: "Goofy aliens are the only 'extraterrestrial' life form sending rovers to sleep, misplacing keys globally, and contributing to cosmic giggles.",
+      cta: "START SCANNING (THE TRUTH)"
+    },
+    desktopConfig: { top: 320, left: '20%', right: '20%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
+    mobileConfig: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
+  },
+  {
+    id: 'damsAndDiversions',
+    type: 'textBlock' as const,
+    content: {
+      h2: "ANTENNAS & XRAY MACHINES",
+      h3: "WHICH IS WORSE?",
+      p: "Antennas and XRAY machines are both startling to unsuspecting humans and the cows who graze among them. On Mars, 91% of the more than 3,000 'first contact' attempts involve small, wiggly antennas...",
+      cta: "GET XRAYED"
+    },
+    desktopConfig: { top: 1150, left: '10%', right: '60%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+  },
+  {
+    id: 'cleanGreen',
+    type: 'textBlock' as const,
+    content: {
+      h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS",
+      h3: "THE MYTH OF THE BENEVOLENT ALIEN",
+      p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.",
+      cta: "QUESTION MOTIVES"
+    },
+    desktopConfig: { top: 2780, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  {
+    id: 'healthyRivers',
+    type: 'textBlock' as const,
+    content: {
+      h2: "WE NEED HAPPY MARTIANS",
+      h3: "THE BENEFITS OF REGULAR SNACKS",
+      p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!",
+      cta: "OFFER A CHEESE PUFF"
+    },
+    desktopConfig: { top: 3330, left: '10%', right: '58%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 1.0, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 6700, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  {
+    id: 'saveBlueHeart',
+    type: 'textBlock' as const,
+    content: {
+      h2: "SAVE THE RED PLANET",
+      h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)",
+      p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...",
+      cta: "DONATE YOUR SOCKS"
+    },
+    desktopConfig: { top: 4530, left: '15%', right: '15%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 0.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 8550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  // --- NEW PERCENTAGE DATA VIEWER SECTION ---
+  {
+    id: 'alienSurvey',
+    type: 'percentageDataViewer' as const,
+    content: {
+      title: "Alien Encounter Stats",
+      statements: [
+        {
+          id: 's1',
+          text: "Initial surveys show 30% of abductees report improved cooking skills after returning.",
+          percentages: [{ value: 30, color: '#346339' }] // Green
+        },
+        {
+          id: 's2',
+          text: "Of those, 20% claim they can now communicate with squirrels, while a total of 55% developed a sudden craving for cosmic ice cream.",
+          percentages: [
+            { value: 20, color: '#e68027ff' }, // Amber
+            { value: 55, color: '#818CF8' }  // Indigo
+          ]
+        },
+        {
+          id: 's3',
+          text: "A staggering 90% of all contacted individuals were simply asked for directions to the nearest black hole.",
+          percentages: [{ value: 90, color: '#ff0000ff' }] // Red
+        }
+      ]
+    },
+    // Positioned where 'ecosystems' was, with 25% side gaps and black text.
+    desktopConfig: { top: 1960, left: '25%', right: '25%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
+    mobileConfig: { top: 3400, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
+  },
+  //
+  // --- DEVELOPER NOTE ---
+  // To add a new section (e.g., an image gallery), add its data object here.
+  // Example:
+  // {
+  //   id: 'myImageGroup',
+  //   type: 'imageGroup' as const,
+  //   content: { images: [...] },
+  //   desktopConfig: { top: 5000, ... },
+  //   mobileConfig: { top: 9000, ... }
+  // }
+  //
+];
+
 // --- DATA FOR IMAGES, TEXT, AND ANIMATIONS ---
+// ... existing data is now replaced by the pageSections array above ...
+// ... DELETING desktopSettings, mobileSettings, and textBlockData ...
+// ... keeping desktopImages, mobileImages, and clouds as they are part of the background collage ...
 
 const desktopImages = [
-  { id: 'D_Image7', src: '/images/truth/dams/water.jpg', top: 1647, zIndex: 0, refHeight: 800, parallaxFactor: 0.1 },
-  { id: 'D_Image1', src: '/images/truth/dirty/mountain.jpg', top: 573, zIndex: 2, refHeight: 700, parallaxFactor: 0.1 },
+  //{ id: 'D_Image7', src: '/images/truth/dams/water.jpg', top: 1647, zIndex: 0, refHeight: 800, parallaxFactor: 0.1 },
+  { id: 'D_Image1', src: '/images/truth/dirty/mountain.png', top: 573, zIndex: 2, refHeight: 700, parallaxFactor: 0.1 },
   { id: 'D_Image4', src: '/images/truth/dirty/trees-right.png', top: 646, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
   { id: 'D_Image2', src: '/images/truth/dirty/water.png', top: 984, zIndex: 4, refHeight: 500, parallaxFactor: 0.1 },
   { id: 'D_Image3', src: '/images/truth/dirty/trees-left.png', top: 674, zIndex: 5, refHeight: 600, parallaxFactor: 0.3 },
@@ -89,30 +214,6 @@ const clouds = [
     { id: 'cloud3', src: '/images/clouds/cloud_new_3.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
 ];
 
-const desktopSettings = {
-  globalTopMarginPx: -250,
-  textBlocks: {
-    hero: { top: 320, left: '20%', right: '20%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } },
-    damsAndDiversions: { top: 1150, left: '10%', right: '60%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 0.9, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } },
-    ecosystems: { top: 1960, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    cleanGreen: { top: 2780, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    healthyRivers: { top: 3330, left: '10%', right: '58%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 1.0, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    saveBlueHeart: { top: 4530, left: '15%', right: '15%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.0, textScale: 0.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-  }
-} as const;
-
-const mobileSettings = {
-  globalTopMarginPx: 600,
-  textBlocks: {
-    hero: { top: -200, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } },
-    damsAndDiversions: { top: 1550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } },
-    ecosystems: { top: 3400, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    cleanGreen: { top: 5000, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.7, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    healthyRivers: { top: 6700, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.8, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-    saveBlueHeart: { top: 8550, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.5, textColor: '#FFFFFF', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } },
-  }
-} as const;
-
 const arrowVariants: Variants = {
   rest: { y: '0vw', opacity: 1 },
   hover: {
@@ -133,11 +234,15 @@ const plusVariants: Variants = {
 } as const;
 
 // --- DEDICATED TEXT BLOCK COMPONENT ---
-type TextBlockConfig = typeof desktopSettings.textBlocks[keyof typeof desktopSettings.textBlocks] | typeof mobileSettings.textBlocks[keyof typeof mobileSettings.textBlocks];
+// This component is now more generic and receives its data from the main page loop.
+
+// Extracting config types for cleaner props
+type TextBlockConfig = typeof pageSections[0]['desktopConfig'] | typeof pageSections[0]['mobileConfig'];
+type TextBlockContent = typeof pageSections[0]['content'];
 
 type TextBlockProps = {
     config: TextBlockConfig;
-    content: { [key: string]: string | undefined };
+    content: TextBlockContent;
     isHero: boolean;
     scrollY: MotionValue<number>;
     scrollInputRangeEnd: number;
@@ -182,11 +287,11 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
                     <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
-                    <motion.a 
-                        href="#" 
-                        className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]" 
-                        whileHover="hover" 
-                        initial="rest" 
+                    <motion.a
+                        href="#"
+                        className="inline-flex items-center gap-3 mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-5 py-2.5 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                        whileHover="hover"
+                        initial="rest"
                         style={{ fontSize: `calc(1vw * var(--text-scale))` }}
                     >
                         <span className="flex items-center justify-center w-8 h-8 border border-current rounded-full">
@@ -199,6 +304,18 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
         </motion.div>
     );
 };
+
+// --- DEVELOPER NOTE ---
+// --- STEP 1: DEFINE NEW SECTION COMPONENTS HERE ---
+// When adding a new section type (e.g., 'imageGroup', 'survey'), create its component here.
+// It should accept props similar to TextBlock for consistency;
+/*
+const ImageGroupBlock: React.FC<any> = ({ config, content, ...props }) => {
+  // ... component logic to render an image group
+  return <div>...</div>;
+};
+*/
+// NOTE: The PercentageDataViewer component is in its own file: app/components/PercentageDataViewer.tsx
 
 
 // --- IMAGE COMPONENT ---
@@ -254,9 +371,9 @@ export default function AnimatedPage() {
   }, [isMobile]);
 
   const referenceWidth = 1280;
-  const currentSettings = isMobile ? mobileSettings : desktopSettings;
+  // Global top margin is now device-dependent
+  const currentGlobalTopMarginPx = isMobile ? 600 : -250;
   const imagesToDisplay = isMobile ? mobileImages : desktopImages;
-  const currentGlobalTopMarginPx = currentSettings.globalTopMarginPx;
 
   const containerHeightVw = useMemo(() => {
     if (!imagesToDisplay.length) return 50;
@@ -269,21 +386,11 @@ export default function AnimatedPage() {
     return (containerHeightVw / 100) * referenceWidth * 1.5;
   }, [containerHeightVw, referenceWidth]);
 
-  const { hero, damsAndDiversions, ecosystems, cleanGreen, healthyRivers, saveBlueHeart } = currentSettings.textBlocks;
-
-  const textBlockData = [
-    { config: hero, content: { pre: "THE MARTIAN TRUTH", h1: "ALL ALIENS ARE GOOFY", sub: "(AND SO ARE THE SPACESHIPS THEY FLY)", desc: "Goofy aliens are the only 'extraterrestrial' life form sending rovers to sleep, misplacing keys globally, and contributing to cosmic giggles.", cta: "START SCANNING (THE TRUTH)" } },
-    { config: damsAndDiversions, content: { h2: "ANTENNAS & XRAY MACHINES", h3: "WHICH IS WORSE?", p: "Antennas and XRAY machines are both startling to unsuspecting humans and the cows who graze among them. On Mars, 91% of the more than 3,000 'first contact' attempts involve small, wiggly antennas...", cta: "GET XRAYED" } },
-    { config: ecosystems, content: { h2: "MARTIAN LANDSCAPES AND THEIR ANCIENT SECRETS UNCOVERED", h3: "WHAT LIES BENEATH THE SAND", p: "What really goes on under the crimson dust? We've uncovered evidence of elaborate alien tunnel systems... small enough for a Martian to fit through, as well as their strange exotic pets with mysterious origins. They also seem to really like icy treats, which is a bit concerning...", cta: "UNEARTH ANOMALIES" } },
-    { config: cleanGreen, content: { h2: "FRIENDLY VISITORS? OR DEEPER INTENTIONS", h3: "THE MYTH OF THE BENEVOLENT ALIEN", p: "They offer advanced technology, universal peace, and free ice cream. Or do they? Martian history is full of stories about 'friendly' visitors who left behind mysterious gadgets, cryptic messages, and the occasional melted dessert. But are these gifts truly benevolent, or is there a deeper agenda beneath those shiny saucers and generous smiles? The truth may be stranger—and stickier—than we think.", cta: "QUESTION MOTIVES" } },
-    { config: healthyRivers, content: { h2: "WE NEED HAPPY MARTIANS", h3: "THE BENEFITS OF REGULAR SNACKS", p: "A well-fed Martian is a non-destructive Martian. Studies show a direct correlation... between snack frequency and overall happiness. So let's keep those cheese puffs coming!", cta: "OFFER A CHEESE PUFF" } },
-    { config: saveBlueHeart, content: { h2: "SAVE THE RED PLANET", h3: "A CALL TO THE STARS (AND YOUR LOCAL GROCER)", p: "Mars needs us! And by 'us,' we mean our spare change for their intergalactic vending machines...", cta: "DONATE YOUR SOCKS" } },
-  ];
-
   return (
-    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-[#f2f1ea] font-sans">
+    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans">
       <Header isLight={headerIsLight} />
 
+      {/* Background collage of images and clouds */}
       <motion.div
         className="relative w-full overflow-hidden"
         style={{ height: `${containerHeightVw}vw` }}
@@ -304,20 +411,61 @@ export default function AnimatedPage() {
         ))}
       </motion.div>
 
+      {/* Absolutely positioned container for all interactive/content sections */}
       <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
-        {textBlockData.map((data, index) => (
-          <TextBlock
-            key={index}
-            {...data}
-            isHero={index === 0}
-            scrollY={scrollY}
-            scrollInputRangeEnd={scrollInputRangeEnd}
-            isMobile={isMobile}
-            parallaxIntensity={parallaxIntensity}
-            currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-            referenceWidth={referenceWidth}
-          />
-        ))}
+        {/* --- DEVELOPER NOTE --- */}
+        {/* --- STEP 2: RENDER SECTIONS DYNAMICALLY --- */}
+        {/* This loop renders each section from the `pageSections` array. */}
+        {pageSections.map((section) => {
+          // Determine the correct config based on the device
+          const config = isMobile ? section.mobileConfig : section.desktopConfig;
+          
+          // We no longer create a single `commonProps` object here.
+          // Instead, we'll pass props inside the switch case where types are narrowed.
+
+          // --- DEVELOPER NOTE ---
+          // --- STEP 3: ADD A CASE FOR YOUR NEW SECTION TYPE ---
+          // Add a new `case` here to render your new component.
+          switch (section.type) {
+            case 'textBlock':
+              return (
+                <TextBlock
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  isMobile={isMobile}
+                  parallaxIntensity={parallaxIntensity}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  referenceWidth={referenceWidth}
+                  isHero={section.id === 'hero'}
+                />
+              );
+            
+            case 'percentageDataViewer':
+              return (
+                <PercentageDataViewer 
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  isMobile={isMobile}
+                  referenceWidth={referenceWidth}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                />
+              );
+
+            // case 'imageGroup':
+            //   return <ImageGroupBlock key={section.id} {...commonProps} />;
+            
+            // case 'survey':
+            //   return <SurveyBlock key={section.id} {...commonProps} />;
+
+            default:
+              // Render nothing if the type is unknown
+              return null;
+          }
+        })}
       </div>
 
       <Footer />
