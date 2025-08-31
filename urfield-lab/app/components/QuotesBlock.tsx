@@ -91,7 +91,7 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
     >
       {/* Title */}
       <motion.h2
-        className="font-script text-center mb-8 md:mb-16"
+        className="text-center mb-8 md:mb-16"
         style={{
           fontSize: isMobile ? 'clamp(32px, 8vw, 48px)' : `calc(4vw * var(--text-scale))`,
           color: config.textColor,

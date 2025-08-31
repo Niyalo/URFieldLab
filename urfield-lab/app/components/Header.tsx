@@ -57,9 +57,9 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
               <Image
                 src="/images/icons/logo-patagonia.svg"
                 alt="Site Logo"
-                width={120}
-                height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
+                width={240}
+                height={48}
+                className={`transition-all duration-500 ${isLight ? 'invert pt-2 w-[120px] h-[48px]' : 'invert-0 w-[240px] h-[48px]'}`}
               />
             </Link>
           </div>
@@ -101,12 +101,12 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
           <div className="md:hidden flex justify-between items-center w-full">
             <Link href="/" className="z-10">
                <Image
-                src="/images/icons/logo-patagonia.svg"
-                alt="Site Logo"
-                width={120}
-                height={24}
-                className={`transition-filter duration-500 ${isLight ? 'invert' : 'invert-0'}`}
-              />
+                 src="/images/icons/logo-patagonia.svg"
+                 alt="Site Logo"
+                 width={240}
+                 height={48}
+                 className={`transition-all duration-500 ${isLight ? 'invert pt-2 w-[120px] h-[48px]' : 'invert-0 w-[240px] h-[48px]'}`}
+               />
             </Link>
             <button onClick={toggleMobileMenu} className="hamburger-button z-10" aria-label="Open menu">
               <span className={isLight ? 'bg-white' : 'bg-black'}></span>
