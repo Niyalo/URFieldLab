@@ -184,7 +184,18 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
         <h2 className="text-3xl md:text-4xl font-bold">
           {title}
         </h2>
-        {subtitle && <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">{subtitle}</p>}
+        {subtitle && <>
+          <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">{subtitle}</p>
+          <br></br>
+        </>
+        }
+        {subtitle && <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">For a full list of outputs from past field labs click here:</p>}
+        {subtitle && <div className="flex flex-wrap justify-center gap-2">
+          <Link href="/chiangmai2019/outputs" className="text-orange-600 dark:text-orange-400 font-semibold hover:underline">Chiang mai 2019 - Outputs</Link>
+          <p> and </p>
+          <Link href="/UR2024/outputs" className="text-orange-600 dark:text-orange-400 font-semibold hover:underline">Kathmandu 2024 - Outputs</Link>
+        </div>
+        } 
       </div>
 
       {/* Year Filter Buttons */}
