@@ -213,6 +213,7 @@ interface BaseImageConfig {
   leftGapPercent?: number;
   rightGapPercent?: number;
   blendMode?: React.CSSProperties['mixBlendMode']; // NEW
+  authorName?: string; // NEW for clickable author images
 }
 
 // Use this type for your arrays:
@@ -226,7 +227,9 @@ const desktopImages: BaseImageConfig[] = [
   { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.3 },
   { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 360, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
-  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
+  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1700, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 5, rightGapPercent: 40 },
+
+  { id: 'scheduling', src: '/images/URFieldLabMainPage/scheduling.gif', top: 1250, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 65, rightGapPercent: 10 },
 
   { id: 'water 1', src: '/images/URFieldLabMainPage/Blue stuff.png', top: 1500, zIndex: 2, refHeight: 600, parallaxFactor: 0.1, leftGapPercent: 0, rightGapPercent: 0, blendMode: 'multiply'},
 
@@ -237,14 +240,14 @@ const desktopImages: BaseImageConfig[] = [
   { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2400, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 30, rightGapPercent: 0 },
 
   // { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'Cloud people 1', src: '/images/URFieldLabMainPage/1.png', top: 4600, zIndex: 13, refHeight: 200, leftGapPercent:0.003, rightGapPercent: 81.8, parallaxFactor: 0.8 },
+  { id: 'Cloud people 1', src: '/images/URFieldLabMainPage/1.png', top: 4600, zIndex: 13, refHeight: 200, leftGapPercent:0.003, rightGapPercent: 81.8, parallaxFactor: 0.8, authorName: 'Madeeha Merchant' },
   { id: 'Cloud people 2', src: '/images/URFieldLabMainPage/2.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:11.18, rightGapPercent: 73.68, parallaxFactor: 0.8 },
-  { id: 'Cloud people 3', src: '/images/URFieldLabMainPage/3.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:19.375, rightGapPercent: 62.778, parallaxFactor: 0.8 },
-  { id: 'Cloud people 4', src: '/images/URFieldLabMainPage/leepi.png', top: 4620, zIndex: 13, refHeight: 700, leftGapPercent:32.986, rightGapPercent: 48.764, parallaxFactor: 0.8 },
-  { id: 'Cloud people 5', src: '/images/URFieldLabMainPage/sue.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:45, rightGapPercent: 36.69, parallaxFactor: 0.8 },
-  { id: 'Cloud people 6', src: '/images/URFieldLabMainPage/sunayana.png', top: 4630, zIndex: 13, refHeight: 700, leftGapPercent:57.08, rightGapPercent: 26.597, parallaxFactor: 0.8 },
-  { id: 'Cloud people 7', src: '/images/URFieldLabMainPage/7.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:68.26, rightGapPercent: 13.4722, parallaxFactor: 0.8 },
-  { id: 'Cloud people 8', src: '/images/URFieldLabMainPage/8.png', top: 4630, zIndex: 12, refHeight: 700, leftGapPercent:75.09, rightGapPercent: 3, parallaxFactor: 0.8 },
+  { id: 'Cloud people 3', src: '/images/URFieldLabMainPage/3.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:19.375, rightGapPercent: 62.778, parallaxFactor: 0.8, authorName: 'Abiral Khatri' },
+  { id: 'Cloud people 4', src: '/images/URFieldLabMainPage/leepi.png', top: 4620, zIndex: 13, refHeight: 700, leftGapPercent:32.986, rightGapPercent: 48.764, parallaxFactor: 0.8, authorName: 'Shamsun Nahar' },
+  { id: 'Cloud people 5', src: '/images/URFieldLabMainPage/sue.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:45, rightGapPercent: 36.69, parallaxFactor: 0.8, authorName: 'Jungsuh (Sue) Lim' },
+  { id: 'Cloud people 6', src: '/images/URFieldLabMainPage/sunayana.png', top: 4630, zIndex: 13, refHeight: 700, leftGapPercent:57.08, rightGapPercent: 26.597, parallaxFactor: 0.8},
+  { id: 'Cloud people 7', src: '/images/URFieldLabMainPage/7.png', top: 4600, zIndex: 13, refHeight: 700, leftGapPercent:68.26, rightGapPercent: 13.4722, parallaxFactor: 0.8, authorName: 'Rajee Tamrakar' },
+  { id: 'Cloud people 8', src: '/images/URFieldLabMainPage/8.png', top: 4630, zIndex: 12, refHeight: 700, leftGapPercent:75.09, rightGapPercent: 3, parallaxFactor: 0.8, authorName: 'Junu Maharjan' },
 
   { id: 'Credits banner', src: '/images/URFieldLabMainPage/baner.png', top: 4650, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
 ];
@@ -269,9 +272,9 @@ const mobileImages: BaseImageConfig[] = [
 
   { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 4200, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 0, rightGapPercent: 0 },
 
-  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 14400+700, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 12200, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
 
-  { id: 'Credits banner', src: '/images/URFieldLabMainPage/baner.png', top: 14600, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'Credits banner', src: '/images/URFieldLabMainPage/baner.png', top: 12450, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
 ];
 
 const clouds = [
@@ -428,13 +431,14 @@ type ImageConfig = BaseImageConfig;
 
 // --- IMAGE COMPONENT ---
 type ParallaxImageProps = {
-    img: ImageConfig;
+    img: BaseImageConfig;
     scrollY: MotionValue<number>;
     scrollInputRangeEnd: number;
     isMobile: boolean;
     parallaxIntensity: number;
     currentGlobalTopMarginPx: number;
     referenceWidth: number;
+    onAuthorClick?: (authorName: string) => void; // NEW
 };
 
 const ParallaxImage: React.FC<ParallaxImageProps> = ({
@@ -444,7 +448,8 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
     isMobile,
     parallaxIntensity,
     currentGlobalTopMarginPx,
-    referenceWidth
+    referenceWidth,
+    onAuthorClick // NEW
 }) => {
     const effectiveTopPx = img.top + currentGlobalTopMarginPx;
     const imageY = useParallaxTransform(scrollY, img.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity, 500);
@@ -458,6 +463,8 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
             className="absolute h-auto object-cover"
             src={img.src}
             alt={img.id}
+            onClick={img.authorName ? () => onAuthorClick!(img.authorName!) : undefined}
+            whileHover={img.authorName ? { scale: 1.1, transition: { duration: 0.2 } } : undefined}
             style={{
                 top: `${(effectiveTopPx / referenceWidth) * 100}vw`,
                 left: `calc(${leftGap}%)`,
@@ -467,6 +474,7 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
                 opacity: imageOpacity,
                 position: 'absolute',
                 mixBlendMode: blendMode, // NEW
+                cursor: img.authorName ? 'pointer' : 'auto',
             }}
         />
     );
@@ -700,7 +708,7 @@ export default function AnimatedPage() {
           pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
         },
         // Config is used for positioning the entire block
-        desktopConfig: { top: 4600+500, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
+        desktopConfig: { top: 4600+600, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
         mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
       },
       //
@@ -771,6 +779,7 @@ export default function AnimatedPage() {
               parallaxIntensity={parallaxIntensity}
               currentGlobalTopMarginPx={currentGlobalTopMarginPx}
               referenceWidth={referenceWidth}
+              onAuthorClick={handleQuoteClick}
             />
         ))}
       </motion.div>
