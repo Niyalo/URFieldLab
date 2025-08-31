@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const Footer: React.FC = () => {
@@ -7,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className="fixed bottom-0 left-0 w-full h-[60px] px-[30px] z-50 flex items-center bg-gradient-to-t from-black/50 to-transparent">
       <div className="w-full flex justify-between items-center">
         <div className="footer-logo">
-          <Image src="/images/icons/URFieldLabLogo.png" alt="UR Field Lab Logo" width={100} height={25} />
+          <img src="/images/icons/URFieldLabLogo.png" alt="UR Field Lab Logo" width={100} height={25} />
         </div>
         <nav className="flex items-center gap-5 text-white">
           <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-[#FF8C00]">
