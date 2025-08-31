@@ -91,11 +91,26 @@ type ArticlePreviewViewerProps = {
 };
 
 const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subtitle }) => {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+  const [availableYears, setAvailableYears] = useState<string[]>([]);
+  const [selectedYear, setSelectedYear] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(true);
 
-  const OPTIONS: EmblaOptionsType = { loop: true, align: 'center', containScroll: 'trimSnaps' };
-  const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
+  // Dynamically set carousel options based on the number of slides
+  const [options, setOptions] = useState<EmblaOptionsType>({ loop: true, align: 'center', containScroll: 'trimSnaps' });
+
+  useEffect(() => {
+    // A reasonable threshold might be 3 slides for the loop to look good.
+    const canLoop = filteredArticles.length > 3;
+    setOptions({
+      loop: canLoop,
+      align: 'center',
+      containScroll: 'trimSnaps'
+    });
+  }, [filteredArticles.length]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
@@ -103,19 +118,42 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
       setIsLoading(true);
       try {
         const fetchedArticles = await getFeaturedArticles();
-        // --- DEBUGGING STEP ---
-        // Log the fetched articles to the browser console to inspect their structure.
-        console.log("Fetched Featured Articles:", fetchedArticles);
-        setArticles(fetchedArticles);
+        setAllArticles(fetchedArticles);
+
+        // Extract unique years and sort them
+        const years = [...new Set(fetchedArticles.map(a => a.year?.title).filter(Boolean) as string[])];
+        years.sort((a, b) => parseInt(b) - parseInt(a)); // Sort years descending
+        setAvailableYears(['All', ...years]);
+
       } catch (error) {
         console.error("Failed to fetch featured articles:", error);
-        setArticles([]);
+        setAllArticles([]);
       } finally {
         setIsLoading(false);
       }
     };
     fetchFeaturedArticles();
   }, []);
+
+  // Effect to filter articles when selectedYear or allArticles changes
+  useEffect(() => {
+    const articlesToFilter = allArticles;
+    if (selectedYear === 'All') {
+      setFilteredArticles(articlesToFilter);
+    } else {
+      setFilteredArticles(articlesToFilter.filter(a => a.year?.title === selectedYear));
+    }
+  }, [selectedYear, allArticles]);
+
+  // Effect to re-initialize and reset the carousel when the number of slides changes
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.reInit();
+      emblaApi.scrollTo(0, false); // Reset to the first slide without animation
+      setSelectedIndex(0); // Manually reset the selected index state
+    }
+  }, [filteredArticles, emblaApi, options]); // Add options as a dependency
+
 
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -124,7 +162,12 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on('select', onSelect);
-    return () => { emblaApi.off('select', onSelect) };
+    // Re-initialize when slides change
+    emblaApi.on('reInit', onSelect);
+    return () => { 
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   const handleCardClick = useCallback((index: number, isCenter: boolean, e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -137,22 +180,41 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
 
   return (
     <div className="relative w-full py-16 z-10">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold"
-        >
+      <div className="text-center mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold">
           {title}
-          </h2>
+        </h2>
         {subtitle && <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">{subtitle}</p>}
       </div>
+
+      {/* Year Filter Buttons */}
+      {availableYears.length > 1 && (
+        <div className="flex justify-center items-center gap-2 md:gap-4 mb-12 flex-wrap px-4">
+          {availableYears.map(year => (
+            <button
+              key={year}
+              onClick={() => setSelectedYear(year)}
+              disabled={selectedYear === year}
+              className={`px-4 py-2 text-sm md:text-base font-semibold rounded-full transition-colors duration-300 border-2 ${
+                selectedYear === year
+                  ? 'bg-orange-500 text-white border-orange-500 cursor-not-allowed'
+                  : 'bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-orange-100 dark:hover:bg-orange-900/50 hover:border-orange-200 dark:hover:border-orange-800'
+              }`}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      )}
       
       {isLoading ? (
         <div className="w-full h-[500px] flex items-center justify-center">
           <p>Loading featured articles...</p>
         </div>
-      ) : articles.length > 0 ? (
+      ) : filteredArticles.length > 0 ? (
         <div className="embla w-full overflow-hidden" ref={emblaRef}>
-          <div className="embla__container flex items-center h-[500px] -ml-4">
-            {articles.map((article, i) => (
+          <div className={`embla__container flex items-center h-[500px] -ml-4 ${!options.loop ? 'justify-center' : ''}`}>
+            {filteredArticles.map((article, i) => (
               <div key={article._id} className="embla__slide flex-[0_0_60%] md:flex-[0_0_30%] min-w-0 pl-4">
                 <div className="h-[400px]">
                   <ArticleCard
@@ -166,8 +228,12 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
           </div>
         </div>
       ) : (
-        <div className="w-full h-[500px] flex items-center justify-center">
-          <p>No featured articles found.</p>
+        <div className="w-full h-[200px] flex items-center justify-center text-center px-4">
+          <p className="text-gray-600 dark:text-gray-400">
+            {selectedYear === 'All' 
+              ? 'No featured articles found.' 
+              : `No featured articles found for ${selectedYear}.`}
+          </p>
         </div>
       )}
     </div>
