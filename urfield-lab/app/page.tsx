@@ -72,134 +72,6 @@ const useParallaxTransform = (
 //
 // ===================================================================================
 
-const pageSections = [
-  {
-    id: 'hero',
-    type: 'textBlock' as const, // Use 'as const' for type safety
-    content: {
-      pre: "",
-      h1: "UNDERSTANDING RISK FIELD LABS",
-      sub: "",
-      desc: "The Understanding Risk (UR) Field Labs are collaborative, unstructured, un-conferences that bring together people to produce creative approaches to address today's most pressing climate and disaster risk management issues.",
-      cta: "START EXPLORING",
-      ctaUrl: "/UR2024"
-    },
-    desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
-    mobileConfig: { top: -100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
-  },
-
-  {
-    id: 'theFieldLabExperience',
-    type: 'textBlock' as const,
-    content: {
-      h2: "The Field Lab experience",
-      h3: "",
-      p: "Over four weeks, participants from around the world co-design a schedule and form working groups to develop projects, ranging from art to research.",
-      cta: "THE SCHEDULE",
-      ctaUrl: "/UR2024/event-structure"
-    },
-    desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 1100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 1.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'whyTheFieldLab',
-    type: 'textBlock' as const,
-    content: {
-      h2: "Why The Field Lab?",
-      h3: "",
-      p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
-      cta: "HOW TO RUN A FIELD LAB",
-      ctaUrl: "/chiangmai2019/outputs#article-nature-based-solutions-factsheets"
-    },
-    desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'locations',
-    type: 'textBlock' as const,
-    content: {
-      h2: "GLOBAL LOCATIONS",
-      h3: "",
-      p: "The Field Lab is held in locations around the world that are on the frontlines of climate and disaster risk",
-      
-    },
-    desktopConfig: { top: 2400, left: '5%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.5, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 3600, left: '10%', right: '10%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.8, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 2.5, ease: "easeOut" } } as MotionProps }
-  },
-  // --- NEW PERCENTAGE DATA VIEWER SECTION ---
-  {
-    id: 'exitSurvey2024',
-    type: 'percentageDataViewer' as const,
-    content: {
-      title: "Exit Survey 2024",
-      subtitle: "Results of the exit survey from the 2024 Kathmandu Field Lab of the 50 responding participants",
-      statements: [
-        {
-          id: 's1',
-          title: "Field Lab Experience",
-          text: "86% gave the Field Lab experience 4-5 stars out of 5",
-          percentages: [{ value: 86, color: '#c63810ff' }] // Deep red
-        },
-        {
-          id: 's2',
-          title: "Impact on Career",
-          text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
-          percentages: [
-            { value: 80, color: '#FF8C00ff' }, // Using incoming color
-            { value: 50, color: '#c63810ff' }
-          ]
-        },
-        {
-          id: 's3',
-          title: "During Field Lab",
-          text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
-          percentages: [
-            { value: 90, color: '#FF8C00ff' }, // Using incoming color
-            { value: 18, color: '#c63810ff' }] 
-        },
-        {
-          id: 's4',
-          title: "Continuation of Project",
-          text: "64% have kept on working on something they initiated at the Field Lab",
-          percentages: [
-            { value: 64, color: '#c63810ff' }, 
-
-          ]
-        }
-      ]
-    },
-    // Positioned where 'ecosystems' was, with 25% side gaps and black text.
-    desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
-    mobileConfig: { top: 5200, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'articlePreviews',
-    type: 'articlePreviewViewer' as const,
-    content: {
-      title: "FEATURED OUTPUTS",
-      subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
-      yearSlug: "UR2024",
-      // Adding empty properties to match the structure of other content objects
-      pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
-    },
-    // Config is used for positioning the entire block
-    desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-    mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
-  },
-  //
-  // --- DEVELOPER NOTE ---
-  // To add a new section (e.g., an image gallery), add its data object here.
-  // Example:
-  // {
-  //   id: 'myImageGroup',
-  //   type: 'imageGroup' as const,
-  //   content: { images: [...] },
-  //   desktopConfig: { top: 5000, ... },
-  //   mobileConfig: { top: 9000, ... }
-  // }
-  //
-];
-
 // --- DATA FOR IMAGES, TEXT, AND ANIMATIONS ---
 // Add optional opacity property to image configs
 interface BaseImageConfig {
@@ -342,9 +214,10 @@ type TextBlockProps = {
     parallaxIntensity: number;
     currentGlobalTopMarginPx: number;
     referenceWidth: number;
+    onCtaClick?: () => void; // NEW
 };
 
-const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth }) => {
+const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth, onCtaClick }) => {
     const y = useParallaxTransform(scrollY, config.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity);
 
     const blockStyle: CSSProperties & { '--text-scale': number } = {
@@ -372,7 +245,8 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     {content.cta && (
                         <div className="inline-block relative mt-[2vw]">
                             <motion.a
-                                href={content.ctaUrl || '#'}
+                                href={onCtaClick ? undefined : (content.ctaUrl || '#')}
+                                onClick={onCtaClick}
 
                                 className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
                                 style={{ fontSize: `calc(1vw * var(--text-scale))` }}
@@ -399,7 +273,8 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
                     {content.cta && (
                         <motion.a
-                            href={content.ctaUrl || '#'}
+                            href={onCtaClick ? undefined : (content.ctaUrl || '#')}
+                            onClick={onCtaClick}
 
                             className="inline-block mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
                             style={{ fontSize: `calc(1vw * var(--text-scale))` }}
@@ -489,7 +364,9 @@ export default function AnimatedPage() {
   const parallaxIntensity = 1;
   const [authors, setAuthors] = useState<any[]>([]);
   const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
-  const [isModalLoading, setIsModalLoading] = useState(false);
+  const [isAuthorModalLoading, setIsAuthorModalLoading] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [isVideoModalLoading, setIsVideoModalLoading] = useState(false);
 
   const { scrollY } = useScroll();
 
@@ -530,8 +407,8 @@ export default function AnimatedPage() {
 
   const handleQuoteClick = async (authorName: string) => {
     setSelectedAuthor(null); // Clear previous author
-    setIsModalLoading(true);
-    
+    setIsAuthorModalLoading(true);
+
     try {
       const authorDetails = await getAuthorByName(authorName);
       if (authorDetails) {
@@ -543,17 +420,29 @@ export default function AnimatedPage() {
       console.error('Error fetching author details:', error);
       alert("Could not load author details.");
     } finally {
-      setIsModalLoading(false);
+      setIsAuthorModalLoading(false);
     }
   };
 
-  const closeModal = () => {
+  const closeAuthorModal = () => {
     setSelectedAuthor(null);
-    setIsModalLoading(false);
+    setIsAuthorModalLoading(false);
+  };
+
+  const handleVideoClick = (videoSrc: string) => {
+    setSelectedVideo(videoSrc);
+    setIsVideoModalLoading(true);
+    // Set loading to false after a short delay to simulate loading
+    setTimeout(() => setIsVideoModalLoading(false), 500);
+  };
+
+  const closeVideoModal = () => {
+    setSelectedVideo(null);
+    setIsVideoModalLoading(false);
   };
 
   useEffect(() => {
-    if (selectedAuthor) {
+    if (selectedAuthor || selectedVideo) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -561,7 +450,7 @@ export default function AnimatedPage() {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [selectedAuthor]);
+  }, [selectedAuthor, selectedVideo]);
 
   const referenceWidth = 1280;
   // Global top margin is now device-dependent
@@ -803,6 +692,7 @@ export default function AnimatedPage() {
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
                   referenceWidth={referenceWidth}
                   isHero={section.id === 'hero'}
+                  onCtaClick={section.id === 'theFieldLabExperience' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
                 />
               );
             
@@ -864,16 +754,16 @@ export default function AnimatedPage() {
 
       {/* Author Modal */}
       {selectedAuthor && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in"
-          onClick={closeModal}
+          onClick={closeAuthorModal}
         >
           <div 
             className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative transform transition-all duration-300 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Loading Spinner */}
-            {isModalLoading && (
+            {isAuthorModalLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 z-10">
                 <Loader2 className="w-12 h-12 animate-spin text-orange-500" />
               </div>
@@ -901,7 +791,7 @@ export default function AnimatedPage() {
                       <Link
                         href={`/${article.year?.slug?.current}/outputs#article-${article._id}`}
                         className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-950 transition-colors font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
-                        onClick={closeModal}
+                        onClick={closeAuthorModal}
                       >
                         <span>{article.title}</span>
                         <span className="ml-4 flex items-center justify-center w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300">
@@ -917,8 +807,46 @@ export default function AnimatedPage() {
             </div>
             
             {/* Close Button */}
-            <button 
-              onClick={closeModal}
+            <button
+              onClick={closeAuthorModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+            >
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal */}
+      {selectedVideo && (
+        <div
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in"
+          onClick={closeVideoModal}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden relative transform transition-all duration-300 animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Loading Spinner */}
+            {isVideoModalLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 z-10">
+                <Loader2 className="w-12 h-12 animate-spin text-orange-500" />
+              </div>
+            )}
+
+            <video
+              src={selectedVideo}
+              controls
+              autoPlay
+              className="w-full h-auto max-h-[80vh] object-contain"
+              onLoadedData={() => setIsVideoModalLoading(false)}
+            >
+              Your browser does not support the video tag.
+            </video>
+
+            {/* Close Button */}
+            <button
+              onClick={closeVideoModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
             >
               <X size={24} />
