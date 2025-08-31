@@ -246,8 +246,7 @@ const desktopImages: BaseImageConfig[] = [
   { id: 'Cloud people 7', src: '/images/URFieldLabMainPage/7.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
   { id: 'Cloud people 8', src: '/images/URFieldLabMainPage/8.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
 
-  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
-  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+  { id: 'Credits banner', src: '/images/URFieldLabMainPage/baner.png', top: 4780+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
 ];
 
 const mobileImages: BaseImageConfig[] = [
