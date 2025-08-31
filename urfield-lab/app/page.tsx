@@ -725,7 +725,7 @@ export default function AnimatedPage() {
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
                   referenceWidth={referenceWidth}
                   isHero={section.id === 'hero'}
-                  onCtaClick={section.id === 'whyTheFieldLab' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
+                  onCtaClick={section.id === 'theFieldLabExperience' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
                 />
               );
             
