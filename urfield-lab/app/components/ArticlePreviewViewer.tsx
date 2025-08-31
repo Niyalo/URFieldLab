@@ -30,7 +30,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isCenter, onClick })
     : article.mainImage ? urlFor(article.mainImage).width(500).height(300).url() : '/images/placeholder.png';
 
   const yearSlug = article.year?.slug?.current;
-  const linkHref = yearSlug ? `/${yearSlug}/outputs#article-${article.slug?.current}` : '#';
+  const linkHref = yearSlug ? `/${yearSlug}/outputs#article-${article._id}` : '#';
 
   return (
     <Link
