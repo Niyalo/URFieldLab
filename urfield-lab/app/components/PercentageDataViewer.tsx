@@ -186,7 +186,7 @@ const PercentageDataViewer: React.FC<PercentageDataViewerProps> = ({
         <h2
           className="font-bold uppercase leading-tight"
           style={{
-            fontSize: isMobile ? 'clamp(22px, 5.5vw, 30px)' : `calc(2.8vw * var(--text-scale))`
+            fontSize: isMobile ? 'clamp(32px, 8vw, 48px)' : `calc(4vw * var(--text-scale))`
           }}
         >
           {content.title}

@@ -250,7 +250,16 @@ const desktopImages: BaseImageConfig[] = [
 
   { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 2400, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 30, rightGapPercent: 0 },
 
-  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  // { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 1', src: '/images/URFieldLabMainPage/1.png', top: 4800+500, zIndex: 13, refHeight: 200, parallaxFactor: 0.8 },
+  { id: 'Cloud people 2', src: '/images/URFieldLabMainPage/2.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 3', src: '/images/URFieldLabMainPage/3.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 4', src: '/images/URFieldLabMainPage/leepi.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 5', src: '/images/URFieldLabMainPage/sue.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 6', src: '/images/URFieldLabMainPage/sunayana.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 7', src: '/images/URFieldLabMainPage/7.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'Cloud people 8', src: '/images/URFieldLabMainPage/8.png', top: 4800+500, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+
   { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 4780+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
   { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 4870+500, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
 ];
