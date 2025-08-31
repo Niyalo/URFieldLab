@@ -39,6 +39,7 @@ type QuotesBlockProps = {
   scrollY: MotionValue<number>;
   scrollInputRangeEnd: number;
   parallaxIntensity: number;
+  onQuoteClick?: (authorName: string) => void;
 };
 
 // --- COMPONENT ---
@@ -49,6 +50,7 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
   isMobile,
   referenceWidth,
   currentGlobalTopMarginPx,
+  onQuoteClick,
 }) => {
   const blockStyle: CSSProperties & { '--text-scale': number } = {
     position: 'absolute',
@@ -108,17 +110,18 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
           // For mobile, alternate margin left/right
           const mobileStaggerStyle: CSSProperties = isMobile
             ? (index % 2 === 0
-                ? { marginRight: '16vw' }
-                : { marginLeft: '0' })
+                ? { marginRight: '12vw' }
+                : { marginLeft: '12vw' })
             : {};
 
           return (
-            <motion.div
+            <motion.button
               key={quote.id}
-              className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg"
+              className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg text-left cursor-pointer hover:bg-white/40 transition-colors"
               custom={index}
               variants={quoteVariants}
               style={mobileStaggerStyle}
+              onClick={() => onQuoteClick?.(quote.author)}
             >
               <p
                 className="text-left mb-4"
@@ -144,7 +147,7 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
                   {quote.author}
                 </span>
               </div>
-            </motion.div>
+            </motion.button>
           );
         })}
       </div>
