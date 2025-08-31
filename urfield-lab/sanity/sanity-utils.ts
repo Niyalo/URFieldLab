@@ -816,6 +816,21 @@ export async function getAuthorById(authorId: string): Promise<Author | null> {
   );
 }
 
+export async function getAuthorByName(name: string): Promise<Author | null> {
+  return client.fetch(
+    groq`*[_type == "author" && name == $name][0]{
+        _id,
+        name,
+        email,
+        role,
+        institute,
+        isAdmin,
+        "pictureURL": picture.asset->url
+      }`,
+    { name }
+  );
+}
+
 export async function getUnverifiedArticles(yearId: string): Promise<Article[]> {
   return client.fetch(
     groq`*[_type == "article" && year._ref == $yearId && verified != true] {

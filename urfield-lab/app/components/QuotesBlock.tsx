@@ -82,10 +82,11 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
 
   return (
     <motion.div
+      key={`quotes-${content.quotes.length}`} // Re-animate when quotes are loaded
       className="w-full flex flex-col items-center box-border p-[1.2vw]"
       style={blockStyle}
       initial="hidden"
-      whileInView="visible"
+      animate="visible"
       viewport={{ once: true, amount: 0.2 }}
       {...config.animation}
     >
@@ -102,13 +103,13 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
       </motion.h2>
 
       {/* Quotes Grid */}
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {content.quotes.map((quote, index) => {
           // For mobile, alternate margin left/right
           const mobileStaggerStyle: CSSProperties = isMobile
             ? (index % 2 === 0
-                ? { marginRight: '12vw' }
-                : { marginLeft: '12vw' })
+                ? { marginRight: '16vw' }
+                : { marginLeft: '0' })
             : {};
 
           return (
@@ -136,7 +137,6 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
                   className="rounded-full"
                 />
                 <span
-                  className="font-script"
                   style={{
                     fontSize: isMobile ? 'clamp(16px, 4vw, 20px)' : `calc(1.5vw * var(--text-scale))`,
                   }}
