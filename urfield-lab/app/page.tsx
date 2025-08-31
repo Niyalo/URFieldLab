@@ -26,11 +26,8 @@ const useIsMobile = (breakpoint: number = 768, aspectRatioThreshold: number = 1)
   useEffect(() => {
     const handleResize = () => {
       const currentWidth = window.innerWidth;
-      const currentHeight = window.innerHeight;
-      setIsMobileState(
-        currentWidth < breakpoint ||
-        (currentHeight > 0 && currentWidth / currentHeight <= aspectRatioThreshold)
-      );
+      // SIMPLIFIED: Only check width, ignore aspect ratio which is unreliable in dev tools.
+      setIsMobileState(currentWidth < breakpoint);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -196,7 +193,8 @@ const pageSections = [
     id: 'articlePreviews',
     type: 'articlePreviewViewer' as const,
     content: {
-      title: "Outputs",
+      title: "FEATURED OUTPUTS",
+      subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
       yearSlug: "UR2024",
       // Adding empty properties to match the structure of other content objects
       pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
@@ -277,9 +275,9 @@ const mobileImages: BaseImageConfig[] = [
 
   { id: 'Locations', src: '/images/URFieldLabMainPage/Locations.png', top: 4200, zIndex: 5, refHeight: 600, parallaxFactor: 0.8, leftGapPercent: 0, rightGapPercent: 0 },
 
-  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 13400, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
-  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 13600, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
-  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 13700, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
+  { id: 'Cloud people', src: '/images/URFieldLabMainPage/People.png', top: 14400+700, zIndex: 13, refHeight: 700, parallaxFactor: 0.8 },
+  { id: 'People cloud', src: '/images/URFieldLabMainPage/People cloud.png', top: 14600+700, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 },
+  { id: 'People cloud 2', src: '/images/URFieldLabMainPage/People cloud 2.png', top: 14700+700, zIndex: 14, refHeight: 403, parallaxFactor: 0.0 }
 ];
 
 const clouds = [
@@ -697,7 +695,7 @@ export default function AnimatedPage() {
         },
         // Config is used for positioning the entire block
         desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-        mobileConfig: { top: 11300, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+        mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
       }
     ];
 
@@ -735,7 +733,7 @@ export default function AnimatedPage() {
   // }
   //
   return (
-    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans">
+    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans overflow-x-hidden">
       <Header isLight={headerIsLight} />
 
       {/* Background collage of images and clouds */}
@@ -825,8 +823,8 @@ export default function AnimatedPage() {
                   }}
                 >
                   <ArticlePreviewViewer
-                    yearSlug={section.content.yearSlug!}
                     title={section.content.title!}
+                    subtitle={section.content.subtitle}
                   />
                 </div>
               );

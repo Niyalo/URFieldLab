@@ -230,7 +230,7 @@ export default function OutputsPage({ params }: Props) {
                   {group.articles && group.articles.length > 0 ? (
                     group.articles.map((article) => (
                       <div key={article._id}>
-                        <Link href={`#article-${article.slug?.current}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 underline decoration-from-font">
+                        <Link href={`#article-${article._id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 underline decoration-from-font">
                           {article.title}
                         </Link>
                         <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
@@ -284,7 +284,7 @@ export default function OutputsPage({ params }: Props) {
                       ))}
                       {group.articles?.map((article) => (
                         <div key={article._id}>
-                          <Link href={`#article-${article.slug?.current}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font">
+                          <Link href={`#article-${article._id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font">
                             {article.title}
                           </Link>
                           <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
@@ -331,13 +331,14 @@ export default function OutputsPage({ params }: Props) {
                           const imageOrder = isEvenGroup ? "md:order-1" : "md:order-2";
                           
                           return (
-                            <ArticlePreview
-                              key={article._id}
-                              article={article}
-                              yearSlug={yearSlug}
-                              imageOrder={imageOrder}
-                              textOrder={textOrder}
-                            />
+                            <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
+                              <ArticlePreview
+                                article={article}
+                                yearSlug={yearSlug}
+                                imageOrder={imageOrder}
+                                textOrder={textOrder}
+                              />
+                            </div>
                           );
                         })}
                       </div>
@@ -409,13 +410,14 @@ export default function OutputsPage({ params }: Props) {
                             const imageOrder = isEvenArticle ? "md:order-1" : "md:order-2";
 
                             return (
-                              <ArticlePreview
-                                key={article._id}
-                                article={article}
-                                yearSlug={yearSlug}
-                                imageOrder={imageOrder}
-                                textOrder={textOrder}
-                              />
+                              <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
+                                <ArticlePreview
+                                  article={article}
+                                  yearSlug={yearSlug}
+                                  imageOrder={imageOrder}
+                                  textOrder={textOrder}
+                                />
+                              </div>
                             );
                           })}
                         </div>
