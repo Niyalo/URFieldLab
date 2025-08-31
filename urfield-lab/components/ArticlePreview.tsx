@@ -12,25 +12,8 @@ const getYouTubeVideoId = (url: string) => {
   return (match && match[2].length === 11) ? match[2] : null;
 };
 
-// Define the Article type based on what's passed from the server component
-type Article = {
-  _id: string;
-  title: string;
-  slug?: { current: string };
-  summary: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mainImage?: any; // Can be a Sanity image object or a preview URL string
-  youtubeVideoUrl?: string;
-  hasBody?: boolean;
-  buttonText?: string;
-  authorListPrefix?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  authors?: { name: string, image?: any }[];
-  externalLinks?: { buttonText: string; url: string }[];
-};
-
 type Props = {
-  article: Article;
+  article: import('@/sanity/sanity-utils').Article;
   yearSlug: string;
   imageOrder: string;
   textOrder: string;
@@ -54,9 +37,9 @@ export default function ArticlePreview({ article, yearSlug, imageOrder, textOrde
             </span>
             {article.authors?.map((author, index) => (
               <div key={author.name + index} className="flex items-center gap-2">
-                {author.image && (
+                {'pictureURL' in author && author.pictureURL && (
                   <Image
-                    src={urlFor(author.image).width(24).height(24).fit('crop').url()}
+                    src={author.pictureURL}
                     alt={author.name}
                     width={24}
                     height={24}

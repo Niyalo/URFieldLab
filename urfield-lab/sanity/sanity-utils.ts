@@ -386,19 +386,25 @@ export interface Article {
   slug?: {
     current: string;
   };
-  year?: {
+  year?: Year | {
     slug: string;
     title: string;
-  };
+  } | null;
   summary?: string;
+  authorListPrefix?: string;
   mainImage?: SanityImageSource;
   youtubeVideoUrl?: string;
-  authors?: { name: string }[];
+  authors?: (Author | { _id: string; name: string })[];
+  workingGroups?: WorkingGroup[];
   order?: number;
   hasBody?: boolean;
   verified?: boolean;
   featured?: boolean;
   content?: any[]; // Or a more specific type for your content blocks
+  body?: PortableTextBlock[];
+  externalLinks?: { buttonText: string; url: string }[];
+  buttonText?: string;
+  contentGroups?: ContentGroup[];
 }
 
 export type ContentBlock = (

@@ -187,6 +187,41 @@ type TextBlockConfig = {
   animation: MotionProps;
 };
 
+interface AuthorItem {
+  name: string;
+  pictureURL?: string;
+  institute?: string;
+  bio?: string;
+  articles?: ArticleItem[];
+}
+
+interface ArticleItem {
+  _id: string;
+  title: string;
+  year?: {
+    slug: {
+      current: string;
+    };
+  };
+}
+
+interface StatementItem {
+  id: string;
+  title: string;
+  text: string;
+  percentages?: Array<{
+    value: number;
+    color: string;
+  }>;
+}
+
+interface QuoteItem {
+  id: string;
+  text: string;
+  author: string;
+  avatarSrc: string;
+}
+
 type SectionContent = {
   pre?: string;
   h1?: string;
@@ -199,8 +234,8 @@ type SectionContent = {
   p?: string;
   title?: string;
   subtitle?: string;
-  statements?: any[];
-  quotes?: any[];
+  statements?: StatementItem[];
+  quotes?: QuoteItem[];
   yearSlug?: string;
 };
 
@@ -301,8 +336,6 @@ const ImageGroupBlock: React.FC<any> = ({ config, content, ...props }) => {
 // NOTE: The PercentageDataViewer component is in its own file: app/components/PercentageDataViewer.tsx
 
 
-// --- IMAGE COMPONENT ---
-type ImageConfig = BaseImageConfig;
 
 // --- IMAGE COMPONENT ---
 type ParallaxImageProps = {
@@ -362,8 +395,8 @@ export default function AnimatedPage() {
   const isMobile = useIsMobile();
   const [headerIsLight, setHeaderIsLight] = useState(false);
   const parallaxIntensity = 1;
-  const [authors, setAuthors] = useState<any[]>([]);
-  const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
+  const [authors, setAuthors] = useState<AuthorItem[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<AuthorItem | null>(null);
   const [isAuthorModalLoading, setIsAuthorModalLoading] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [isVideoModalLoading, setIsVideoModalLoading] = useState(false);
@@ -563,7 +596,7 @@ export default function AnimatedPage() {
         type: 'quotesBlock' as const,
         content: {
           title: "Feedback from the surveys & interviews",
-          quotes: authors.length > 0 ? authors.map((author: any, index: number) => {
+          quotes: authors.length > 0 ? authors.map((author: AuthorItem, index: number) => {
             // This maps the fetched authors to the quotes data structure.
             return {
               id: `q${index + 1}`,
@@ -692,7 +725,7 @@ export default function AnimatedPage() {
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
                   referenceWidth={referenceWidth}
                   isHero={section.id === 'hero'}
-                  onCtaClick={section.id === 'theFieldLabExperience' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
+                  onCtaClick={section.id === 'whyTheFieldLab' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
                 />
               );
             
@@ -786,7 +819,7 @@ export default function AnimatedPage() {
               <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 border-b-2 border-orange-500 pb-2">Contributions</h3>
               {selectedAuthor.articles && selectedAuthor.articles.length > 0 ? (
                 <ul className="space-y-3">
-                  {selectedAuthor.articles.map((article: any) => (
+                  {selectedAuthor.articles.map((article: ArticleItem) => (
                     <li key={article._id}>
                       <Link
                         href={`/${article.year?.slug?.current}/outputs#article-${article._id}`}

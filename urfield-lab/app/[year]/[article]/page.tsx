@@ -55,6 +55,7 @@ export default async function ArticlePage({ params }: Props) {
       <main className="max-w-7xl mx-auto p-8 sm:p-12">
         <div className="text-center mb-12">
           <p className="text-lg text-gray-600 dark:text-gray-400 italic">
+            {/* By: {authorNames} */}
             {article.authorListPrefix || "By"}: {authorNames}
           </p>
         </div>

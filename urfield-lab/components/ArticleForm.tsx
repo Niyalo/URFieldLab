@@ -8,7 +8,7 @@ import slugify from 'slugify';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Author, Article, WorkingGroup } from '@/sanity/sanity-utils';
+import { Author, Article, WorkingGroup, Year } from '@/sanity/sanity-utils';
 import { SessionData } from '@/lib/session';
 import ArticlePreview from './ArticlePreview';
 import ArticleBody from './ArticleBody';
@@ -17,9 +17,21 @@ import RichTextEditor from './RichTextEditor';
 
 // A local, more flexible Article type for previewing purposes
 type PreviewArticle = Omit<Article, 'mainImage' | 'authors' | 'year'> & {
-    mainImage: string | { asset: { _ref: string; url: string } } | null; // Can be a Sanity image object or a preview URL string
-    authors: { name: string, image?: { asset: { url: string; _ref?: string } } | null }[];
-    year: { _id: string; slug: { current: string }; _type?: string; year?: number; title?: string } | null;
+    mainImage: string | { asset: { _ref: string; url: string } } | undefined; // Can be a Sanity image object or a preview URL string
+    authors: { name: string; _id: string; image?: { asset: { url: string; _ref?: string } } | null }[];
+    year: {
+        _id: string;
+        _type: 'year';
+        year: number;
+        title: string;
+        slug: { current: string };
+        logo: {
+            asset: {
+                _ref: string;
+                url: string;
+            };
+        };
+    } | null | undefined;
     externalLinks?: { buttonText: string; url: string }[];
 };
 
@@ -282,10 +294,18 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
         if (!formRef.current || !user) return;
 
         const formData = new FormData(formRef.current);
-        const currentUserAuthor = { name: user.name, image: user.pictureURL ? { asset: { url: user.pictureURL } } : undefined };
+        const currentUserAuthor = {
+            _id: user._id || 'current-user',
+            name: user.name,
+            image: user.pictureURL ? { asset: { url: user.pictureURL } } : undefined
+        };
         const selectedAuthorDetails = selectedAuthors.map(opt => {
             const authorData = availableAuthors.find(a => a._id === opt.value);
-            return { name: opt.label, image: authorData?.pictureURL ? { asset: { url: authorData.pictureURL } } : undefined };
+            return {
+                _id: opt.value,
+                name: opt.label,
+                image: authorData?.pictureURL ? { asset: { url: authorData.pictureURL } } : undefined
+            };
         });
 
         // Create a version of the body with temporary URLs for new images
@@ -302,10 +322,9 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
 
         const constructedArticle: PreviewArticle = {
             _id: article?._id || 'new-article',
-            _type: 'article',
             title: formData.get('title') as string,
             summary: formData.get('summary') as string,
-            mainImage: mainImagePreview, // Use the preview URL
+            mainImage: mainImagePreview || undefined, // Use the preview URL
             youtubeVideoUrl: formData.get('youtubeVideoUrl') as string,
             hasBody: hasBody,
             buttonText: formData.get('buttonText') as string,
@@ -315,10 +334,19 @@ export default function ArticleForm({ article, availableAuthors, availableWGs, u
             body: previewBody,
             externalLinks: externalLinks,
             // Dummy data for non-essential fields
-            year: article?.year || { _id: '', _type: 'year', year: new Date().getFullYear(), title: '', slug: { current: yearSlug } },
+            year: (article?.year && typeof article.year === 'object' && '_type' in article.year)
+                ? article.year as Year
+                : {
+                    _id: `year-${yearSlug}`,
+                    _type: 'year' as const,
+                    year: new Date().getFullYear(),
+                    title: article?.year && 'title' in article.year ? article.year.title : '',
+                    slug: { current: yearSlug },
+                    logo: { asset: { _ref: '', url: '' } }
+                },
             // Add other required fields from Article that are not in PreviewArticle with dummy data if needed
-            workingGroups: [], // Example dummy data
-            contentGroups: [], // Example dummy data
+            // workingGroups: [], // Example dummy data
+            // contentGroups: [], // Example dummy data
         };
 
         setPreviewData(constructedArticle);
