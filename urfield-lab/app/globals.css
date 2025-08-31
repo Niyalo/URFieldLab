@@ -126,13 +126,18 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply text-foreground; 
+    @apply text-foreground;
     background-image: url('/images/BG/siteBG.png');
-    background-size: 100vw auto; 
-    background-repeat: repeat-y;  
-    background-color: #F2F1EA;  
+    background-size: 100vw auto;
+    background-repeat: repeat-y;
+    background-color: #F2F1EA;
     margin: 0;
     font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, span {
+    font-family: 'Futura Passata', sans-serif;
+    font-weight: bold;
   }
 }
 
