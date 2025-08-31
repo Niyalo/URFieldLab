@@ -9,6 +9,9 @@ import PercentageDataViewer from './components/PercentageDataViewer';
 import QuotesBlock from './components/QuotesBlock';
 import ArticlePreviewViewer from './components/ArticlePreviewViewer';
 import { getAuthorByName } from '../sanity/sanity-utils';
+import { X, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 // --- HELPER HOOKS & FUNCTIONS ---
 
@@ -198,7 +201,7 @@ const pageSections = [
     },
     // Config is used for positioning the entire block
     desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-    mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+    mobileConfig: { top: 11300, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -233,11 +236,8 @@ interface BaseImageConfig {
 const desktopImages: BaseImageConfig[] = [
   { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: 370, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
 
-  { id: 'nilgiri left', src: '/images/URFieldLabMainPage/nilgiri left.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
-  { id: 'nilgiri right', src: '/images/URFieldLabMainPage/nilgiri right.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
-
   { id: 'Trees left', src: '/images/URFieldLabMainPage/Mountain Left.png', top: 350, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.3 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.1 },
   { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 360, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
   { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
@@ -284,8 +284,6 @@ const clouds = [
     { id: 'cloud1', src: '/images/clouds/cloud_new_1.png', top: 200, zIndex: 1, speed: 20, width: '35vw', timeOffset: 0 },
     { id: 'cloud2', src: '/images/clouds/cloud_new_2.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
     { id: 'cloud3', src: '/images/clouds/cloud_new_3.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
-    { id: 'cloud4', src: '/images/clouds/cloud_new_4.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
-    { id: 'cloud5', src: '/images/clouds/cloud_new_5.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
 ];
 
 const arrowVariants: Variants = {
@@ -370,7 +368,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.pre || ''}</p>
                     <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
-                    <p className="text-[1.1vw] max-w-[20vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.desc || ''}</p>
+                    <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
                     {content.cta && (
                         <div className="inline-block relative mt-[2vw]">
                             <motion.a
@@ -483,6 +481,8 @@ export default function AnimatedPage() {
   const [headerIsLight, setHeaderIsLight] = useState(false);
   const parallaxIntensity = 1;
   const [authors, setAuthors] = useState<any[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<any>(null);
+  const [isModalLoading, setIsModalLoading] = useState(false);
 
   const { scrollY } = useScroll();
 
@@ -502,7 +502,7 @@ export default function AnimatedPage() {
     const fetchAuthors = async () => {
       try {
         // Replace these with the actual author names you want to fetch
-        const authorNames = ['Wahaj Habib','Jungsuh (Sue) Lim', 'Sneha Anil Malani', 'Alok Bhardwaj', 'Pamela Cajilig', 'Tian Ning Lim'];
+        const authorNames = ['Jungsuh (Sue) Lim', 'Sneha Anil Malani', 'Alok Bhardwaj', 'Pamela Cajilig', 'Tian Ning Lim', 'Wahaj Habib'];
         const fetchedAuthors = [];
 
         for (const name of authorNames) {
@@ -520,6 +520,42 @@ export default function AnimatedPage() {
 
     fetchAuthors();
   }, []);
+
+  const handleQuoteClick = async (authorName: string) => {
+    setSelectedAuthor(null); // Clear previous author
+    setIsModalLoading(true);
+    
+    try {
+      const authorDetails = await getAuthorByName(authorName);
+      console.log('Author details for', authorName, ':', authorDetails);
+      if (authorDetails) {
+        setSelectedAuthor(authorDetails);
+      } else {
+        alert("Could not find author information.");
+      }
+    } catch (error) {
+      console.error('Error fetching author details:', error);
+      alert("Could not load author details.");
+    } finally {
+      setIsModalLoading(false);
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedAuthor(null);
+    setIsModalLoading(false);
+  };
+
+  useEffect(() => {
+    if (selectedAuthor) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [selectedAuthor]);
 
   const referenceWidth = 1280;
   // Global top margin is now device-dependent
@@ -564,7 +600,7 @@ export default function AnimatedPage() {
           h3: "",
           p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
           cta: "HOW TO RUN A FIELD LAB",
-          ctaUrl: "/UR2024/event-structure"
+          ctaUrl: "/chiangmai2019/outputs#article-nature-based-solutions-factsheets"
         },
         desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
         mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -598,7 +634,7 @@ export default function AnimatedPage() {
               title: "Impact on Career",
               text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
               percentages: [
-                { value: 80, color: '#ff8e59ff' }, // Blue
+                { value: 80, color: '#FF8C00ff' }, // Blue
                 { value: 50, color: '#c63810ff' }  // Indigo
               ]
             },
@@ -607,7 +643,7 @@ export default function AnimatedPage() {
               title: "During Field Lab",
               text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
               percentages: [
-                { value: 90, color: '#ff8e59ff' }, 
+                { value: 90, color: '#FF8C00ff' }, 
                 { value: 18, color: '#c63810ff' }] 
             },
             {
@@ -625,184 +661,246 @@ export default function AnimatedPage() {
         desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
         mobileConfig: { top: 5200, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
       },
-      // --- NEW QUOTES BLOCK SECTION ---
       {
         id: 'participantFeedback',
         type: 'quotesBlock' as const,
         content: {
           title: "Feedback from the surveys & interviews",
-          quotes: authors.length > 0 ? authors.map((author: any, index: number) => {
-                return {
-                  id: `q${index + 1}`,
-                  text: [
-                    "It was a unique experience. Prior to this, my exposure had been limited to traditional academic conferences, which typically followed a rigid schedule of paper presentations and keynote sessions. In contrast, the unconference format was refreshingly open, dynamic, and participatory.",
-                    "Great opportunity to meet the locals and learn about the regional situation with other professionals.",
-                    "It was an extremely collaborate, creative and interesting month.",
-                    "It was a great experience overall. I was connected to experts from varied field other than mine.",
-                    "Really inspiring experience that broadened my network of friends and collaborators.",
-                    "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc."
-                  ][index] || "Great experience at the UR Field Lab!",
-                  author: author.name,
-                  avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
-                };
-              }) : [
-                { id: 'q1', text: "Loading author feedback...", author: "Loading...", avatarSrc: "/images/avatars/avatar1.png" }
-              ]
-            },
-            desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
-            mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
-          },
-          {
-            id: 'articlePreviews',
-            type: 'articlePreviewViewer' as const,
-            content: {
-              title: "FEATURED OUTPUTS",
-              subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
-              yearSlug: "UR2024",
-              pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
-            },
-            // Config is used for positioning the entire block
-            desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-            mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
-          }
-        ];
+          quotes: authors.length > 0 ? authors.map((author, index) => ({
+            id: `q${index + 1}`,
+            text: [
+              "Great opportunity to meet the locals and learn about the regional situation with other professionals.",
+              "It was an extremely collaborate, creative and interesting month.",
+              "It was a great experience overall. I was connected to experts from varied field other than mine.",
+              "Really inspiring experience that broadened my network of friends and collaborators.",
+              "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc.",
+              "It was a unique experience. Prior to this, my exposure had been limited to traditional academic conferences, which typically followed a rigid schedule of paper presentations and keynote sessions. In contrast, the unconference format was refreshingly open, dynamic, and participatory."
+            ][index] || "Great experience at the UR Field Lab!",
+            author: author.name,
+            avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
+          })) : [
+            { id: 'q1', text: "Loading author feedback...", author: "Loading...", avatarSrc: "/images/avatars/avatar1.png" }
+          ]
+        },
+        desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
+        mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
+      },
+      {
+        id: 'articlePreviews',
+        type: 'articlePreviewViewer' as const,
+        content: {
+          title: "Outputs",
+          yearSlug: "UR2024",
+          pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
+        },
+        // Config is used for positioning the entire block
+        desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
+        mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+      }
+    ];
 
-        return baseSections;
-      }, [authors]);
+    return baseSections;
+  }, [authors]);
 
-      const containerHeightVw = useMemo(() => {
-        if (!imagesToDisplay.length && dynamicPageSections.length === 0) return 100;
+  const containerHeightVw = useMemo(() => {
+    if (!imagesToDisplay.length && dynamicPageSections.length === 0) return 100;
 
-        const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
-        const lastSection = dynamicPageSections.length > 0 ? dynamicPageSections[dynamicPageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
+    const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
+    const lastSection = dynamicPageSections.length > 0 ? dynamicPageSections[dynamicPageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
+    
+    const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
+    const lastSectionTop = lastSectionConfig.top || 0;
+
+    const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
+    const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500);
+
+    return (lastElementTop / referenceWidth) * 100;
+  }, [imagesToDisplay, isMobile, referenceWidth, currentGlobalTopMarginPx, dynamicPageSections]);
+
+  const scrollInputRangeEnd = useMemo(() => {
+    return (containerHeightVw / 100) * referenceWidth * 1.5;
+  }, [containerHeightVw, referenceWidth]);
+
+  // --- DEVELOPER NOTE ---
+  // To add a new section (e.g., an image gallery), add its data object here.
+  // Example:
+  // {
+  //   id: 'myImageGroup',
+  //   type: 'imageGroup' as const,
+  //   content: { images: [...] },
+  //   desktopConfig: { top: 5000, ... },
+  //   mobileConfig: { top: 9000, ... }
+  // }
+  //
+  return (
+    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans overflow-x-hidden">
+      <Header isLight={headerIsLight} />
+
+      {/* Background collage of images and clouds */}
+      <motion.div
+        className="relative w-full overflow-hidden"
+        style={{ height: `${containerHeightVw}vw` }}
+      >
+        {clouds.map(cloud => <CloudParallax key={cloud.id} {...cloud} referenceWidth={referenceWidth} />)}
         
-        const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
-        const lastSectionTop = lastSectionConfig.top || 0;
+        {imagesToDisplay.map(img => (
+            <ParallaxImage
+              key={img.id}
+              img={img}
+              scrollY={scrollY}
+              scrollInputRangeEnd={scrollInputRangeEnd}
+              isMobile={isMobile}
+              parallaxIntensity={parallaxIntensity}
+              currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+              referenceWidth={referenceWidth}
+            />
+        ))}
+      </motion.div>
 
-        const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
-        const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500);
-
-        return (lastElementTop / referenceWidth) * 100;
-      }, [imagesToDisplay, isMobile, referenceWidth, currentGlobalTopMarginPx, dynamicPageSections]);
-
-      const scrollInputRangeEnd = useMemo(() => {
-        return (containerHeightVw / 100) * referenceWidth * 1.5;
-      }, [containerHeightVw, referenceWidth]);
-
-      // --- DEVELOPER NOTE ---
-      // To add a new section (e.g., an image gallery), add its data object here.
-      // Example:
-      // {
-      //   id: 'myImageGroup',
-      //   type: 'imageGroup' as const,
-      //   content: { images: [...] },
-      //   desktopConfig: { top: 5000, ... },
-      //   mobileConfig: { top: 9000, ... }
-      // }
-      //
-      return (
-        <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans overflow-x-hidden">
-          <Header isLight={headerIsLight} />
-
-          {/* Background collage of images and clouds */}
-          <motion.div
-            className="relative w-full overflow-hidden"
-            style={{ height: `${containerHeightVw}vw` }}
-          >
-            {clouds.map(cloud => <CloudParallax key={cloud.id} {...cloud} referenceWidth={referenceWidth} />)}
-            
-            {imagesToDisplay.map(img => (
-                <ParallaxImage
-                  key={img.id}
-                  img={img}
+      {/* Absolutely positioned container for all interactive/content sections */}
+      <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
+        {dynamicPageSections.map((section) => {
+          const config = isMobile ? section.mobileConfig : section.desktopConfig;
+          
+          switch (section.type) {
+            case 'textBlock':
+              return (
+                <TextBlock
+                  key={section.id}
+                  config={config}
+                  content={section.content}
                   scrollY={scrollY}
                   scrollInputRangeEnd={scrollInputRangeEnd}
                   isMobile={isMobile}
                   parallaxIntensity={parallaxIntensity}
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
                   referenceWidth={referenceWidth}
+                  isHero={section.id === 'hero'}
                 />
-            ))}
-          </motion.div>
+              );
+            
+            case 'percentageDataViewer':
+              return (
+                <PercentageDataViewer 
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  isMobile={isMobile}
+                  referenceWidth={referenceWidth}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
+                />
+              );
+            
+            case 'quotesBlock':
+              return (
+                <QuotesBlock
+                  key={section.id}
+                  config={config}
+                  content={section.content}
+                  isMobile={isMobile}
+                  referenceWidth={referenceWidth}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  parallaxIntensity={parallaxIntensity}
+                  onQuoteClick={handleQuoteClick}
+                />
+              );
 
-          {/* Absolutely positioned container for all interactive/content sections */}
-          <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
-            {dynamicPageSections.map((section) => {
-              const config = isMobile ? section.mobileConfig : section.desktopConfig;
-              
-              switch (section.type) {
-                case 'textBlock':
-                  return (
-                    <TextBlock
-                      key={section.id}
-                      config={config}
-                      content={section.content}
-                      scrollY={scrollY}
-                      scrollInputRangeEnd={scrollInputRangeEnd}
-                      isMobile={isMobile}
-                      parallaxIntensity={parallaxIntensity}
-                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                      referenceWidth={referenceWidth}
-                      isHero={section.id === 'hero'}
-                    />
-                  );
-                
-                case 'percentageDataViewer':
-                  return (
-                    <PercentageDataViewer 
-                      key={section.id}
-                      config={config}
-                      content={section.content}
-                      isMobile={isMobile}
-                      referenceWidth={referenceWidth}
-                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                      scrollY={scrollY}
-                      scrollInputRangeEnd={scrollInputRangeEnd}
-                      parallaxIntensity={parallaxIntensity}
-                    />
-                  );
-                
-                case 'quotesBlock':
-                  return (
-                    <QuotesBlock
-                      key={section.id}
-                      config={config}
-                      content={section.content}
-                      isMobile={isMobile}
-                      referenceWidth={referenceWidth}
-                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                      scrollY={scrollY}
-                      scrollInputRangeEnd={scrollInputRangeEnd}
-                      parallaxIntensity={parallaxIntensity}
-                    />
-                  );
+            case 'articlePreviewViewer':
+              return (
+                <div
+                  key={section.id}
+                  style={{
+                    position: 'absolute',
+                    top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
+                    left: config.left,
+                    width: `calc(100% - ${config.left} - ${config.right})`,
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  <ArticlePreviewViewer
+                    title={section.content.title!}
+                    subtitle={section.content.subtitle}
+                  />
+                </div>
+              );
 
-                case 'articlePreviewViewer':
-                  return (
-                    <div
-                      key={section.id}
-                      style={{
-                        position: 'absolute',
-                        top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
-                        left: config.left,
-                        width: `calc(100% - ${config.left} - ${config.right})`,
-                        pointerEvents: 'auto',
-                      }}
-                    >
-                      <ArticlePreviewViewer
-                        title={section.content.title!}
-                        subtitle={section.content.subtitle}
-                      />
-                    </div>
-                  );
+            default:
+              return null;
+          }
+        })}
+      </div>
 
-                default:
-                  return null;
-              }
-            })}
+      {/* Author Modal */}
+      {selectedAuthor && (
+        <div 
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in"
+          onClick={closeModal}
+        >
+          <div 
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden relative transform transition-all duration-300 animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Loading Spinner */}
+            {isModalLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 z-10">
+                <Loader2 className="w-12 h-12 animate-spin text-orange-500" />
+              </div>
+            )}
+
+            {/* Left Side: Bio */}
+            <div className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto">
+              <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4 self-center flex-shrink-0">
+                <Image src={selectedAuthor.pictureURL || '/images/avatars/avatar1.png'} alt={selectedAuthor.name} fill className="object-cover" />
+              </div>
+              <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100">{selectedAuthor.name}</h2>
+              <p className="text-md italic text-center text-gray-500 dark:text-gray-400 mb-6">{selectedAuthor.institute || 'No institute information'}</p>
+              <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                <p>{selectedAuthor.bio || "No biography available."}</p>
+              </div>
+            </div>
+
+            {/* Right Side: Articles */}
+            <div className="w-full md:w-1/2 bg-gray-50 dark:bg-gray-900/50 p-8 overflow-y-auto">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 border-b-2 border-orange-500 pb-2">Contributions</h3>
+              {selectedAuthor.articles && selectedAuthor.articles.length > 0 ? (
+                <ul className="space-y-3">
+                  {selectedAuthor.articles.map((article) => (
+                    <li key={article._id}>
+                      <Link
+                        href={`/${article.year.slug.current}/outputs#article-${article.slug?.current}`}
+                        className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-950 transition-colors font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+                        onClick={closeModal}
+                      >
+                        <span>{article.title}</span>
+                        <span className="ml-4 flex items-center justify-center w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300">
+                          &gt;
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400">No articles by this author.</p>
+              )}
+            </div>
+            
+            {/* Close Button */}
+            <button 
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
+            >
+              <X size={24} />
+            </button>
           </div>
-
-          <Footer />
         </div>
-      );
-    }
+      )}
+
+      <Footer />
+    </div>
+  );
+}

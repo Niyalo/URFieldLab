@@ -810,18 +810,33 @@ export async function getAuthorById(authorId: string): Promise<Author | null> {
 }
 
 export async function getAuthorByName(name: string): Promise<Author | null> {
-  return client.fetch(
-    groq`*[_type == "author" && name == $name][0]{
-        _id,
-        name,
-        email,
-        role,
-        institute,
-        isAdmin,
-        "pictureURL": picture.asset->url
-      }`,
-    { name }
-  );
+  try {
+    const result = await client.fetch(
+      groq`*[_type == "author" && name == $name][0]{
+          _id,
+          name,
+          email,
+          role,
+          institute,
+          bio,
+          isAdmin,
+          "pictureURL": picture.asset->url,
+          "articles": *[_type == "article" && references(^._id)] | order(title asc) {
+              _id,
+              title,
+              slug,
+              "year": year->{slug}
+          }
+        }`,
+      { name }
+    );
+    
+    console.log('Author query result for', name, ':', result);
+    return result;
+  } catch (error) {
+    console.error('Error fetching author by name:', error);
+    return null;
+  }
 }
 
 export async function getUnverifiedArticles(yearId: string): Promise<Article[]> {
