@@ -198,7 +198,7 @@ const pageSections = [
     },
     // Config is used for positioning the entire block
     desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-    mobileConfig: { top: 11300, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+    mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -233,8 +233,11 @@ interface BaseImageConfig {
 const desktopImages: BaseImageConfig[] = [
   { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: 370, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
 
+  { id: 'nilgiri left', src: '/images/URFieldLabMainPage/nilgiri left.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
+  { id: 'nilgiri right', src: '/images/URFieldLabMainPage/nilgiri right.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
+
   { id: 'Trees left', src: '/images/URFieldLabMainPage/Mountain Left.png', top: 350, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.1 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.3 },
   { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 360, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
   { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
@@ -281,6 +284,8 @@ const clouds = [
     { id: 'cloud1', src: '/images/clouds/cloud_new_1.png', top: 200, zIndex: 1, speed: 20, width: '35vw', timeOffset: 0 },
     { id: 'cloud2', src: '/images/clouds/cloud_new_2.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
     { id: 'cloud3', src: '/images/clouds/cloud_new_3.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
+    { id: 'cloud4', src: '/images/clouds/cloud_new_4.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
+    { id: 'cloud5', src: '/images/clouds/cloud_new_5.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
 ];
 
 const arrowVariants: Variants = {
@@ -365,7 +370,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <p className="text-[1.2vw] uppercase tracking-widest" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.pre || ''}</p>
                     <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
-                    <p className="text-[1.1vw] max-w-[40vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
+                    <p className="text-[1.1vw] max-w-[20vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.2vw * var(--text-scale))` }}>{content.desc || ''}</p>
                     {content.cta && (
                         <div className="inline-block relative mt-[2vw]">
                             <motion.a
@@ -619,183 +624,185 @@ export default function AnimatedPage() {
         // Positioned where 'ecosystems' was, with 25% side gaps and black text.
         desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
         mobileConfig: { top: 5200, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
-  },
-  {
-    id: 'participantFeedback',
-    type: 'quotesBlock' as const,
-    content: {
-      title: "Feedback from the surveys & interviews",
-      quotes: authors.length > 0 ? authors.map((author: any, index: number) => {
-            return {
-              id: `q${index + 1}`,
-              text: [
-                "It was a unique experience. Prior to this, my exposure had been limited to traditional academic conferences, which typically followed a rigid schedule of paper presentations and keynote sessions. In contrast, the unconference format was refreshingly open, dynamic, and participatory.",
-                "Great opportunity to meet the locals and learn about the regional situation with other professionals.",
-                "It was an extremely collaborate, creative and interesting month.",
-                "It was a great experience overall. I was connected to experts from varied field other than mine.",
-                "Really inspiring experience that broadened my network of friends and collaborators.",
-                "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc."
-              ][index] || "Great experience at the UR Field Lab!",
-              author: author.name,
-              avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
-            };
-          }) : [
-            { id: 'q1', text: "Loading author feedback...", author: "Loading...", avatarSrc: "/images/avatars/avatar1.png" }
-          ]
-        },
-        desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
-        mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
       },
+      // --- NEW QUOTES BLOCK SECTION ---
       {
-        id: 'articlePreviews',
-        type: 'articlePreviewViewer' as const,
+        id: 'participantFeedback',
+        type: 'quotesBlock' as const,
         content: {
-          title: "Outputs",
-          yearSlug: "UR2024",
-          pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
-        },
-        // Config is used for positioning the entire block
-        desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-        mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
-      }
-    ];
-
-    return baseSections;
-  }, [authors]);
-
-  const containerHeightVw = useMemo(() => {
-    if (!imagesToDisplay.length && dynamicPageSections.length === 0) return 100;
-
-    const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
-    const lastSection = dynamicPageSections.length > 0 ? dynamicPageSections[dynamicPageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
-    
-    const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
-    const lastSectionTop = lastSectionConfig.top || 0;
-
-    const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
-    const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500);
-
-    return (lastElementTop / referenceWidth) * 100;
-  }, [imagesToDisplay, isMobile, referenceWidth, currentGlobalTopMarginPx, dynamicPageSections]);
-
-  const scrollInputRangeEnd = useMemo(() => {
-    return (containerHeightVw / 100) * referenceWidth * 1.5;
-  }, [containerHeightVw, referenceWidth]);
-
-  // --- DEVELOPER NOTE ---
-  // To add a new section (e.g., an image gallery), add its data object here.
-  // Example:
-  // {
-  //   id: 'myImageGroup',
-  //   type: 'imageGroup' as const,
-  //   content: { images: [...] },
-  //   desktopConfig: { top: 5000, ... },
-  //   mobileConfig: { top: 9000, ... }
-  // }
-  //
-  return (
-    <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans overflow-x-hidden">
-      <Header isLight={headerIsLight} />
-
-      {/* Background collage of images and clouds */}
-      <motion.div
-        className="relative w-full overflow-hidden"
-        style={{ height: `${containerHeightVw}vw` }}
-      >
-        {clouds.map(cloud => <CloudParallax key={cloud.id} {...cloud} referenceWidth={referenceWidth} />)}
-        
-        {imagesToDisplay.map(img => (
-            <ParallaxImage
-              key={img.id}
-              img={img}
-              scrollY={scrollY}
-              scrollInputRangeEnd={scrollInputRangeEnd}
-              isMobile={isMobile}
-              parallaxIntensity={parallaxIntensity}
-              currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-              referenceWidth={referenceWidth}
-            />
-        ))}
-      </motion.div>
-
-      {/* Absolutely positioned container for all interactive/content sections */}
-      <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
-        {dynamicPageSections.map((section) => {
-          const config = isMobile ? section.mobileConfig : section.desktopConfig;
-          
-          switch (section.type) {
-            case 'textBlock':
-              return (
-                <TextBlock
-                  key={section.id}
-                  config={config}
-                  content={section.content}
-                  scrollY={scrollY}
-                  scrollInputRangeEnd={scrollInputRangeEnd}
-                  isMobile={isMobile}
-                  parallaxIntensity={parallaxIntensity}
-                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                  referenceWidth={referenceWidth}
-                  isHero={section.id === 'hero'}
-                />
-              );
-            
-            case 'percentageDataViewer':
-              return (
-                <PercentageDataViewer 
-                  key={section.id}
-                  config={config}
-                  content={section.content}
-                  isMobile={isMobile}
-                  referenceWidth={referenceWidth}
-                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                  scrollY={scrollY}
-                  scrollInputRangeEnd={scrollInputRangeEnd}
-                  parallaxIntensity={parallaxIntensity}
-                />
-              );
-            
-            case 'quotesBlock':
-              return (
-                <QuotesBlock
-                  key={section.id}
-                  config={config}
-                  content={section.content}
-                  isMobile={isMobile}
-                  referenceWidth={referenceWidth}
-                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
-                  scrollY={scrollY}
-                  scrollInputRangeEnd={scrollInputRangeEnd}
-                  parallaxIntensity={parallaxIntensity}
-                />
-              );
-
-            case 'articlePreviewViewer':
-              return (
-                <div
-                  key={section.id}
-                  style={{
-                    position: 'absolute',
-                    top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
-                    left: config.left,
-                    width: `calc(100% - ${config.left} - ${config.right})`,
-                    pointerEvents: 'auto',
-                  }}
-                >
-                  <ArticlePreviewViewer
-                    title={section.content.title!}
-                    subtitle={section.content.subtitle}
-                  />
-                </div>
-              );
-
-            default:
-              return null;
+          title: "Feedback from the surveys & interviews",
+          quotes: authors.length > 0 ? authors.map((author: any, index: number) => {
+                return {
+                  id: `q${index + 1}`,
+                  text: [
+                    "It was a unique experience. Prior to this, my exposure had been limited to traditional academic conferences, which typically followed a rigid schedule of paper presentations and keynote sessions. In contrast, the unconference format was refreshingly open, dynamic, and participatory.",
+                    "Great opportunity to meet the locals and learn about the regional situation with other professionals.",
+                    "It was an extremely collaborate, creative and interesting month.",
+                    "It was a great experience overall. I was connected to experts from varied field other than mine.",
+                    "Really inspiring experience that broadened my network of friends and collaborators.",
+                    "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc."
+                  ][index] || "Great experience at the UR Field Lab!",
+                  author: author.name,
+                  avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
+                };
+              }) : [
+                { id: 'q1', text: "Loading author feedback...", author: "Loading...", avatarSrc: "/images/avatars/avatar1.png" }
+              ]
+            },
+            desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
+            mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
+          },
+          {
+            id: 'articlePreviews',
+            type: 'articlePreviewViewer' as const,
+            content: {
+              title: "FEATURED OUTPUTS",
+              subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
+              yearSlug: "UR2024",
+              pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
+            },
+            // Config is used for positioning the entire block
+            desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
+            mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
           }
-        })}
-      </div>
+        ];
 
-      <Footer />
-    </div>
-  );
-}
+        return baseSections;
+      }, [authors]);
+
+      const containerHeightVw = useMemo(() => {
+        if (!imagesToDisplay.length && dynamicPageSections.length === 0) return 100;
+
+        const lastImage = imagesToDisplay.length > 0 ? imagesToDisplay[imagesToDisplay.length - 1] : { top: 0, refHeight: 0 };
+        const lastSection = dynamicPageSections.length > 0 ? dynamicPageSections[dynamicPageSections.length - 1] : { desktopConfig: { top: 0 }, mobileConfig: { top: 0 }};
+        
+        const lastSectionConfig = isMobile ? lastSection.mobileConfig : lastSection.desktopConfig;
+        const lastSectionTop = lastSectionConfig.top || 0;
+
+        const lastImageAdjustedTop = lastImage.top + currentGlobalTopMarginPx;
+        const lastElementTop = Math.max(lastImageAdjustedTop + lastImage.refHeight, lastSectionTop + currentGlobalTopMarginPx + 500);
+
+        return (lastElementTop / referenceWidth) * 100;
+      }, [imagesToDisplay, isMobile, referenceWidth, currentGlobalTopMarginPx, dynamicPageSections]);
+
+      const scrollInputRangeEnd = useMemo(() => {
+        return (containerHeightVw / 100) * referenceWidth * 1.5;
+      }, [containerHeightVw, referenceWidth]);
+
+      // --- DEVELOPER NOTE ---
+      // To add a new section (e.g., an image gallery), add its data object here.
+      // Example:
+      // {
+      //   id: 'myImageGroup',
+      //   type: 'imageGroup' as const,
+      //   content: { images: [...] },
+      //   desktopConfig: { top: 5000, ... },
+      //   mobileConfig: { top: 9000, ... }
+      // }
+      //
+      return (
+        <div key={isMobile ? 'mobile' : 'desktop'} className="relative bg-transparent font-sans overflow-x-hidden">
+          <Header isLight={headerIsLight} />
+
+          {/* Background collage of images and clouds */}
+          <motion.div
+            className="relative w-full overflow-hidden"
+            style={{ height: `${containerHeightVw}vw` }}
+          >
+            {clouds.map(cloud => <CloudParallax key={cloud.id} {...cloud} referenceWidth={referenceWidth} />)}
+            
+            {imagesToDisplay.map(img => (
+                <ParallaxImage
+                  key={img.id}
+                  img={img}
+                  scrollY={scrollY}
+                  scrollInputRangeEnd={scrollInputRangeEnd}
+                  isMobile={isMobile}
+                  parallaxIntensity={parallaxIntensity}
+                  currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                  referenceWidth={referenceWidth}
+                />
+            ))}
+          </motion.div>
+
+          {/* Absolutely positioned container for all interactive/content sections */}
+          <div className="absolute top-0 left-0 w-full z-20 pointer-events-none">
+            {dynamicPageSections.map((section) => {
+              const config = isMobile ? section.mobileConfig : section.desktopConfig;
+              
+              switch (section.type) {
+                case 'textBlock':
+                  return (
+                    <TextBlock
+                      key={section.id}
+                      config={config}
+                      content={section.content}
+                      scrollY={scrollY}
+                      scrollInputRangeEnd={scrollInputRangeEnd}
+                      isMobile={isMobile}
+                      parallaxIntensity={parallaxIntensity}
+                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                      referenceWidth={referenceWidth}
+                      isHero={section.id === 'hero'}
+                    />
+                  );
+                
+                case 'percentageDataViewer':
+                  return (
+                    <PercentageDataViewer 
+                      key={section.id}
+                      config={config}
+                      content={section.content}
+                      isMobile={isMobile}
+                      referenceWidth={referenceWidth}
+                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                      scrollY={scrollY}
+                      scrollInputRangeEnd={scrollInputRangeEnd}
+                      parallaxIntensity={parallaxIntensity}
+                    />
+                  );
+                
+                case 'quotesBlock':
+                  return (
+                    <QuotesBlock
+                      key={section.id}
+                      config={config}
+                      content={section.content}
+                      isMobile={isMobile}
+                      referenceWidth={referenceWidth}
+                      currentGlobalTopMarginPx={currentGlobalTopMarginPx}
+                      scrollY={scrollY}
+                      scrollInputRangeEnd={scrollInputRangeEnd}
+                      parallaxIntensity={parallaxIntensity}
+                    />
+                  );
+
+                case 'articlePreviewViewer':
+                  return (
+                    <div
+                      key={section.id}
+                      style={{
+                        position: 'absolute',
+                        top: `${((config.top + currentGlobalTopMarginPx) / referenceWidth) * 100}vw`,
+                        left: config.left,
+                        width: `calc(100% - ${config.left} - ${config.right})`,
+                        pointerEvents: 'auto',
+                      }}
+                    >
+                      <ArticlePreviewViewer
+                        title={section.content.title!}
+                        subtitle={section.content.subtitle}
+                      />
+                    </div>
+                  );
+
+                default:
+                  return null;
+              }
+            })}
+          </div>
+
+          <Footer />
+        </div>
+      );
+    }

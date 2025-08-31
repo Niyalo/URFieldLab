@@ -29,7 +29,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isCenter, onClick })
     ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     : article.mainImage ? urlFor(article.mainImage).width(500).height(300).url() : '/images/placeholder.png';
 
-  const yearSlug = article.year?.slug?.current;
+  const yearSlug = article.year?.slug;
   const linkHref = yearSlug ? `/${yearSlug}/outputs#article-${article._id}` : '#';
 
   return (
@@ -103,6 +103,9 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
       setIsLoading(true);
       try {
         const fetchedArticles = await getFeaturedArticles();
+        // --- DEBUGGING STEP ---
+        // Log the fetched articles to the browser console to inspect their structure.
+        console.log("Fetched Featured Articles:", fetchedArticles);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error("Failed to fetch featured articles:", error);

@@ -1,0 +1,919 @@
+
+Fetched Featured Articles: 
+[
+    {
+        "_id": "9c985a56-db71-4d04-9b42-a435250801da",
+        "authors": [
+            {
+                "name": "Abiral Khatri"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-28T10:54:30Z",
+                "_id": "image-f28d7199814c47a4711f1faee477835df14ac50f-834x577-png",
+                "_rev": "vh59lWLD22bjQ8VSvCaGhZ",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-28T10:54:30Z",
+                "assetId": "f28d7199814c47a4711f1faee477835df14ac50f",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "VHBN1g~qV@E1oe9FM{ayt7WCRjRjoLWBf6RjWBR*ofof",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.4454072790294628,
+                        "height": 577,
+                        "width": 834
+                    },
+                    "hasAlpha": true,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAA7DAAAOwwHHb6hkAAADkklEQVR4nB3R2VJaCQCE4fMEMxUdMYgiAodFQJBFUEShRBDBbVyCGjVLhYnGxD0omyAeRFlFR2My7/pPhYu+/aqrW/BNBxifCjARmiIYDROenyW8EGV6PkowFmFmKcrsyhLeqRl0Njc9ohmZyoBCbUapsdAhV/FHt4JOtRaZyYQQiASZioQIxyLMLkSJLsaYXZojvDhHeD5GdHmhDbr8UwwMOZCLFrr6jXQrjSg1Q3QrRf6U9/FKpUY2OIgwszBLbGme1bVl4usrbGy+YXNrnbWNOCvxNTZ23rK6tYVrMkivwYZMbaZTaaTrN6iz0icO0tGn4lX/AF06A8JKfJWdd9t82f2Hg6+7nJ8ekE6ecHL0jf39PQ4OD3mf+IzbH0Y5aEcuWpFpzLzWWhgw2VEZLXSp1HT0q+lUiQifEp84Pjwgc3FO+vw7V7kUZalAsZAjlUpxfHLK250POH1B+k0OFHobcr0VhcGG2uJCbbbTrRH5S62lS6NDyFwkKeSyXF8VSKUuSCbPuLzMcVUskspk2dv/RnxjB7dvmn6jnR6dlR69lT6jHdE2inbIhVynRyaKvDYYEco319zclJAkqQ2cJZNkcjkKxSKnySQfE7vs7h/w9/oWJtcYvXorPTobA2Y3uuHxduvXegNyox7F75evb8rkr65JZ/MkU1nOUxkuC1fki0W+HR3zee8LqUyG7UQCi9tHj9aKUu/E6JhAa/OiMA6jMJroM5vos1gQ8qU70tkCxyfnHJ0muUhnKUolipLEWfI76fQFl/lLFuObiDYPCp29jTkmQmjtXnpNDlTWYTTDNjT2YQTprk6+IHF0kuTw+IzsZYFKrUG1VqNUuqZZu+WqWCC6/Aa9Y6wdpz+EKxBGdHgZsLnRuUYwe0awej0I9dYDt5Ua2VyBdCaPVK7QfPiX5n2LRr3Kw329vefy5jbuwDSeqRCeUATLeACty4s44sU0OorHP44/HEC4b7VoNJrc3lYo39Wp3z/x+PxCq/VAo1FvpyBJvEskmFlcxD8XxTkdQufxoR0Zx+idwOmfIBKbIb6+jFC5q1CrVKhWa1TrLZqtJ55//OLHy09aj4/Umk2yxSJbHz8yPRdlNBzE7JtE7Rxro45gkMhSjPfv1vmc2EGQrkvcSCXKt1XKdw0q1Xuenn/y8us/Wo9P3FRqnKQzrL7dZiIcxjHpx+AeR+v0MujzMxaNsLa1xsGXD3zde8//r5YpyBDq8HQAAAAASUVORK5CYII=",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#4c4434",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#04141b",
+                            "foreground": "#fff",
+                            "population": 0.58,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#bfbebe",
+                            "foreground": "#000",
+                            "population": 7.96,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#bfbebe",
+                            "foreground": "#000",
+                            "population": 7.96,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#8bcfed",
+                            "foreground": "#000",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#787a7b",
+                            "foreground": "#fff",
+                            "population": 6.08,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#20a4de",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/f28d7199814c47a4711f1faee477835df14ac50f-834x577.png",
+                "sha1hash": "f28d7199814c47a4711f1faee477835df14ac50f",
+                "size": 1250725,
+                "uploadId": "G5jvqNRJm3C1onV2lLdWpwTZwncSijUa",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/f28d7199814c47a4711f1faee477835df14ac50f-834x577.png"
+            }
+        },
+        "slug": null,
+        "summary": "The following Storymap was developed by the team to illustrate an exploratory case study of urbanization and water access challenges in Budhanilkantha, Ward 1, Kathmandu\n\nThe working Group that developed these ideas is working on some follow-up activities, as of October 2024, and will update this post.\n\nThe storymap features the Ekikrit Taulung Drinking Water User Group",
+        "title": "Urban Thirst",
+        "year": {
+            "slug": "UR2024",
+            "title": "URFieldLab'24"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "0efc2087-3c7c-42d6-92da-7490c1b647b0",
+        "authors": [
+            {
+                "name": "Jungsuh (Sue) Lim"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-25T08:12:43Z",
+                "_id": "image-46eae449d3b0463ab37cf5672d27f60c28607328-4032x3024-png",
+                "_rev": "Wq6Q1Egs4fTcXnmQtyzmhX",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-25T08:12:43Z",
+                "assetId": "46eae449d3b0463ab37cf5672d27f60c28607328",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "VJF=s=IS%0%LD%~q4oE2D%RktlxZROoJ-:IUt7RQn%%M",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.3333333333333333,
+                        "height": 3024,
+                        "width": 4032
+                    },
+                    "hasAlpha": false,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsTAAALEwEAmpwYAAADnklEQVR4nAGTA2z8AFFLPUdDOjUzLywrJzMyLVNSSXh3bZSUjMTDv9DRzq20rZiUiX9sXmZcT2trX6ahls7LyJyjq3V9hZWbnQBTTDs6Ny8pKCQnJiMwLilVU0iTkIK1s6rCvrm1s6yYnpecnpaclIp8e293fnGysqjb2dSsrq1qbm5qcHEAWVA8NzMrIyIfJCMgLi0oWFVLop2Pvbiur6ihnJaLiIh8kZSLpqadkpmNiZWHvsK56+nky8vIf4KBYmNmAF9WQ0A7MyooJisqJ0RDP3p3b66mm7GpnZ6ViZKKfH58a3t+cZmakZqhlZKekb/Cu+3r6OPl4qanqHlpbABfV0hKRDo6NjE/PDZnZV6im5KyoZOlkX6bjHqQh3h0dGZra16Mg3efmYukpprJycPr6eTj5N+xqKeEXFwAVU4/VE0+XlZGb2hWhn9xoJCBlnZhjWpRmH5oiX9yZ2dcYllKhGhUo4Vwuqma2dTM5+Xez83GnIaDfkNBAEI9MVBJOnBmUYl+ZYZ3ZINoVXVQOW9LM3xiTm9oYFVTTVtHN3RQOI9nTa6RfNXMweDe17StqYFdXHcyMAA1MCZEPjBiWEV0aVJrW0dnTTlgQStaOSFcQStQRztGPjZSOiljQSp4VDyXe2e+s6jDwLuSgoBvPz5yKykAOTMnR0AwW1E/bGFKZFdCV0c1TTkmRy4VTTETTDQaRTAbSjEbTzUhXEUzdGNXin94hXl3akxLYywqbSgnAEQ9LllPO3BjS39xVl9VQTgxJiggFiUaDTMjD0cyGEo1GU86HEU1IDcvJklCPmJWVmFIS1QrK1oiIGAlIwBtY0yJe16lk3GllHFmXEcnIxsUEg4UEQwiHBNCOCRYTDBjVTdVTDdHRT1eXVluZWVcQUNPIiJRHhxMIR4AuKaCxrKL0L2VxLSOhHdeNjAmGhgUGRcUIB0ZNjMoTU08Wl9OXWhdb3x1i5KLfnh0Wzw7UiAeTB0bOBwZANnDmNS/lcu8lr2yj42AZUM8LiMgGiIgHCopJjI5NTNLSDpdXUpydGKKin2UkHdwbFs3NVIfHkIbGSgYFQDJs4q+qoO3poGvn32HeF1FPi4nJBsnJB4xMS01QkIrT1MzXGFAam9CbHFQaWlTTktFJyU3FxYoFRMcFRIAtJ94rJdzq5Vxp5NwgnNXQzwtJyMaJSIbLSsmMzs7MkhOSGBkUm5wRF1eP05LMjMvIBUUGA8OFhIPFxYS4UxiIjwT9WAAAAAASUVORK5CYII=",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#432a1f",
+                            "foreground": "#fff",
+                            "population": 5.61,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#613908",
+                            "foreground": "#fff",
+                            "population": 0.47,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#432a1f",
+                            "foreground": "#fff",
+                            "population": 5.61,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#c3b7a0",
+                            "foreground": "#000",
+                            "population": 4.38,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#dfc99f",
+                            "foreground": "#000",
+                            "population": 2.4,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#68889c",
+                            "foreground": "#fff",
+                            "population": 1.01,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#b55604",
+                            "foreground": "#fff",
+                            "population": 0.03,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/46eae449d3b0463ab37cf5672d27f60c28607328-4032x3024.png",
+                "sha1hash": "46eae449d3b0463ab37cf5672d27f60c28607328",
+                "size": 16208055,
+                "uploadId": "XfwXWq6iAhwlBLMb4m2B3l5mbM6aztMZ",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/46eae449d3b0463ab37cf5672d27f60c28607328-4032x3024.png"
+            }
+        },
+        "slug": {
+            "_type": "slug",
+            "current": "paper-boat-community-art-workshop"
+        },
+        "summary": "What do you value the most? What are your priorities? By writing down the top three things to take on the boat, we share what we value in times of disaster and emergency.\n\nJungsuh documented the process of conducting the Paper Boat Community Art Workshop with the elderly residents from the Nonghoi neighbourhood. She incorporated the products of this workshop into her art piece for the Art and Science Exhibit,  which took place at the end of the field lab.",
+        "title": "Paper Boat Community Art Workshop",
+        "year": {
+            "slug": "chiangmai2019",
+            "title": "URFieldLab'19"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "56b747a7-36c8-4a9b-b17a-fedce9295419",
+        "authors": [
+            {
+                "name": "Jungsuh Lim (Sue)"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-28T11:36:09Z",
+                "_id": "image-a2cda3dd11ec7bb79c2cfd8828bdb893a4885f10-584x555-png",
+                "_rev": "Wq6Q1Egs4fTcXnmQu2UHZv",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-28T11:36:09Z",
+                "assetId": "a2cda3dd11ec7bb79c2cfd8828bdb893a4885f10",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "eIJt^;?bxuIV~qt5ofIo9Zxuax?b%M%MD%%MWBNGt7xu-;%L9FM{WB",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.0522522522522522,
+                        "height": 555,
+                        "width": 584
+                    },
+                    "hasAlpha": true,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAE9ElEQVR4nB2Sa1vSBxiH/59qb7e2ttVcZg7zkImah4AUQQQNQRQ5eAJBEQ8pqCCpeEClmAcSz04wRVNzVjZba4fvcO+SF8+75/o9z3X/buGfzx84Se4RGO3D09/J7sYS794ecprc5TS5w8XZa94cbLG2PMukvxebVUuzXoHJoMSgrUCnkaLXSDEbavANdSP8+fF33hzuMDE2wDN3O6tLIY5eb7G/G+UwHuPt8R4HezGWwuP4PU5MDUrqNVKadHK06sdoFCWpqVWWYzKoEH4/2Wc9ukC33UhzQzXjvl7WVubYWl0gvr3E0f46uxsR5oIeum2NKJ6IkUsf0lgvR1crRa0oQauWoK99gr62AmF7LYJvyEl1RTHlRfdpNz9l6vkACzPDRObHiEaChIIeXHYjKvkjCh/cpawoizpVOUZ9Fe2Wp3j67Twf7WN8tA9h41UYZ0cTJQW/IM5NT13q6Wymy2ags01PV4cBk6EaWVke2fd+JD87jYryPFTyYoy6KrwDdmLL8xzsrZNMbCKcHSfw9juQPMpB8igbu1XLoLsNV6cRR3sDna16zAYVlZKHZN/7gQf3b6N8UohOI8PSWMPIMwex5TmOX29z/iaB8PHihJmJYeSSAmSlefR3WQlPj7D8YpL16HyK72J4Ek+fnSqpmDzRbSrK82mql9Ni1KRQjI/0ElucIxnfQDg53GV8tD8VVlIgwt6iYy7oJb61zLuzAz5eHPPh/Ij93RhupxVx7l0eZP2EQlaItkaCoa4SR2sjockR4ltRhNXFOWwWPQ+y0sjNvJVa8nu62FmLcG3Ax3cn/HV1wbVey5EQ1ZWlZKR9Q9bd71Phmqoy+rvbicxNsLe5guDtc6CUFZNx62sy026griohMOxiczVMMr7O+UmCT5dv+fvzJa/3Nuiym1HIiigpyKI4PxNTg5rZiRFeRULEluYReuxm5I8LUmGiO9+hU8sI+vtZXZxh61WY/Z0oF6cHfLo857fNKN4BJ26HFUdbEx0WPS6bGd9QD+HpANGXswgvQuNYG2spyE5HlH4z9eHIs07mp4Z5OetndXGao8QGZ0cJpgJeTAY11qZaum0mggEPo4Muep0thGees7f5CuHiNMnCdABDXRX599Mozs/A0qjC09fO+KibxYUAie0VViIhGuoUFOZloJAW0tb8lKnAEHNTPkLBUbZjSxwldhC+XH0gGd9iwjdAdcUjfrnzLY+L7mNtVNPXZSE4NsBKZAa/t5fKcjE5mdfaPKTDomPM28PshIfwjI9o5BrRrwjvz95weriX4uOyW8jNvE1W+k2qJAVoa6S0mbX4PT1M+gfp6bSiqiylUiKmx25i+vkQU2MD+Ie68Q06mR0fRlhfepH68P3bY2JLLzDp1Yhz0lMKXSN4UpqHsV7JkNuWavP6qL5WTn9XS6q8gNfFkLsDl81In9OCMB/0cxTf5q8/3nP1/py1lZeY9DVk/vQNt258hejnbxHn3KFOKcE32E1oYpRBtw2bpR5nawOOlgbMehWtxlp6HRaElZcznCUT/P3pkv++/Ml1SSMDXZQ9FJGT8SNFuRmUFYiolhXhsjWnBA4F/eg1FSilYvRqGQqpmDplOc7WJoRoJMTpYZwvV5f8+/mKs6N9gmODdJh1tBqf0mGux6hVoJQVUlNZjLvzuigPqopSRGk3qJYVopGXUiYWUZx3j/8BVtUQeVLqh+YAAAAASUVORK5CYII=",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#4c433a",
+                            "foreground": "#fff",
+                            "population": 4.11,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#241c0c",
+                            "foreground": "#fff",
+                            "population": 0.06,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#7c756a",
+                            "foreground": "#fff",
+                            "population": 6.04,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#c4bbb2",
+                            "foreground": "#000",
+                            "population": 3.27,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#f4ece3",
+                            "foreground": "#000",
+                            "population": 1.48,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#7c756a",
+                            "foreground": "#fff",
+                            "population": 6.04,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#bf943f",
+                            "foreground": "#000",
+                            "population": 0,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/a2cda3dd11ec7bb79c2cfd8828bdb893a4885f10-584x555.png",
+                "sha1hash": "a2cda3dd11ec7bb79c2cfd8828bdb893a4885f10",
+                "size": 687831,
+                "uploadId": "ThBAGt2oNO5aBQhVkL34tntucb9A36R1",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/a2cda3dd11ec7bb79c2cfd8828bdb893a4885f10-584x555.png"
+            }
+        },
+        "slug": {
+            "_type": "slug",
+            "current": "in-times-of-hardship-i-will-be-with-you"
+        },
+        "summary": "“In Times Of Hardship, I Will Be With You” is a video created by (Sue) Jungsuh Lim.\n\nThe video, developed entirely during the UR Field Lab in KTM, was shown at one of the Field lab’s final art installations, co-organized by Sue Lim herself at the Patan Museum in Durbar Square, Kathmandu, from the 5th to the 7th of July 2024. ",
+        "title": "In Times Of Hardship, I Will Be With You",
+        "year": {
+            "slug": "UR2024",
+            "title": "URFieldLab'24"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "192baaf8-7958-4038-ac0e-804eeb95db70",
+        "authors": [
+            {
+                "name": "Sneha Anil Malani"
+            },
+            {
+                "name": "Gurusaravanan Manoharan"
+            },
+            {
+                "name": "Xavier Asuncion"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-25T10:50:29Z",
+                "_id": "image-df7fa2bbd16c81f3a432f09ad28349570996b915-7016x4961-png",
+                "_rev": "Wq6Q1Egs4fTcXnmQtzQHkF",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-25T10:50:29Z",
+                "assetId": "df7fa2bbd16c81f3a432f09ad28349570996b915",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "V4Qm0HI9~V?vX9~V%M%MW=xv=_t6I;IU?H?GoeM|t7t6",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.4142310018141504,
+                        "height": 4961,
+                        "width": 7016
+                    },
+                    "hasAlpha": false,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAIAAACgpqunAAAACXBIWXMAAAsTAAALEwEAmpwYAAACVklEQVR4nB3SWY7bOhBAUe1/YwGSdNuWKFFkcShOxVGy2+4MwPt56AB3AefjTr/u7XWUQVhQNq+y3YqTI/viYJD/OEdNzksWzd6zL8EEYKTme/X//f09VdybV2RFUmuxe4Q5wlIcJM2LNz2naIRZL0HxGm1GGWFO8jKC/PM8p6RYtiLoLZqtOPBytuvPAEtUGyEk1Ha/KfaGwClYckBmj+Kd4PoaNGWE7CCYzWsWzG74rNlPJ65Rr15zBG7lirChkRSx5zCyr05WLz4fY6rJdQolmKi3oHgwEmGzcvGGo+ZoRM1p9JITpgA12Uaukbv39OfzOY0Sj0qNfHaqRjx7aZWsVaBBKlBGJ6LeWyEbHa9kKzlC2QK8zjplBzWYEkyyMnszSqwUQavLyn/M648bm7mwDkenx1k+n+fzPooD0uxew5RR1miL1x5Y0DwZqcXC2PXGlvd5frtelpUp2CjC2eLHKI+eW9Qt6te9T1HvZGVQG4o5WRGN2Ofv7PZN8qvk1529qf1m5OzNWpOpwZAVUW8l6MeoEwqGYjHbBcVCCMEItb4rfrVyCYYnlAkhBzMq3c/eS0xGeFiD2mowkxWL3WfLbx7WqHcUCwrmtQhGtOTOXo721Tn6eYxRUvrHDGpryU1mn/V2Q8Gy02Sl5TcrFgdbsrLncLTSS6rJ5+hbSUelEmxCqAlfj2NCWBV7c7D2HGpED5sVzMHXXi25Rj5ZIARyuib/OPrZ8peo0a+P+5RQGX5FyWp0o8TstIeN3Nd22ansddQ8GxGAJc3voxwtN/JHTc+z/Q8tj+EmB/clnQAAAABJRU5ErkJggg==",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#575550",
+                            "foreground": "#fff",
+                            "population": 2.07,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#6f3714",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#c2bdb6",
+                            "foreground": "#000",
+                            "population": 6.76,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#c2bdb6",
+                            "foreground": "#000",
+                            "population": 6.76,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#fcf4ef",
+                            "foreground": "#000",
+                            "population": 6.25,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#857b75",
+                            "foreground": "#fff",
+                            "population": 0.69,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d66b28",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/df7fa2bbd16c81f3a432f09ad28349570996b915-7016x4961.png",
+                "sha1hash": "df7fa2bbd16c81f3a432f09ad28349570996b915",
+                "size": 28526021,
+                "uploadId": "Io3VtyYb8JrYUJM9byzuu1FbzHCRi7ua",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/df7fa2bbd16c81f3a432f09ad28349570996b915-7016x4961.png"
+            }
+        },
+        "slug": {
+            "_type": "slug",
+            "current": "flood-mindmap"
+        },
+        "summary": "Chiang Mai’s flooding is a complex issue and only understandable when viewed from multiple perspectives. Through the interdisciplinary work, participants had the opportunity to understand this complexity and view issues and solutions from various perspectives. A mind map to communicate, deconstruct, and analyze the various inter-linkages between stakeholders, the environment and their impacts on the city’s flooding was produced by three field lab participants.",
+        "title": "Flood Mindmap",
+        "year": {
+            "slug": "chiangmai2019",
+            "title": "URFieldLab'19"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "4c069432-2c91-45f0-906c-cd9f22d3798f",
+        "authors": [
+            {
+                "name": "Jungsuh Lim (Sue)"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-28T11:42:11Z",
+                "_id": "image-a8ac33acc615c1b1bd29de2eb358da0857f20872-569x486-png",
+                "_rev": "Wq6Q1Egs4fTcXnmQu2WPkb",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-28T11:42:11Z",
+                "assetId": "a8ac33acc615c1b1bd29de2eb358da0857f20872",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "eUSNL;q%lgt5XPsoaya4kAagq7owVdjae;t5f%bZjHkAXQodi}nkW:",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.1707818930041152,
+                        "height": 486,
+                        "width": 569
+                    },
+                    "hasAlpha": true,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAA7DAAAOwwHHb6hkAAADbUlEQVR4nFWUaY9URRSG+w+ZKNJ1qm536y/xg58NMSbEmVFUBAyQaEAHJOwhEpdkBGRxFBgjW0CYYVin6Z4hgxLFyDJC6py6DR8eU/c2JH54U5XKvU+9Z6uGXg7YdU/qhkpltyBlzdVreasg3Wox6Hf+p7LXrjSYfw2d73CvX9C97Wiks4HyYqC87LErvoJXmvXobL1Pc2F4QSBVFxTYcD/I8PkOSwst/rjjaQxOtBhMFaRfPHpa0PMOPePQ44543FVndl7QSw696rCbHp2rZRWwXSkuFDy6m4E/tyknC+yYoEcdesAR9zp0q0N3CLpf0AkhHmuip5votEOvOWzOVw7LXqtKi/UC+nugUU6GChYPLyd+u5w43iSubmKrBFsj2Kce+8Kj2x36tUN/FOycVClJN0MV+gvNexqWXR1pEg8sJ25vYmscNlJLxxz2oSet9uhah20S0t6CNFGgJzw6LdgNjz4H3srAnxx2xKFfNbGNjvSekEbkBfTJu577Kx3/jjaxDUK5rSDtKtBvPPprndcqp12PdTPwjEd/EHRLdiPYqJCG0lFhcUWTc2++zMLby4gbhbQtkLYX2J5QhR8vZ6AMqx5opKkCmwjYZsE+qIE2MgSOCL23XuXkGy/RXfEKcb0jbQkVVHd59IgnzjjinNTt1A80Bt+3Gexv1R9+4knvZ5ivZKOeByub3H1nGQ/Hmi+KpFs8cbcQs8OZJvGmw3oeW8xtc7JFeaBFuSdQbgqkjwNpLANrlzYmpI+EtC5gqz221qObPbpPiFOOOOtq4G3B7gmNdC2QzgXS4UDaE7CNAcsuc9hjUrfPeiFtCtgGj64XbNxj33n0rGDXBe0L9qfHloRGTqhe9+hFQScF3SnoBqkLtErQdQ793JO+LLDxgGbYbo8ezdMjWP5/UbCHHou5ylUPeTSP1AVBqxZy2FbBPhN0XLAdAds51L6AHRLi2TwxntgX9C8hPQkkzUXptyn7rfqFmQmkU4JNOuygwyY8dshjhz12UNBDgh4fzvtVqXovLnrsgSfFAq2BHZ7Odxj0OgyutRn81mZwqmAwFUhnCtJ0gc147JJUk6FXhHhD6mZe8NjfoXIXY+D+46HDrKfzbZ72Ojy78TrPpjs8u9BmMNuunq3ns5qjyGvOe+wKesdhS3XuHj32LPzj+Q+ZfNTl0aYNnAAAAABJRU5ErkJggg==",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#8e560a",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d4800f",
+                            "foreground": "#fff",
+                            "population": 0.1,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#f4d436",
+                            "foreground": "#000",
+                            "population": 13.48,
+                            "title": "#000"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#967c02",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#fcda3b",
+                            "foreground": "#000",
+                            "population": 11.14,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#a26c58",
+                            "foreground": "#fff",
+                            "population": 0.01,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#f4d436",
+                            "foreground": "#000",
+                            "population": 13.48,
+                            "title": "#000"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/a8ac33acc615c1b1bd29de2eb358da0857f20872-569x486.png",
+                "sha1hash": "a8ac33acc615c1b1bd29de2eb358da0857f20872",
+                "size": 497066,
+                "uploadId": "R1Jsq2byapS4N9oudXS6Rbm8O9KIsICB",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/a8ac33acc615c1b1bd29de2eb358da0857f20872-569x486.png"
+            }
+        },
+        "slug": {
+            "_type": "slug",
+            "current": "this-is-how-i-recall"
+        },
+        "summary": "“This Is How I Recall” is an Art Project comprised of audio interviews and earthquake maps.",
+        "title": "This Is How I Recall",
+        "year": {
+            "slug": "UR2024",
+            "title": "URFieldLab'24"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "876c0ffa-c16e-4ae7-8c3e-5a1c7409d7bc",
+        "authors": [
+            {
+                "name": "Sheila Amalia Burhanudin"
+            },
+            {
+                "name": "Tri Selasa Pagianti"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-25T06:16:23Z",
+                "_id": "image-f30ef5ad8c96c3d80884175b1f78fff27c055adc-554x370-png",
+                "_rev": "7JxKe3NrZ7Ao9QX6BKIIu4",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-25T06:16:23Z",
+                "assetId": "f30ef5ad8c96c3d80884175b1f78fff27c055adc",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "VRHV3b%1D*M{%M?b-;tRIVt8_MxuRjbIof?as:xuWCt7",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.4972972972972973,
+                        "height": 370,
+                        "width": 554
+                    },
+                    "hasAlpha": false,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsTAAALEwEAmpwYAAADJElEQVR4nAEZA+b8APj59vHz7uvv6Onw4+ry3erv4Nnd0tXXx+Xl1O7u5dre25uloWRybVdlYFhpY11wamx+e4mYlp2uq6S4tADX2Ne/w8CutrG8wrnb3s7Z2syrrqKusKHe3c7u7eXP0s2Pl5NeZ2NNU09PWlNXZl1XYFpYYWBldXR7jYwAoaGle4GFZW5vfoN/uLeuwsC3kIyFlJGH0c7D5OLavbu3k5SQe3VyaFtXbWhje4B5a2xnVllZXWdqf4eKAIB/i1xgZ0hNUF1dW5GOiKiln4qEgYmCfLy1rcvFwKCXlIZ7eYFsanRYVX5nZ4+Iin1+fmJmZ15jZ3R1eQB8eYtlYWZUTktbVFJ7d3WWlJGNioeLhoOqpKOmnqJ0aWlfT01mTEpnR0RxV1qFfIJ5en5aXl9NUFVZXGcAiH6He2xoa1xTYVhWcGxthoKBiYWBlJCPqaasioWNTkdIQTQxUzo1Wj45Z1ZXend+aGxwRkpNOUBKTFdsAIt7dIh1aH9sXm1iXWNfYWtlZXdxbZOPjqmmrHx4fzo3OTQrKEk0MFI7OWFUVWpqblNXWTg+QTU9RlBWZACLeW2KdWaEb151ZVpgVlRZUVFmYF2HhIGkoaF6d3k9Oz03MC1IOTRTQz9kWldubGhkZWBaXlpbX19oaGcAgnJofmxfdGJWbFpPZFJJW01GWlNPdXJvm5eTjouJbWxpZF5YZVpRaF5UeHNpiId9jY2CkZOJkJKIioqAAHZqYXBiWGVYUF9PRmVNQGNOQl5VUHFxbZWUjqemoKuqpKOgmJWPhI6IfZmUiqakmquqoKutoaSmmZmajQBxZlxtX1VjVk5bTUVgSj5pU0d1bGWJioadnpmsrKe6ubS8u7S0sqmwraS2sqm4taytraOanZOSloyVmI0AamFZaF1UYVdPWVBKW09IbmBWiIF5oKGdq66psLCst7axs7OtpKSfq6qkvLuzubivkZSMYWVhWV5abXNsAGRfWmJcVV1XUVdTTl1cWHx6dZiXkqutqLO2sbi5tLy8tqmqpISFgpKUkLm6s7Kzq3J1cTQ5OS81NEFHQ6lPhTcVRUDUAAAAAElFTkSuQmCC",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#543d31",
+                            "foreground": "#fff",
+                            "population": 2.74,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#1f4b8d",
+                            "foreground": "#fff",
+                            "population": 0.05,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#543d31",
+                            "foreground": "#fff",
+                            "population": 2.74,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d1caa7",
+                            "foreground": "#000",
+                            "population": 0.31,
+                            "title": "#000"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#cdb489",
+                            "foreground": "#000",
+                            "population": 0.05,
+                            "title": "#fff"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#9c646c",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#ab8751",
+                            "foreground": "#fff",
+                            "population": 0.03,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/f30ef5ad8c96c3d80884175b1f78fff27c055adc-554x370.png",
+                "sha1hash": "f30ef5ad8c96c3d80884175b1f78fff27c055adc",
+                "size": 468119,
+                "uploadId": "DpaEvQrmUdcIpsGl5Fu24PjvQ44WPBo3",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/f30ef5ad8c96c3d80884175b1f78fff27c055adc-554x370.png"
+            }
+        },
+        "slug": {
+            "_type": "slug",
+            "current": "critical-infrastructures-mapping-in-nong-hoi"
+        },
+        "summary": "Field survey on critical infrastructure mapping was carried out in the Nonghoi neighbourhood. Led by Sheila Amalia and Tri S. Pagianti from Humanitarian OpenStreetMap (HOT OSM), this survey was conducted using field papers and OsmAnd. Critical infrastructures that are important for disaster response were collected and uploaded to OSM over the span of two weeks.",
+        "title": "Critical Infrastructures Mapping in Nong Hoi",
+        "year": {
+            "slug": "chiangmai2019",
+            "title": "URFieldLab'19"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "67ba9b75-b636-4741-ba05-1121b7e6b1f0",
+        "authors": [
+            {
+                "name": "Sneha Anil Malani"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-25T10:15:51Z",
+                "_id": "image-1c90ff7106b2449bd9ae7d1effd23a1288cc27fd-5669x3779-png",
+                "_rev": "vh59lWLD22bjQ8VSvBmIng",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-25T10:15:51Z",
+                "assetId": "1c90ff7106b2449bd9ae7d1effd23a1288cc27fd",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "V67BsGxU004m?d.At7ITM_tR00R:_N?cD$8^Rj.8%LM{",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1.5001323101349564,
+                        "height": 3779,
+                        "width": 5669
+                    },
+                    "hasAlpha": false,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC5klEQVR4nEXLy28TRwCA8b03O7M7M7te72P27cd6be8mu3bsdRO/FEjiPGzsQF40VElJW5FUDSEHJKQCSlUq5YB6aAEhuCBVVdJLBbeWCz1UqipVHLhz6Z9RpZdKv+P3MUAyoexA2QWSDSQHyHmolYERQavGOTXOGAdyHqSznJLDRgHrHidnzil5XvMZnhaRXkTUh0qO13xsRSjTUMIFq74qjy+iTAPQEKo+r/nEKhGrzFOfpz7SS9gMGWQE2AwQLULVw1Yk5KblYL69erR58HCi9znxupxdR3aVOBUxExNnAjkxdqrEmRTcOoOsiujWRHcSGSFx62Jhxm2sfnH38Q8//jrYPaaVoRL07NrITQZquS3mP0wHF2m8rAbzsj/DiMUL6viCWVuRSxckv6tM9KPFvW+fvnz1+7ujk9PW1Xthb68+vNUYfukmQ6M2CpcOqqPbhc62GQ0YpXrFTNbzM5+601s0HljJRueje49//uPN23++O/3r47tnzc371cGtZHTktbeKc3uzN5709p/Fl+5kprcZo3HNamxkOzu59id2sp5tbS9cP3n+y9+//fn++Onrzdsvute+iZYOgovX7cpyobvT23+2dPOn+sZJYfaQ0SojtdKnkyOjumLEfSdZ66zf+erh2YPvz4afPWhvfd26elzrHxSSvmSWaLE9tX6/u/soWjn2Zm8yJJsIXlPyO2mvmc5PKcVOpjaodq/ErUu5xuXS3F68fBi01ozcOIclorje1Fp54dBp7uiVywxU8rxeQnqAjTIxQ6yXeNUDogkEU7BiGs6b0ZKWm8SSxgIeolTKnpDLs2KuiY2IOe8kG6QsLu0gJQsFOsaJHwA8BgUWKZzkIM3HmselKOAFFkkgZXOqD9MZQHSGxWlAFIBlSFRIFBbiMRb+hzsHBSiaSPOJVuBTJhAoEExAdBbJgJMYlhNYXmB5ESCJ5cj5Ngb+xyJINERLghliJcsJlMUqy6dZKAJI/gVHY5/b+8iYUAAAAABJRU5ErkJggg==",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#274459",
+                            "foreground": "#fff",
+                            "population": 0.33,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#041464",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d1e1f3",
+                            "foreground": "#000",
+                            "population": 5.08,
+                            "title": "#000"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#1f4979",
+                            "foreground": "#fff",
+                            "population": 0,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d1e1f3",
+                            "foreground": "#000",
+                            "population": 5.08,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#51748e",
+                            "foreground": "#fff",
+                            "population": 0.06,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#5477ad",
+                            "foreground": "#fff",
+                            "population": 4.57,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/1c90ff7106b2449bd9ae7d1effd23a1288cc27fd-5669x3779.png",
+                "sha1hash": "1c90ff7106b2449bd9ae7d1effd23a1288cc27fd",
+                "size": 50694392,
+                "uploadId": "njLg2jZapqwrmvv6niMs2MLOp20EGIaq",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/1c90ff7106b2449bd9ae7d1effd23a1288cc27fd-5669x3779.png"
+            }
+        },
+        "slug": null,
+        "summary": "Water is sacred. Water is a commodity.\n\nReligious traditions have long utilized water in their rituals from the washing of oneself before daily prayers; pilgrimages to sacred rivers like the Indian Ganges; the baptism and admission of a soul into a religious sect. However, increased privatization has led to inequitable distribution of water and large dependence on plastic. The artist questions how easy it has become to quench our thirst by buying a plastic bottle of water. Is the water in the bottle still sacred?",
+        "title": "Living with Water: Art & Science Exhibition — We Become What We Worship (2019)",
+        "year": {
+            "slug": "chiangmai2019",
+            "title": "URFieldLab'19"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "e4e3ab76-d02d-44bd-b9f7-769b49a048cc",
+        "authors": [
+            {
+                "name": "Aagya Dhungana"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-28T12:53:51Z",
+                "_id": "image-0be36848b9053b4ae25ecfe3485d3b9d5eb1617d-928x1085-png",
+                "_rev": "7JxKe3NrZ7Ao9QX6BNzrL4",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-28T12:53:51Z",
+                "assetId": "0be36848b9053b4ae25ecfe3485d3b9d5eb1617d",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "eONACRxt~UoeWCWDofj?WCs:%Ks:RkWBR*-.jtWCWBay%1WVRkWCoe",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 0.8552995391705069,
+                        "height": 1085,
+                        "width": 928
+                    },
+                    "hasAlpha": true,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAXCAYAAAALHW+jAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAFEElEQVR4nFWVaVMiWRaG+a09E10ddldXV1vVZZW7AiIICAgq+54Iiiwii6CCoCCbSzWKiuX8kqfjXpiJmA83MjLvuSdPnvc5b6peuiGeOwHEddSP8tqPMuqFeekEeW4HeGr7GV77eemGGfWiPHfDMv657ZP7z+2AjBV7P26iqF57IjDMaz/Cj9sYr31FBt03nLQqWzSKNmp5C2c5MycZE6XMBuWMnnJ6netTB0+dAK+9CD9uYnKpxokU3u5ivN3t8Xa7x3MnRPvMzknGQOFQz0FkFc/uF6yWP9jcfI9l8zfMG1PEggv0L1yMehFGfYVXkfDHjcJ4RSeJ47z0ojKwXrRRyW6SUrQo/gW8zhnM5t9ZW3+HRvtvdu3TnB9vMrjy8dQWrYuMKxx1Q5M+RHjpRrlreGWyUnKDZFhL3LdCRlmjlDKSjmtRQgvEQwsklRVO0ga6Z9s8NMdJVU/XPsQatrwMrjxys5jSE/bOsmv5zKbuT6zr0wS358jt6ajmLDRPtrgu2zjLbpCOrVBOrdM732bY8qEaNJw8Nj38femiXbZRy5nIH+jwbs+gW55i+ds71PNTmDR/4LZ9lZU28jaaJSvlQx3JyCKH0SWqOSODKzcqUdnDlYf2qYOzrImzrJlK2kRwZx7N/BSLMz+zOjfF+soHrIbPeO1z7AfUHCd0nCTXOU5oSEaXOM+ZGF4HUIn+DZpeKlkjifAKuYQI0uOzf0O3+BtL335hZW4Kw+pHrIYv2Da+YNVP47TMcBjWUEkbOT0y0qu5JXJSlOduUIqwF1wi4lsgGVllz7vEluET2sX3GNQfcVpmibrVhJzL2PTTGDUfiLqXqBe2uL/0MuopEjmVxOVG4bEdpJq3EPLOEfLMko2tEfercdnmCLmWOU5sUDt2cJqxoniWcNtmyMR09KtuXnoRmew/d4kxh4J0MS23dTfZuA7Fvyh7VMlskt83Ujo00ihsUc9vcbxv4DCi5iiho1HaYtD0TyYtOq5Q9PC/Myt62SrbpTjVnJmrko2LYyunGSPllGByhYBrhty+ls65g0HTI+f8Scz6hGPVY9PNsOXhcaL2fd1Ju2LnsmDhsrBJ7chIbk9DyDmDxfgrTsdHankTD1duxNnHpofHpldeBTGqweWYQwGl2BBwdyoOKik9pYM1igda9oML2M2/o9X8i4D7C91zB0+yAJdMKhINm94x2OJTxXruBHnphHlo+bkq2kiGl4i4v7LnnyPunyfk/obT8YlocJ6LooXvDRdDMWXibDvISNpbZGJf3ZAURnAkmlw9MhHzzeLd+UzUP0smpiZ/oCcZVbNtn2bH8SfFlE72fDSxPyHu2//Z121MqjRoBiWsh5FlCsl1agULFwUr9eIWJ2kTu9t/odO9IxFZ5PuVl7dbZXJeYBMfYzN+KGSPMWiGqGRMZPa0VI6Mks1S2kAxtUE5ayaTWCceWpKGO2wHeb1ReJHYKOOE0vIn9iWqHV6HqOdtpJRVlOA8AfdX7JYPWMzvpclm4mvUC1ZuL1w8dYI8tvzc1908tALj0ZOiXIv/xrjBT9cB+tVdymk9++EF/Dt/Ydn4FfXKT+h1v3AQWaZz6pCIPTS93F246JxuyxcIJv9nX5JDyZRPmuVNdYfLvFlaVDq6jMfxiV3rRymQ8D5xZnDp4nvdyW3Nyf2FS75kwqF3XGVLVBqQCIn7vxtObqoOCbqYlmxMQ+lQT7+2K9l7lHCLYgTD4y/9B8IZdzT1i5EOAAAAAElFTkSuQmCC",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#42482a",
+                            "foreground": "#fff",
+                            "population": 0.01,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#4a3d18",
+                            "foreground": "#fff",
+                            "population": 0.06,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#e4d3a9",
+                            "foreground": "#000",
+                            "population": 16.12,
+                            "title": "#000"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d4c69d",
+                            "foreground": "#000",
+                            "population": 10.31,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#e4d3a9",
+                            "foreground": "#000",
+                            "population": 16.12,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#8d846a",
+                            "foreground": "#fff",
+                            "population": 8.89,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#c4b484",
+                            "foreground": "#000",
+                            "population": 0.13,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "image.png",
+                "path": "images/1p9zvv6x/production/0be36848b9053b4ae25ecfe3485d3b9d5eb1617d-928x1085.png",
+                "sha1hash": "0be36848b9053b4ae25ecfe3485d3b9d5eb1617d",
+                "size": 2460501,
+                "uploadId": "A447UySZZXfdVrnprUTVBdbfoYeKbnts",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/0be36848b9053b4ae25ecfe3485d3b9d5eb1617d-928x1085.png"
+            }
+        },
+        "slug": null,
+        "summary": "The map is a landcover map of Kathmandu valley of 2010 prepared by extracting data from ICIMOD’s spatial data portal. The map uses unique symbology and cartographic symbols for feature which makes the map stand out and appear visually pleasing. It is an abstract map which shows the classes through symbols where indexes are not provided for the viewer to easily interpret the physical features the symbol is representing.",
+        "title": "Vintage map of Kathmandu Valley, Project Climate Atlas",
+        "year": {
+            "slug": "UR2024",
+            "title": "URFieldLab'24"
+        },
+        "youtubeVideoUrl": null
+    },
+    {
+        "_id": "4ac90236-81b5-4c2e-b61d-1d1fe1a0e32c",
+        "authors": [
+            {
+                "name": "Shree Saha"
+            }
+        ],
+        "mainImage": {
+            "asset": {
+                "_createdAt": "2025-07-28T13:21:01Z",
+                "_id": "image-53aef8e94dfbb01661d64f41f0314765c8fc0ea2-2480x2480-png",
+                "_rev": "x5BEP24sCofvDH4Z1zEw6s",
+                "_type": "sanity.imageAsset",
+                "_updatedAt": "2025-07-28T13:21:01Z",
+                "assetId": "53aef8e94dfbb01661d64f41f0314765c8fc0ea2",
+                "extension": "png",
+                "metadata": {
+                    "_type": "sanity.imageMetadata",
+                    "blurHash": "edP?j%t7~VoekWofjZaybHof~WWBPAkCMxxuWqWBn%WBNckCROj[VX",
+                    "dimensions": {
+                        "_type": "sanity.imageDimensions",
+                        "aspectRatio": 1,
+                        "height": 2480,
+                        "width": 2480
+                    },
+                    "hasAlpha": true,
+                    "isOpaque": true,
+                    "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsSAAALEgHS3X78AAAEBUlEQVR4nI2Ue0+TZxjG+zH2BbZ/lpjsE2xLFnQLgY1NBszpRKdhoHLYohLEznIYLQJtOQtFwIlEhzC1BUQObTkUSunhfdu3Jyooc3hEwVAW6G9pcZMZWXiT+683z++5rvu570vG/3wb4TCP7VaEqhJ82hKeu6bZCK8CkW3PyLb7sb4WZlkSCFUrsR5KwnE8lflWDct+kfW1VYhEdgiMRIhEYT6RUKMKKTMF/5njBNTncJfkMHtRwwuvsK1S2dtsvvSK3K0vx5aZilSWz4PRYRZcDqZa6hj58Sj++oqY+phSItsDI+Ewqx6RuWoVlkPJTJw5ic9o5I+HTwgtPmXYPMm1slIGco4gNVRsKl37L1S21eaqT+RBjQp7+l6GT+cyYbiNNL/IwtJLfIvPGHQF6NIP0PVLEbcyvkWsUbIcg4a3ACORWD/CATeLugocmakM5efw+289dFsEjN45LLMLXLd6qNMbae030dl9i8pjx2hPScBXp2TVL/6rVBaFrXgFFhvLCWbvY6r0NFevdiG/NsAPuh5Ot/eQ03KdhJJGEuVqCn+9QXH3EF//VMSBT+K4kryH+XolYb8Ycyl76rAy36DCk5mGVFLAVH8flV197FbUs+tEKR8cO8d7Rwt5Jy2HXUfyST7fSlypjncPnuT9z1I5sjsO/cEkFpoqWRFsyNxaBTMZX+KU5zJrNjEu+inquEm8oo6P5Zv1YYGWj06VE/9zNd9oO0gqb2OPXEuiXENmvoKm/clYvkvgXm0xsmBDMc6cNERtEUHBhTn0J5csHmpG7GhMAhqTSLVJoMbooM7kon7MTeOYB92EhyujdrouttO1by/mlE+5V1+CbMVt436rBldxHrbLOsxOiYHQY/pelX72EYbZR+iDjzAEH6IPLNIbfMhY4D7OwX5shdlYDiQRUJexLExvPkp0K3w6LROFuYy16TDaBPp89zFI99B75rkVLfccN4W73BBCGGa8mG70YC3MwpHxFXMN51nxirFpiY3NeniVp5KI1KxlUp6HueUCg+NW+pw+DA4vN20e9DPRktBP2NFf6mAg+3sshz8n2KBi2e9m46/oLEZeD/Z6OMxSVGmLlvGCbIwXajGOjnN72oXeMoNh0s7gpI2hzk76Mw4zmpZAoFbJc68QE/RPWMjeTJglScDbpMZ6Npup5lpG7gzROzpJ75CJ4cttGPOOMpH2BXfVypjN9diWvLl6W5ImettzyUWoWYOzMJvxuioGe3q4o2tkOOsAU/sTCGqULHs2B5mdxFe0uS8kF7MX1FhOZTGUf4KRjBSmDiYyV122mTQ7ja9X1NiBJY8Ld20F5vQkJtPjCTWoYjYjW3q2Q+Br6BO7FbFKgadKwTOn9a0ZuBX4N+wzP7fOeNPTAAAAAElFTkSuQmCC",
+                    "palette": {
+                        "_type": "sanity.imagePalette",
+                        "darkMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#253233",
+                            "foreground": "#fff",
+                            "population": 0.06,
+                            "title": "#fff"
+                        },
+                        "darkVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#761810",
+                            "foreground": "#fff",
+                            "population": 1.64,
+                            "title": "#fff"
+                        },
+                        "dominant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#82a5b2",
+                            "foreground": "#000",
+                            "population": 4.1,
+                            "title": "#fff"
+                        },
+                        "lightMuted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#d2b6a4",
+                            "foreground": "#000",
+                            "population": 0.29,
+                            "title": "#fff"
+                        },
+                        "lightVibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#96dfeb",
+                            "foreground": "#000",
+                            "population": 0.14,
+                            "title": "#000"
+                        },
+                        "muted": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#82a5b2",
+                            "foreground": "#000",
+                            "population": 4.1,
+                            "title": "#fff"
+                        },
+                        "vibrant": {
+                            "_type": "sanity.imagePaletteSwatch",
+                            "background": "#f12a1a",
+                            "foreground": "#fff",
+                            "population": 1.59,
+                            "title": "#fff"
+                        }
+                    }
+                },
+                "mimeType": "image/png",
+                "originalFilename": "Mountains_on_fire_reduced.png",
+                "path": "images/1p9zvv6x/production/53aef8e94dfbb01661d64f41f0314765c8fc0ea2-2480x2480.png",
+                "sha1hash": "53aef8e94dfbb01661d64f41f0314765c8fc0ea2",
+                "size": 1383881,
+                "uploadId": "Uk7rbU0S3HdybVPcGkTZCPoNHFHxvRsx",
+                "url": "https://cdn.sanity.io/images/1p9zvv6x/production/53aef8e94dfbb01661d64f41f0314765c8fc0ea2-2480x2480.png"
+            }
+        },
+        "slug": null,
+        "summary": "“Mountains on Fire” is an evocative abstract painting that intertwines the elements of fire and water in a dramatic tableau. The painting is bordered with geometric representations of fire, their angular forms adding a sense of structured chaos that frames the scene. Central to the artwork are the mountains, depicted as melting, their solidity dissolving into fluidity and cascading into a whirlpool of water below. This whirlpool symbolizes the transformative power of nature, embodying themes of destruction and rebirth. The juxtaposition of the fiery border and the aqueous core creates a dynamic tension, capturing the viewer’s imagination and inviting multiple interpretations, from reflections on environmental change to metaphors for personal or societal transformation.",
+        "title": "Mountains on Fire",
+        "year": {
+            "slug": "UR2024",
+            "title": "URFieldLab'24"
+        },
+        "youtubeVideoUrl": null
+    }
+]

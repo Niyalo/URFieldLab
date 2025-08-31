@@ -176,9 +176,9 @@ export default function OutputsPage({ params }: Props) {
         </div>
       </div>
 
-      <main className="w-full max-w-full mx-auto lg:grid lg:grid-cols-12 lg:gap-12">
+      <main className="w-full max-w-full mx-auto lg:grid lg:grid-cols-12 lg:gap-12 pt-24">
         {/* Left Panel: Contents (Sticky on large screens) */}
-        <aside className="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:py-16 lg:pr-4">
+        <aside className="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto lg:py-16 lg:pr-4">
           <div className="w-full bg-gray-900 text-white py-8 px-4 sm:px-8 lg:hidden">
             <h2 className="text-3xl font-bold text-center uppercase tracking-wider">
               Contents

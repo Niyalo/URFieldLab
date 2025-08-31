@@ -382,30 +382,23 @@ export interface Door {
 
 export interface Article {
   _id: string;
-  _type: "article";
   title: string;
   slug?: {
     current: string;
   };
-  mainImage?: {
-    asset: {
-      _ref: string;
-      url: string;
-    };
-  }; // Sanity image object, not a URL string
-  authorListPrefix?: string;
-  year: Year;
-  summary: string;
-  hasBody?: boolean;
-  buttonText?: string;
+  year?: {
+    slug: string;
+    title: string;
+  };
+  summary?: string;
+  mainImage?: SanityImageSource;
   youtubeVideoUrl?: string;
-  externalLinks?: { buttonText: string; url: string }[];
-  authors?: Author[];
-  workingGroups?: WorkingGroup[];
-  contentGroups?: ContentGroup[];
+  authors?: { name: string }[];
+  order?: number;
+  hasBody?: boolean;
   verified?: boolean;
-  // The body can contain various content blocks
-  body?: ContentBlock[];
+  featured?: boolean;
+  content?: any[]; // Or a more specific type for your content blocks
 }
 
 export type ContentBlock = (
