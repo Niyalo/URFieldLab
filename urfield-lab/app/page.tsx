@@ -256,8 +256,9 @@ const desktopImages: BaseImageConfig[] = [
 const mobileImages: BaseImageConfig[] = [
   { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: -400, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
 
-  { id: 'Trees left', src: '/images/URFieldLabMainPage/trees-left.png', top: 380, zIndex: 2, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'Trees right', src: '/images/URFieldLabMainPage/trees-right.png', top: 400, zIndex: 3, refHeight: 600, parallaxFactor: 0.3 },
+  { id: 'Trees left', src: '/images/URFieldLabMainPage/Mountain Left.png', top: 250, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 250, zIndex: 2, refHeight: 600, parallaxFactor: 0.1 },
+  { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 260, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
   { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1800, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 10, rightGapPercent: 10 },
 
