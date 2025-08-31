@@ -109,7 +109,7 @@ const pageSections = [
       h3: "",
       p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
       cta: "HOW TO RUN A FIELD LAB",
-      ctaUrl: "/UR2024/event-structure"
+      ctaUrl: "/chiangmai2019/outputs#article-nature-based-solutions-factsheets"
     },
     desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -145,8 +145,8 @@ const pageSections = [
           title: "Impact on Career",
           text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
           percentages: [
-            { value: 80, color: '#ff8e59ff' }, // Blue
-            { value: 50, color: '#c63810ff' }  // Indigo
+            { value: 80, color: '#FF8C00ff' }, // Using incoming color
+            { value: 50, color: '#c63810ff' }
           ]
         },
         {
@@ -154,7 +154,7 @@ const pageSections = [
           title: "During Field Lab",
           text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
           percentages: [
-            { value: 90, color: '#ff8e59ff' }, 
+            { value: 90, color: '#FF8C00ff' }, // Using incoming color
             { value: 18, color: '#c63810ff' }] 
         },
         {
@@ -172,23 +172,6 @@ const pageSections = [
     desktopConfig: { top: 3050, left: '10%', right: '10%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 0.9, textColor: '#000000', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps },
     mobileConfig: { top: 5200, left: '5%', right: '5%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.2, textColor: '#000000', animation: { initial: { opacity: 0, y: 15 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: false, amount: 0.3 }, transition: { duration: 1.8, ease: "easeOut" } } as MotionProps }
   },
-  // --- NEW QUOTES BLOCK SECTION ---
-  {
-    id: 'participantFeedback',
-    type: 'quotesBlock' as const,
-    content: {
-      title: "Feedback from the surveys & interviews",
-      quotes: [
-        { id: 'q1', text: "The UR Field Lab was a transformative experience, fostering collaboration and innovation in a way I've never seen before.", author: "Elena", avatarSrc: "/images/avatars/avatar1.png" },
-        { id: 'q2', text: "A truly unique 'un-conference' that breaks down barriers and allows for genuine co-creation. Highly recommended.", author: "Marcus", avatarSrc: "/images/avatars/avatar1.png" },
-        { id: 'q3', text: "I left with not just new ideas, but a new network of passionate colleagues from around the world.", author: "Aisha", avatarSrc: "/images/avatars/avatar1.png" },
-        { id: 'q4', text: "The hands-on, project-based approach meant we were creating tangible solutions from day one. Incredible.", author: "David", avatarSrc: "/images/avatars/avatar1.png" },
-        { id: 'q5', text: "It's a powerful reminder of what can be achieved when diverse minds come together with a shared purpose.", author: "Priya", avatarSrc: "/images/avatars/avatar1.png" },
-      ]
-    },
-    desktopConfig: { top: 3800, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.2, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps },
-    mobileConfig: { top: 8150, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#333333', animation: {} as MotionProps }
-  },
   {
     id: 'articlePreviews',
     type: 'articlePreviewViewer' as const,
@@ -201,7 +184,7 @@ const pageSections = [
     },
     // Config is used for positioning the entire block
     desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
-    mobileConfig: { top: 11300, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
+    mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
   },
   //
   // --- DEVELOPER NOTE ---
@@ -236,8 +219,11 @@ interface BaseImageConfig {
 const desktopImages: BaseImageConfig[] = [
   { id: 'Mountain outline', src: 'images/URFieldLabMainPage/Mountain_outline.png', top: 370, zIndex: 1, refHeight: 700, parallaxFactor: 0.1, opacity: 0.3, blendMode: 'multiply' },
 
+  { id: 'nilgiri left', src: '/images/URFieldLabMainPage/nilgiri left.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
+  { id: 'nilgiri right', src: '/images/URFieldLabMainPage/nilgiri right.png', top: 200, zIndex: 1, refHeight: 600, parallaxFactor: 0.1 },
+
   { id: 'Trees left', src: '/images/URFieldLabMainPage/Mountain Left.png', top: 350, zIndex: 3, refHeight: 600, parallaxFactor: 0.2 },
-  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.1 },
+  { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.3 },
   { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 360, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
   { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1300, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 40, rightGapPercent: 5 },
@@ -284,6 +270,8 @@ const clouds = [
     { id: 'cloud1', src: '/images/clouds/cloud_new_1.png', top: 200, zIndex: 1, speed: 20, width: '35vw', timeOffset: 0 },
     { id: 'cloud2', src: '/images/clouds/cloud_new_2.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
     { id: 'cloud3', src: '/images/clouds/cloud_new_3.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
+    { id: 'cloud4', src: '/images/clouds/cloud_new_4.png', top: 450, zIndex: 1, speed: 15, width: '40vw', timeOffset: 15 },
+    { id: 'cloud5', src: '/images/clouds/cloud_new_5.png', top: 300, zIndex: 15, speed: 35, width: '25vw', timeOffset: 5 },
 ];
 
 const arrowVariants: Variants = {
@@ -302,6 +290,7 @@ const arrowVariants: Variants = {
 
 // --- DEDICATED TEXT BLOCK COMPONENT ---
 // This component is now more generic and receives its data from the main page loop.
+
 
 // Extracting config types for cleaner props
 type TextBlockConfig = {
@@ -373,6 +362,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                         <div className="inline-block relative mt-[2vw]">
                             <motion.a
                                 href={content.ctaUrl || '#'}
+
                                 className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
                                 style={{ fontSize: `calc(1vw * var(--text-scale))` }}
                             >
@@ -399,6 +389,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     {content.cta && (
                         <motion.a
                             href={content.ctaUrl || '#'}
+
                             className="inline-block mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
                             style={{ fontSize: `calc(1vw * var(--text-scale))` }}
                         >
@@ -501,7 +492,7 @@ export default function AnimatedPage() {
   useEffect(() => {
     const fetchAuthors = async () => {
       try {
-        // Replace these with the actual author names you want to fetch
+        // Using author list from incoming changes
         const authorNames = ['Jungsuh (Sue) Lim', 'Sneha Anil Malani', 'Alok Bhardwaj', 'Pamela Cajilig', 'Tian Ning Lim', 'Wahaj Habib'];
         const fetchedAuthors = [];
 
@@ -527,7 +518,6 @@ export default function AnimatedPage() {
     
     try {
       const authorDetails = await getAuthorByName(authorName);
-      console.log('Author details for', authorName, ':', authorDetails);
       if (authorDetails) {
         setSelectedAuthor(authorDetails);
       } else {
@@ -564,6 +554,8 @@ export default function AnimatedPage() {
 
   // Create dynamic pageSections with author data
   const dynamicPageSections = useMemo(() => {
+    // This function now correctly builds the sections array,
+    // dynamically creating the quotes section from the fetched author data.
     const baseSections = [
       {
         id: 'hero',
@@ -634,8 +626,8 @@ export default function AnimatedPage() {
               title: "Impact on Career",
               text: "80% believe the Field Lab has already had a positive impact on their career. Almost 50% say the positive impact on their career has been significant (greater than 8 out of 10).",
               percentages: [
-                { value: 80, color: '#FF8C00ff' }, // Blue
-                { value: 50, color: '#c63810ff' }  // Indigo
+                { value: 80, color: '#FF8C00ff' }, // Using incoming color
+                { value: 50, color: '#c63810ff' }
               ]
             },
             {
@@ -643,7 +635,7 @@ export default function AnimatedPage() {
               title: "During Field Lab",
               text: "90% made progress, and 18% completed, an idea or project that they worked on during the Field Lab.",
               percentages: [
-                { value: 90, color: '#FF8C00ff' }, 
+                { value: 90, color: '#FF8C00ff' }, // Using incoming color
                 { value: 18, color: '#c63810ff' }] 
             },
             {
@@ -666,19 +658,23 @@ export default function AnimatedPage() {
         type: 'quotesBlock' as const,
         content: {
           title: "Feedback from the surveys & interviews",
-          quotes: authors.length > 0 ? authors.map((author, index) => ({
-            id: `q${index + 1}`,
-            text: [
-              "Great opportunity to meet the locals and learn about the regional situation with other professionals.",
-              "It was an extremely collaborate, creative and interesting month.",
-              "It was a great experience overall. I was connected to experts from varied field other than mine.",
-              "Really inspiring experience that broadened my network of friends and collaborators.",
-              "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc.",
-              "It was a unique experience. Prior to this, my exposure had been limited to traditional academic conferences, which typically followed a rigid schedule of paper presentations and keynote sessions. In contrast, the unconference format was refreshingly open, dynamic, and participatory."
-            ][index] || "Great experience at the UR Field Lab!",
-            author: author.name,
-            avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
-          })) : [
+          quotes: authors.length > 0 ? authors.map((author: any, index: number) => {
+            // This maps the fetched authors to the quotes data structure.
+            return {
+              id: `q${index + 1}`,
+              text: [
+                "The UR Field Lab was a transformative experience, fostering collaboration and innovation in a way I've never seen before.",
+                "A truly unique 'un-conference' that breaks down barriers and allows for genuine co-creation. Highly recommended.",
+                "I left with not just new ideas, but a new network of passionate colleagues from around the world.",
+                "The hands-on, project-based approach meant we were creating tangible solutions from day one. Incredible.",
+                "It's a powerful reminder of what can be achieved when diverse minds come together with a shared purpose.",
+                "It was because of the people that I met at the field lab that I got to know of, and decided to do the Erasmus Mundus Flood Risk Management, MSc."
+              ][index] || "Great experience at the UR Field Lab!",
+              author: author.name,
+              avatarSrc: author.pictureURL || "/images/avatars/avatar1.png"
+            };
+          }) : [
+            // This provides a loading state before authors are fetched.
             { id: 'q1', text: "Loading author feedback...", author: "Loading...", avatarSrc: "/images/avatars/avatar1.png" }
           ]
         },
@@ -689,14 +685,28 @@ export default function AnimatedPage() {
         id: 'articlePreviews',
         type: 'articlePreviewViewer' as const,
         content: {
-          title: "Outputs",
+          title: "FEATURED OUTPUTS",
+          subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
           yearSlug: "UR2024",
+          // Adding empty properties to match the structure of other content objects
           pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
         },
         // Config is used for positioning the entire block
         desktopConfig: { top: 4400, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.3, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps },
         mobileConfig: { top: 12800, left: '0%', right: '0%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.0, textColor: '#000000', animation: {} as MotionProps }
-      }
+      },
+      //
+      // --- DEVELOPER NOTE ---
+      // To add a new section (e.g., an image gallery), add its data object here.
+      // Example:
+      // {
+      //   id: 'myImageGroup',
+      //   type: 'imageGroup' as const,
+      //   content: { images: [...] },
+      //   desktopConfig: { top: 5000, ... },
+      //   mobileConfig: { top: 9000, ... }
+      // }
+      //
     ];
 
     return baseSections;
@@ -869,10 +879,10 @@ export default function AnimatedPage() {
               <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 border-b-2 border-orange-500 pb-2">Contributions</h3>
               {selectedAuthor.articles && selectedAuthor.articles.length > 0 ? (
                 <ul className="space-y-3">
-                  {selectedAuthor.articles.map((article) => (
+                  {selectedAuthor.articles.map((article: any) => (
                     <li key={article._id}>
                       <Link
-                        href={`/${article.year.slug.current}/outputs#article-${article.slug?.current}`}
+                        href={`/${article.year?.slug?.current}/outputs#article-${article._id}`}
                         className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-950 transition-colors font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
                         onClick={closeModal}
                       >
