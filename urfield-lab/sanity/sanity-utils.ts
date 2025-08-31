@@ -1145,6 +1145,29 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   return client.fetch(query, { slug });
 }
 
+export async function getFeaturedArticles(yearId?: string): Promise<Article[]> {
+  const params: { yearId?: string } = {};
+  let query = `*[_type == "article" && featured == true && verified == true`;
+
+  if (yearId) {
+    query += ` && year._ref == $yearId`;
+    params.yearId = yearId;
+  }
+
+  query += `] | order(order asc, title asc) {
+    _id,
+    title,
+    slug,
+    "year": year->{ "slug": slug.current, "title": title },
+    summary,
+    mainImage { asset-> },
+    youtubeVideoUrl,
+    "authors": authors[]->{name}
+  }`;
+
+  return client.fetch(groq`${query}`, params);
+}
+
 export async function getEventStructureByYear(yearSlug: string): Promise<EventStructure | null> {
   return client.fetch(
     groq`*[_type == "eventStructure" && year->slug.current == $yearSlug][0] {

@@ -191,7 +191,8 @@ const pageSections = [
     id: 'articlePreviews',
     type: 'articlePreviewViewer' as const,
     content: {
-      title: "Outputs",
+      title: "FEATURED OUTPUTS",
+      subtitle: "A selection of featured projects, papers, and videos from across all Field Labs.",
       yearSlug: "UR2024",
       // Adding empty properties to match the structure of other content objects
       pre: "", h1: "", sub: "", desc: "", cta: "", ctaUrl: ""
@@ -595,8 +596,8 @@ export default function AnimatedPage() {
                   }}
                 >
                   <ArticlePreviewViewer
-                    yearSlug={section.content.yearSlug!}
                     title={section.content.title!}
+                    subtitle={section.content.subtitle}
                   />
                 </div>
               );

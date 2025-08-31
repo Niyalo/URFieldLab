@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import React, { useCallback, useEffect, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getArticlesByYearSlug, getYearsWithArticles, type Article } from '@/sanity/sanity-utils';
+import { getFeaturedArticles, type Article } from '@/sanity/sanity-utils';
 import { urlFor } from '@/sanity/sanity-utils';
 
 // Helper to get YouTube thumbnail
@@ -18,32 +19,32 @@ const getYouTubeVideoId = (url: string) => {
 // --- Article Card Sub-component ---
 type ArticleCardProps = {
   article: Article;
-  yearSlug: string;
-  scrollXProgress: MotionValue<number>;
-  index: number;
-  total: number;
+  isCenter: boolean;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scrollXProgress, index, total }) => {
-  // This is now the correct place for the hooks
-  const start = index / total;
-  const end = (index + 1) / total;
-  const scale = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.8, 1.2, 0.8, 0.8]);
-  const opacity = useTransform(scrollXProgress, [start - 0.1, start, end, end + 0.1], [0.7, 1, 0.7, 0.7]);
-
-  // Determine image source
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, isCenter, onClick }) => {
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
   const imageUrl = videoId
     ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     : article.mainImage ? urlFor(article.mainImage).width(500).height(300).url() : '/images/placeholder.png';
 
+  const yearSlug = article.year?.slug?.current;
+  const linkHref = yearSlug ? `/${yearSlug}/outputs#article-${article.slug?.current}` : '#';
+
   return (
-    <Link href={`/${yearSlug}/outputs#article-${article.slug?.current}`} className="block w-full h-full">
-      <motion.div
-        style={{ scale, opacity }}
-        className="relative w-full h-full bg-white/50 dark:bg-black/50 rounded-lg shadow-md overflow-hidden flex flex-col"
-        whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
-        transition={{ type: 'spring', stiffness: 300 }}
+    <Link
+      href={linkHref}
+      onClick={onClick}
+      className="block w-full h-full cursor-pointer"
+      aria-label={`View details for ${article.title}`}
+    >
+      <div
+        className={`relative w-full h-full bg-white/80 dark:bg-black/80 rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-500 text-left ${isCenter ? 'scale-100' : 'scale-90'}`}
+        style={{
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}
       >
         {/* Image container */}
         <div className="relative w-full h-1/2 flex-shrink-0">
@@ -65,6 +66,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scrollXPro
 
         {/* Text Content */}
         <div className="p-4 flex flex-col flex-grow">
+          <p className="text-xs font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">
+            {article.year?.title || 'Featured'}
+          </p>
           <h3 className="font-bold text-lg mb-2 line-clamp-2">{article.title}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 flex-grow">
             {article.summary}
@@ -75,128 +79,89 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, yearSlug, scrollXPro
             </p>
           )}
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 };
 
-// --- NEW: Internal Scroller Component ---
-type ScrollerProps = {
-  articles: Article[];
-  yearSlug: string;
-};
-
-const Scroller: React.FC<ScrollerProps> = ({ articles, yearSlug }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const { scrollXProgress } = useScroll({ container: scrollRef });
-
-  return (
-    <div
-      ref={scrollRef}
-      className="w-full h-[500px] flex overflow-x-auto snap-x snap-mandatory scrollbar-hide py-10" // Added py-10 for vertical space for scaling
-      style={{ perspective: '1000px' }}
-    >
-      {/* Spacer to center first item */}
-      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
-
-      {articles.map((article, i) => (
-        <div key={article._id} className="w-[300px] h-[400px] flex-shrink-0 snap-center px-4 flex items-center justify-center">
-          <ArticleCard
-            article={article}
-            yearSlug={yearSlug}
-            scrollXProgress={scrollXProgress}
-            index={i}
-            total={articles.length}
-          />
-        </div>
-      ))}
-
-      {/* Spacer to center last item */}
-      <div className="flex-shrink-0 w-[calc(50%-150px)]" />
-    </div>
-  );
-};
-
-
 // --- Main Viewer Component ---
 type ArticlePreviewViewerProps = {
-  yearSlug: string; // This will be the initial year
   title: string;
+  subtitle?: string;
 };
 
-const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ yearSlug, title }) => {
-  // State for the list of years with articles
-  const [availableYears, setAvailableYears] = useState<{ _id: string; year: number; title: string; slug: string; }[]>([]);
-  // State for the currently selected year slug
-  const [selectedYearSlug, setSelectedYearSlug] = useState(yearSlug);
-  // State for the articles of the selected year
+const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subtitle }) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Effect to fetch the list of available years ONCE on mount
-  useEffect(() => {
-    const fetchYears = async () => {
-      const years = await getYearsWithArticles();
-      setAvailableYears(years);
-    };
-    fetchYears();
-  }, []);
+  const OPTIONS: EmblaOptionsType = { loop: true, align: 'center', containScroll: 'trimSnaps' };
+  const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Effect to fetch articles whenever the selectedYearSlug changes
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchFeaturedArticles = async () => {
       setIsLoading(true);
       try {
-        const fetchedArticles = await getArticlesByYearSlug(selectedYearSlug);
+        const fetchedArticles = await getFeaturedArticles();
         setArticles(fetchedArticles);
       } catch (error) {
-        console.error("Failed to fetch articles:", error);
-        setArticles([]); // Clear articles on error
+        console.error("Failed to fetch featured articles:", error);
+        setArticles([]);
       } finally {
         setIsLoading(false);
       }
     };
-    if (selectedYearSlug) {
-        fetchArticles();
-    }
-  }, [selectedYearSlug]);
+    fetchFeaturedArticles();
+  }, []);
 
-  const handleYearSelect = (slug: string) => {
-    setSelectedYearSlug(slug);
-  };
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('select', onSelect);
+    return () => { emblaApi.off('select', onSelect) };
+  }, [emblaApi, onSelect]);
+
+  const handleCardClick = useCallback((index: number, isCenter: boolean, e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isCenter) {
+      e.preventDefault(); // Prevent navigation if not center
+      emblaApi?.scrollTo(index);
+    }
+    // If it is the center card, the default Link behavior proceeds
+  }, [emblaApi]);
 
   return (
     <div className="relative w-full py-16 z-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{title}</h2>
-      
-      {/* Year Selector Buttons */}
-      <div className="flex justify-center items-center gap-4 mb-8">
-        {availableYears.map((year) => (
-          <button
-            key={year._id}
-            onClick={() => handleYearSelect(year.slug)}
-            disabled={selectedYearSlug === year.slug}
-            className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-300
-              ${selectedYearSlug === year.slug
-                ? 'bg-orange-700 text-white cursor-not-allowed' // Active/disabled style
-                : 'bg-[#FF8C00] text-white hover:bg-orange-600' // Default style
-              }
-            `}
-          >
-            {year.year}
-          </button>
-        ))}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold">{title}</h2>
+        {subtitle && <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 max-w-2xl mx-auto">{subtitle}</p>}
       </div>
-
+      
       {isLoading ? (
         <div className="w-full h-[500px] flex items-center justify-center">
-          <p>Loading articles...</p>
+          <p>Loading featured articles...</p>
         </div>
       ) : articles.length > 0 ? (
-        <Scroller articles={articles} yearSlug={selectedYearSlug} />
+        <div className="embla w-full overflow-hidden" ref={emblaRef}>
+          <div className="embla__container flex items-center h-[500px] -ml-4">
+            {articles.map((article, i) => (
+              <div key={article._id} className="embla__slide flex-[0_0_60%] md:flex-[0_0_30%] min-w-0 pl-4">
+                <div className="h-[400px]">
+                  <ArticleCard
+                    article={article}
+                    isCenter={i === selectedIndex}
+                    onClick={(e) => handleCardClick(i, i === selectedIndex, e)}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : (
         <div className="w-full h-[500px] flex items-center justify-center">
-          <p>No articles found for this year.</p>
+          <p>No featured articles found.</p>
         </div>
       )}
     </div>

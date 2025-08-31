@@ -25,6 +25,13 @@ export const article = defineType({
       description: 'The date when the article was written.',
     }),
     defineField({
+      name: 'featured',
+      title: 'Featured',
+      type: 'boolean',
+      description: 'Mark this article as featured for special display.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'workingGroups',
       title: 'Working Groups',
       type: 'array',
