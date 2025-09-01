@@ -15,6 +15,7 @@ type Quote = {
 
 type QuotesBlockContent = {
   title: string;
+  subtitle: string;
   quotes: Quote[];
 };
 
@@ -68,6 +69,11 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
   };
 
+  const subtitleVariants: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2, ease: "easeOut" } },
+  };
+
   const quoteVariants: Variants = {
     hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: (i: number) => ({
@@ -94,7 +100,7 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
     >
       {/* Title */}
       <motion.h2
-        className="text-center mb-8 md:mb-16"
+        className="text-center mb-4"
         style={{
           fontSize: isMobile ? 'clamp(32px, 8vw, 48px)' : `calc(4vw * var(--text-scale))`,
           color: config.textColor,
@@ -104,8 +110,20 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
         {content.title}
       </motion.h2>
 
+      {/* Subtitle */}
+      <motion.p
+        className="text-center mb-8 md:mb-16"
+        style={{
+          fontSize: isMobile ? 'clamp(18px, 4.5vw, 24px)' : `calc(1.5vw * var(--text-scale))`,
+          color: config.textColor,
+        }}
+        variants={subtitleVariants}
+      >
+        {content.subtitle}
+      </motion.p>
+
       {/* Quotes Grid */}
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="w-full flex flex-wrap justify-center gap-x-6 gap-y-12">
         {content.quotes.map((quote, index) => {
           // For mobile, alternate margin left/right
           const mobileStaggerStyle: CSSProperties = isMobile
@@ -117,7 +135,7 @@ const QuotesBlock: React.FC<QuotesBlockProps> = ({
           return (
             <motion.button
               key={quote.id}
-              className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg text-left cursor-pointer hover:bg-white/40 transition-colors"
+              className="flex flex-col justify-between p-5 rounded-2xl bg-white/30 backdrop-blur-sm shadow-lg text-left cursor-pointer hover:bg-white/40 transition-colors min-w-0 basis-full md:basis-1/5"
               custom={index}
               variants={quoteVariants}
               style={mobileStaggerStyle}

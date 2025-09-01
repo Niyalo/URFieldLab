@@ -9,6 +9,7 @@ import PercentageDataViewer from './components/PercentageDataViewer';
 import QuotesBlock from './components/QuotesBlock';
 import ArticlePreviewViewer from './components/ArticlePreviewViewer';
 import { getAuthorByName } from '../sanity/sanity-utils';
+import PDFViewerClient from '../components/PDFViewerClient';
 import { X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -253,9 +254,10 @@ type TextBlockProps = {
     referenceWidth: number;
   onCtaClick?: () => void; // legacy single CTA override
   onVideoClick?: (videoUrl?: string) => void; // NEW for video sentinel
+  onPdfClick?: (pdfUrl?: string) => void; // NEW for PDF sentinel
 };
 
-const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth, onCtaClick, onVideoClick }) => {
+const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth, onCtaClick, onVideoClick, onPdfClick }) => {
     const y = useParallaxTransform(scrollY, config.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity);
 
     const blockStyle: CSSProperties & { '--text-scale': number } = {
@@ -289,14 +291,18 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                         <div className="flex flex-wrap gap-4 justify-center mt-[2vw]">
                           {buttons.map((b, idx) => {
                             const isVideo = b.ctaUrl === 'video';
+                            const isPdf = b.ctaUrl && b.ctaUrl.endsWith('.pdf');
                             return (
                               <div key={idx} className="inline-block relative">
                                 <motion.a
-                                  href={isVideo ? '#' : b.ctaUrl}
+                                  href={isVideo || isPdf ? '#' : b.ctaUrl}
                                   onClick={(e) => {
                                     if (isVideo) {
                                       e.preventDefault();
                                       onVideoClick?.(content.videoUrl || '/images/URFieldLabMainPage/runFieldLab.mp4');
+                                    } else if (isPdf) {
+                                      e.preventDefault();
+                                      onPdfClick?.(b.ctaUrl);
                                     } else if (idx === 0 && buttons.length === 1 && onCtaClick) {
                                       // preserve legacy single override behaviour
                                       e.preventDefault();
@@ -341,14 +347,18 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                         <div className="flex flex-wrap gap-4 mt-[2vw]">
                           {buttons.map((b, idx) => {
                             const isVideo = b.ctaUrl === 'video';
+                            const isPdf = b.ctaUrl && b.ctaUrl.endsWith('.pdf');
                             return (
                               <motion.a
                                 key={idx}
-                                href={isVideo ? '#' : b.ctaUrl}
+                                href={isVideo || isPdf ? '#' : b.ctaUrl}
                                 onClick={(e) => {
                                   if (isVideo) {
                                     e.preventDefault();
                                     onVideoClick?.(content.videoUrl || '/images/URFieldLabMainPage/runFieldLab.mp4');
+                                  } else if (isPdf) {
+                                    e.preventDefault();
+                                    onPdfClick?.(b.ctaUrl);
                                   } else if (idx === 0 && buttons.length === 1 && onCtaClick) {
                                     e.preventDefault();
                                     onCtaClick();
@@ -447,6 +457,7 @@ export default function AnimatedPage() {
   const [isAuthorModalLoading, setIsAuthorModalLoading] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [isVideoModalLoading, setIsVideoModalLoading] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
 
   const { scrollY } = useScroll();
 
@@ -521,8 +532,12 @@ export default function AnimatedPage() {
     setIsVideoModalLoading(false);
   };
 
+  const closePdfModal = () => {
+    setSelectedPdf(null);
+  };
+
   useEffect(() => {
-    if (selectedAuthor || selectedVideo) {
+    if (selectedAuthor || selectedVideo || selectedPdf) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -530,7 +545,7 @@ export default function AnimatedPage() {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [selectedAuthor, selectedVideo]);
+  }, [selectedAuthor, selectedVideo, selectedPdf]);
 
   const referenceWidth = 1280;
   // Global top margin is now device-dependent
@@ -580,8 +595,10 @@ export default function AnimatedPage() {
           h2: "Why The Field Lab?",
           h3: "",
           p: "We need to develop new and effective ways of working with climate change data, while also working to create a more equitable and pluralistic data. (change)",
-          cta: "HOW TO RUN A FIELD LAB",
-          ctaUrl: "/chiangmai2019/outputs#article-nature-based-solutions-factsheets"
+          ctas: [
+            { cta: "HOW TO RUN A FIELD LAB", ctaUrl: '/chiangmai2019/outputs#article-cf36df1e-7de5-46bf-8147-6159ef61ff87' },
+            { cta: 'FIELD LAB TOOLKIT', ctaUrl: '/images/URFieldLabMainPage/toolkit.pdf' }
+          ],
         },
         desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
         mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
@@ -602,7 +619,7 @@ export default function AnimatedPage() {
         type: 'percentageDataViewer' as const,
         content: {
           title: "Exit Survey 2024",
-          subtitle: "Results of the exit survey from the 2024 Kathmandu Field Lab of the 50 responding participants",
+          subtitle: "Results of the exit survey from the 2024 Kathmandu Field Lab participants, to which 50 people responded.",
           statements: [
             {
               id: 's1',
@@ -646,7 +663,8 @@ export default function AnimatedPage() {
         id: 'participantFeedback',
         type: 'quotesBlock' as const,
         content: {
-          title: "Feedback from the surveys & interviews",
+          title: "Where are they Now?",
+          subtitle: "Quotes from the alumni of the 2019 Chiang Mai Field Lab on Urban Flooding.",
           quotes: authors.length > 0 ? authors.map((author: AuthorItem, index: number) => {
             // This maps the fetched authors to the quotes data structure.
             return {
@@ -777,6 +795,11 @@ export default function AnimatedPage() {
                   referenceWidth={referenceWidth}
                   isHero={section.id === 'hero'}
                   onVideoClick={(url) => handleVideoClick(url || '/images/URFieldLabMainPage/runFieldLab.mp4')}
+                  onPdfClick={(url) => {
+                    if (url) {
+                      setSelectedPdf(url);
+                    }
+                  }}
                 />
               );
             
@@ -939,6 +962,32 @@ export default function AnimatedPage() {
         </div>
       )}
 
+      {/* PDF Modal */}
+      {selectedPdf && (
+        <div
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 transition-opacity duration-300 animate-fade-in"
+          onClick={closePdfModal}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden relative transform transition-all duration-300 animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <PDFViewerClient
+              pdfUrl={selectedPdf}
+              originalUrl={selectedPdf}
+              initialViewMode="single"
+            />
+
+            {/* Close Button */}
+            <button
+              onClick={closePdfModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white z-10"
+            >
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );

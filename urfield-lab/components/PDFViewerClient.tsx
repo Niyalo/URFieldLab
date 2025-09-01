@@ -14,18 +14,24 @@ const Page = dynamic(() => import('react-pdf').then(mod => mod.Page), { ssr: fal
 interface PDFViewerClientProps {
   pdfUrl: string;
   originalUrl: string;
+  /** Set initial view mode. Default: 'book' */
+  initialViewMode?: 'single' | 'book';
+  /** Automatically shrink (only) the initial render to fit container width. Default: true */
+  autoFit?: boolean;
 }
 
-export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClientProps) {
+export default function PDFViewerClient({ pdfUrl, originalUrl, initialViewMode = 'book', autoFit = true }: PDFViewerClientProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [scale, setScale] = useState<number>(0.7);
+  const [viewMode, setViewMode] = useState<'single' | 'book'>(initialViewMode);
+  const [scale, setScale] = useState<number>(initialViewMode === 'single' ? 1.0 : 0.7);
   const [rotation, setRotation] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<'single' | 'book'>('book');
   const containerRef = useRef<HTMLDivElement>(null);
+  // Once user interacts (zoom / rotate) we stop auto-fitting
+  const autoFitLockedRef = useRef<boolean>(false);
 
   // Ensure we're on the client side
   useEffect(() => {
@@ -67,14 +73,17 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
   }
 
   function zoomIn() {
+    autoFitLockedRef.current = true;
     setScale(prevScale => Math.min(prevScale + 0.2, 3.0));
   }
 
   function zoomOut() {
+    autoFitLockedRef.current = true;
     setScale(prevScale => Math.max(prevScale - 0.2, 0.5));
   }
 
   function rotate() {
+    autoFitLockedRef.current = true;
     setRotation(prevRotation => (prevRotation + 90) % 360);
   }
 
@@ -87,17 +96,63 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
 
   function switchViewMode(mode: 'single' | 'book') {
     setViewMode(mode);
-    // Adjust scale based on view mode
+    // Re-enable auto-fit for the new mode (will run once)
+    autoFitLockedRef.current = false;
     if (mode === 'book') {
-      setScale(0.7); // Smaller scale for two-page view
-      // Ensure we're on an odd page for book view
+      setScale(prev => Math.min(prev, 0.7));
       if (pageNumber % 2 === 0 && pageNumber > 1) {
         setPageNumber(pageNumber - 1);
       }
     } else {
-      setScale(1.0); // Normal scale for single page
+      setScale(prev => Math.max(prev, 1.0));
     }
   }
+
+  // Auto-fit effect (shrink only) after load / resize / mode change
+  useEffect(() => {
+    if (!autoFit || !isClient || loading || error) return;
+    const containerEl = containerRef.current;
+    if (!containerEl) return;
+
+    const attemptFit = () => {
+      if (autoFitLockedRef.current) return; // user interacted
+      const wrapper = containerEl.querySelector('.pdf-pages-wrapper') as HTMLElement | null;
+      if (!wrapper) return;
+      const containerRect = containerEl.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const containerWidth = containerRect.width - 8; // small padding buffer
+      const containerHeight = containerRect.height - 8; // small padding buffer
+      const wrapperWidth = wrapperRect.width;
+      const wrapperHeight = wrapperRect.height;
+
+      let widthRatio = 1;
+      if (wrapperWidth > containerWidth && wrapperWidth > 0) {
+        widthRatio = containerWidth / wrapperWidth;
+      }
+
+      let heightRatio = 1;
+      if (wrapperHeight > containerHeight && wrapperHeight > 0) {
+        heightRatio = containerHeight / wrapperHeight;
+      }
+
+      const minRatio = Math.min(widthRatio, heightRatio);
+      if (minRatio < 1) {
+        const newScale = parseFloat((scale * minRatio).toFixed(2));
+        if (newScale < scale) {
+          setScale(newScale);
+        }
+      }
+    };
+
+    // Delay to ensure PDF is rendered
+    const timeoutId = setTimeout(attemptFit, 100);
+    const handleResize = () => setTimeout(attemptFit, 100);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [autoFit, isClient, loading, error, viewMode, scale]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -236,7 +291,8 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
 
           <div 
             ref={containerRef}
-            className="flex justify-center bg-gray-100 min-h-[500px] p-4 rounded-lg shadow-inner"
+            className="flex justify-center bg-gray-100 p-4 rounded-lg shadow-inner"
+            style={{ height: 'calc(90vh - 200px)', overflow: 'auto' }}
           >
             {isClient ? (
               <Document
@@ -247,7 +303,7 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
                 className="max-w-full"
               >
                 {viewMode === 'book' ? (
-                  <div className="flex gap-4">
+                  <div className="pdf-pages-wrapper flex gap-4">
                     <Page
                       pageNumber={pageNumber}
                       scale={scale}
@@ -268,14 +324,16 @@ export default function PDFViewerClient({ pdfUrl, originalUrl }: PDFViewerClient
                     )}
                   </div>
                 ) : (
-                  <Page
-                    pageNumber={pageNumber}
-                    scale={scale}
-                    rotate={rotation}
-                    className="shadow-lg"
-                    renderTextLayer={true}
-                    renderAnnotationLayer={true}
-                  />
+                  <div className="pdf-pages-wrapper">
+                    <Page
+                      pageNumber={pageNumber}
+                      scale={scale}
+                      rotate={rotation}
+                      className="shadow-lg"
+                      renderTextLayer={true}
+                      renderAnnotationLayer={true}
+                    />
+                  </div>
                 )}
               </Document>
             ) : (
