@@ -99,7 +99,7 @@ const desktopImages: BaseImageConfig[] = [
   { id: 'Trees right', src: '/images/URFieldLabMainPage/Mountain_right.png', top: 350, zIndex: 2, refHeight: 600, parallaxFactor: 0.3 },
   { id: 'Hill', src: '/images/URFieldLabMainPage/close hill.png', top: 360, zIndex: 3, refHeight: 600, parallaxFactor: 0.5 },
 
-  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1700, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 5, rightGapPercent: 40 },
+  { id: 'Boats', src: '/images/URFieldLabMainPage/boats.png', top: 1750, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 5, rightGapPercent:50 },
 
   { id: 'scheduling', src: '/images/URFieldLabMainPage/scheduling.gif', top: 1250, zIndex: 5, refHeight: 600, parallaxFactor: 0.6, leftGapPercent: 65, rightGapPercent: 10 },
 
@@ -229,6 +229,8 @@ type SectionContent = {
   desc?: string;
   cta?: string;
   ctaUrl?: string;
+  ctas?: { cta: string; ctaUrl: string }[]; // NEW multi-CTA
+  videoUrl?: string; // URL for video modal when using sentinel 'video'
   h2?: string;
   h3?: string;
   p?: string;
@@ -249,10 +251,11 @@ type TextBlockProps = {
     parallaxIntensity: number;
     currentGlobalTopMarginPx: number;
     referenceWidth: number;
-    onCtaClick?: () => void; // NEW
+  onCtaClick?: () => void; // legacy single CTA override
+  onVideoClick?: (videoUrl?: string) => void; // NEW for video sentinel
 };
 
-const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth, onCtaClick }) => {
+const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY, scrollInputRangeEnd, isMobile, parallaxIntensity, currentGlobalTopMarginPx, referenceWidth, onCtaClick, onVideoClick }) => {
     const y = useParallaxTransform(scrollY, config.parallaxFactor, scrollInputRangeEnd, isMobile, parallaxIntensity);
 
     const blockStyle: CSSProperties & { '--text-scale': number } = {
@@ -277,46 +280,90 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                     <h1 className="text-[4.0vw] font-bold uppercase leading-none my-[1vw]" style={{ fontSize: `calc(4.0vw * var(--text-scale))` }}>{content.h1 || ''}</h1>
                     <p className="text-[1.5vw] uppercase" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.sub || ''}</p>
                     <p className="text-[1.1vw] max-w-[20vw] mx-auto mt-[2vw]" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.desc || ''}</p>
-                    {content.cta && (
-                        <div className="inline-block relative mt-[2vw]">
-                            <motion.a
-                                href={onCtaClick ? undefined : (content.ctaUrl || '#')}
-                                onClick={onCtaClick}
-
-                                className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
-                                style={{ fontSize: `calc(1vw * var(--text-scale))` }}
-                            >
-                                <span>{content.cta}</span>
-                            </motion.a>
-                            <motion.div
-                                className="absolute left-1/2 -translate-x-1/2 top-full mt-4"
-                                variants={arrowVariants}
-                                initial="rest"
-                                whileHover="hover"
-                            >
-                                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 12L0 0L20 0L10 12Z" fill="#FF8C00"/>
-                                </svg>
-                            </motion.div>
+                    {(() => {
+                      const buttons = content.ctas && content.ctas.length > 0
+                        ? content.ctas
+                        : (content.cta ? [{ cta: content.cta, ctaUrl: content.ctaUrl || '#' }] : []);
+                      if (buttons.length === 0) return null;
+                      return (
+                        <div className="flex flex-wrap gap-4 justify-center mt-[2vw]">
+                          {buttons.map((b, idx) => {
+                            const isVideo = b.ctaUrl === 'video';
+                            return (
+                              <div key={idx} className="inline-block relative">
+                                <motion.a
+                                  href={isVideo ? '#' : b.ctaUrl}
+                                  onClick={(e) => {
+                                    if (isVideo) {
+                                      e.preventDefault();
+                                      onVideoClick?.(content.videoUrl || '/images/URFieldLabMainPage/runFieldLab.mp4');
+                                    } else if (idx === 0 && buttons.length === 1 && onCtaClick) {
+                                      // preserve legacy single override behaviour
+                                      e.preventDefault();
+                                      onCtaClick();
+                                    }
+                                  }}
+                                  className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                                  style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                                >
+                                  <span>{b.cta}</span>
+                                </motion.a>
+                                {idx === 0 && (
+                                  <motion.div
+                                    className="absolute left-1/2 -translate-x-1/2 top-full mt-4"
+                                    variants={arrowVariants}
+                                    initial="rest"
+                                    whileHover="hover"
+                                  >
+                                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M10 12L0 0L20 0L10 12Z" fill="#FF8C00"/>
+                                    </svg>
+                                  </motion.div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                    )}
+                      );
+                    })()}
                 </>
             ) : (
                 <div className={`max-w-[60vw] ${config.textAlign === 'center' ? 'mx-auto' : ''}`}>
                     <h2 className="text-[2.5vw] font-bold uppercase leading-tight" style={{ fontSize: `calc(2.5vw * var(--text-scale))` }}>{content.h2 || ''}</h2>
                     <h3 className="text-[1.5vw] uppercase mt-[0.5vw] mb-[1.5vw]" style={{ fontSize: `calc(1.5vw * var(--text-scale))` }}>{content.h3 || ''}</h3>
                     <p className="text-[1.1vw] leading-relaxed" style={{ fontSize: `calc(1.1vw * var(--text-scale))` }}>{content.p || ''}</p>
-                    {content.cta && (
-                        <motion.a
-                            href={onCtaClick ? undefined : (content.ctaUrl || '#')}
-                            onClick={onCtaClick}
-
-                            className="inline-block mt-[2vw] text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
-                            style={{ fontSize: `calc(1vw * var(--text-scale))` }}
-                        >
-                            <span>{content.cta}</span>
-                        </motion.a>
-                    )}
+                    {(() => {
+                      const buttons = content.ctas && content.ctas.length > 0
+                        ? content.ctas
+                        : (content.cta ? [{ cta: content.cta, ctaUrl: content.ctaUrl || '#' }] : []);
+                      if (buttons.length === 0) return null;
+                      return (
+                        <div className="flex flex-wrap gap-4 mt-[2vw]">
+                          {buttons.map((b, idx) => {
+                            const isVideo = b.ctaUrl === 'video';
+                            return (
+                              <motion.a
+                                key={idx}
+                                href={isVideo ? '#' : b.ctaUrl}
+                                onClick={(e) => {
+                                  if (isVideo) {
+                                    e.preventDefault();
+                                    onVideoClick?.(content.videoUrl || '/images/URFieldLabMainPage/runFieldLab.mp4');
+                                  } else if (idx === 0 && buttons.length === 1 && onCtaClick) {
+                                    e.preventDefault();
+                                    onCtaClick();
+                                  }
+                                }}
+                                className="inline-block text-[1vw] tracking-wider group bg-[#FF8C00] text-white px-8 py-3 rounded-full border-2 border-[#FF8C00] transition-colors duration-300 hover:bg-white hover:text-[#FF8C00]"
+                                style={{ fontSize: `calc(1vw * var(--text-scale))` }}
+                              >
+                                <span>{b.cta}</span>
+                              </motion.a>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
                 </div>
             )}
         </motion.div>
@@ -503,8 +550,9 @@ export default function AnimatedPage() {
           h1: "UNDERSTANDING RISK FIELD LABS",
           sub: "",
           desc: "The Understanding Risk (UR) Field Labs are collaborative, unstructured, un-conferences that bring together people to produce creative approaches to address today's most pressing climate and disaster risk management issues.",
-          cta: "START EXPLORING",
-          ctaUrl: "/UR2024"
+          cta: "START EXPLORING", // legacy
+          ctaUrl: "/UR2024",      // legacy
+          ctas: [ { cta: 'START EXPLORING', ctaUrl: '/UR2024' } ]
         },
         desktopConfig: { top: 420, left: '25%', right: '25%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0.1, textScale: 1.0, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps },
         mobileConfig: { top: -100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 1.9, textColor: '#000000', animation: { initial: { opacity: 1 }, animate: { opacity: 1 } } as MotionProps }
@@ -516,10 +564,13 @@ export default function AnimatedPage() {
           h2: "The Field Lab experience",
           h3: "",
           p: "Over four weeks, participants from around the world co-design a schedule and form working groups to develop projects, ranging from art to research.",
-          cta: "THE SCHEDULE",
-          ctaUrl: "/UR2024/event-structure"
+          ctas: [
+            { cta: 'THE SCHEDULE', ctaUrl: 'video' },
+            { cta: 'EVENT STRUCTURE', ctaUrl: '/UR2024/event-structure' }
+          ],
+          videoUrl: '/images/URFieldLabMainPage/runFieldLab.mp4'
         },
-        desktopConfig: { top: 1300, left: '10%', right: '65%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
+        desktopConfig: { top: 1300, left: '10%', right: '55%', textAlign: 'left' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
         mobileConfig: { top: 1100, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#000000ff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 1.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
       },
       {
@@ -725,7 +776,7 @@ export default function AnimatedPage() {
                   currentGlobalTopMarginPx={currentGlobalTopMarginPx}
                   referenceWidth={referenceWidth}
                   isHero={section.id === 'hero'}
-                  onCtaClick={section.id === 'theFieldLabExperience' ? () => handleVideoClick('/images/URFieldLabMainPage/runFieldLab.mp4') : undefined}
+                  onVideoClick={(url) => handleVideoClick(url || '/images/URFieldLabMainPage/runFieldLab.mp4')}
                 />
               );
             
