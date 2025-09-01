@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { getContentGroups, getWorkingGroups, getYearBySlug, urlFor, getAuthorsForFilter } from "@/sanity/sanity-utils";
@@ -56,11 +56,17 @@ export default function OutputsPage({ params }: Props) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [allAuthors, setAllAuthors] = useState<{ value: string; label: string }[]>([]);
   const [selectedAuthors, setSelectedAuthors] = useState<{ value: string; label: string }[]>([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const initialHash = useRef<string>('');
 
   useEffect(() => {
     const resolveParams = async () => {
       const resolvedParams = await params;
       setYearSlug(resolvedParams.year);
+      // Store the hash only on the initial load
+      if (typeof window !== 'undefined') {
+        initialHash.current = window.location.hash;
+      }
     };
     resolveParams();
   }, [params]);
@@ -87,6 +93,8 @@ export default function OutputsPage({ params }: Props) {
         }, {} as Record<string, boolean>);
         setOpenDetails(allDetails);
       }
+      // Data fetching is complete
+      setIsInitialLoading(false);
     };
     fetchData();
   }, [yearSlug]);
@@ -114,6 +122,24 @@ export default function OutputsPage({ params }: Props) {
       filteredContentGroups: filterGroupArticles(contentGroups),
     };
   }, [selectedAuthors, workingGroups, contentGroups]);
+
+  // Effect to scroll to hash after content is rendered
+  useEffect(() => {
+    if (isInitialLoading || !initialHash.current) return;
+
+    const hash = initialHash.current;
+    // Use a timeout to ensure the DOM has been painted after the state update
+    const timer = setTimeout(() => {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      // Clear the hash ref so this doesn't run again on subsequent re-renders
+      initialHash.current = ''; 
+    }, 200); // A small delay to ensure rendering is complete
+
+    return () => clearTimeout(timer);
+  }, [isInitialLoading, filteredWorkingGroups, filteredContentGroups]); // Rerun when data changes
 
   useEffect(() => {
     const handleScroll = () => {
@@ -159,6 +185,15 @@ export default function OutputsPage({ params }: Props) {
 
   return (
     <div className="font-sans [--select-bg:white] [--select-border:hsl(0,0%,80%)] [--select-border-hover:hsl(0,0%,70%)] [--select-menu-bg:white] [--select-option-hover-bg:#deebff] [--select-option-selected-bg:#2684ff] [--select-option-color:inherit] [--select-multi-bg:#e6e6e6] [--select-multi-label-color:inherit] [--select-multi-remove-color:#8c8c8c] [--select-multi-remove-hover-bg:#ff8f8f] [--select-multi-remove-hover-color:white] [--select-input-color:inherit] [--select-placeholder-color:hsl(0,0%,50%)] dark:[--select-bg:#2d3748] dark:[--select-border:#4a5568] dark:[--select-border-hover:#718096] dark:[--select-menu-bg:#2d3748] dark:[--select-option-hover-bg:#4a5568] dark:[--select-option-selected-bg:#4299e1] dark:[--select-multi-bg:#4a5568] dark:[--select-multi-label-color:white] dark:[--select-multi-remove-color:#a0aec0] dark:[--select-multi-remove-hover-bg:#e53e3e] dark:[--select-multi-remove-hover-color:white] dark:[--select-input-color:white] dark:[--select-placeholder-color:#a0aec0]">
+      {/* Loading Overlay */}
+      {isInitialLoading && initialHash.current && (
+        <div className="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-[9999]">
+          <div className="text-center">
+            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">Loading article...</p>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="relative h-64 sm:h-80 bg-gray-800">
         <Image
