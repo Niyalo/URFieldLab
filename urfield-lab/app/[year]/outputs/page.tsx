@@ -59,6 +59,27 @@ export default function OutputsPage({ params }: Props) {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const initialHash = useRef<string>('');
 
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    e.preventDefault();
+    const element = document.querySelector(hash) as HTMLElement;
+    if (element) {
+      // Find the main header to dynamically get its height for an accurate offset.
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.offsetHeight : 96; // Fallback to 6rem/96px
+      const safetyPadding = 16; // 1rem of extra space for visual comfort
+
+      const elementTop = element.getBoundingClientRect().top + window.scrollY;
+      
+      window.scrollTo({
+        top: elementTop - headerHeight - safetyPadding,
+        behavior: 'smooth'
+      });
+      
+      // Update URL without triggering a page reload
+      window.history.pushState(null, '', hash);
+    }
+  };
+
   useEffect(() => {
     const resolveParams = async () => {
       const resolvedParams = await params;
@@ -128,17 +149,71 @@ export default function OutputsPage({ params }: Props) {
     if (isInitialLoading || !initialHash.current) return;
 
     const hash = initialHash.current;
-    // Use a timeout to ensure the DOM has been painted after the state update
+
+    // A minimal delay to ensure the initial DOM render is complete before we start checking.
     const timer = setTimeout(() => {
-      const element = document.querySelector(hash);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const element = document.querySelector(hash) as HTMLElement;
+      if (!element) {
+        initialHash.current = '';
+        return;
       }
-      // Clear the hash ref so this doesn't run again on subsequent re-renders
-      initialHash.current = ''; 
-    }, 200); // A small delay to ensure rendering is complete
+
+      // --- Iterative Scroll Correction Loop ---
+      
+      let stabilityCounter = 0;
+      const STABILITY_THRESHOLD = 10; // Frames to be stable before stopping.
+      let maxChecks = 120; // Failsafe: stop after ~2 seconds.
+      let animationFrameId: number;
+
+      const correctScrollPosition = () => {
+        // Stop if we've run out of checks or the element has been removed from the page.
+        if (maxChecks-- <= 0 || !document.body.contains(element)) {
+          initialHash.current = '';
+          if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          return;
+        }
+
+        const header = document.querySelector('header');
+        const headerHeight = header ? header.offsetHeight : 96;
+        const safetyPadding = 16;
+        const expectedTop = headerHeight + safetyPadding;
+        
+        const currentTop = element.getBoundingClientRect().top;
+        const difference = expectedTop - currentTop;
+
+        // If the element is not in the correct position (with a 1px tolerance).
+        if (Math.abs(difference) > 1) {
+          // Adjust the scroll position by the difference.
+          window.scrollBy(0, -difference);
+          // Reset the stability counter because we made an adjustment.
+          stabilityCounter = 0;
+        } else {
+          
+          // The position is correct, so we increment the stability counter.
+          stabilityCounter++;
+        }
+
+        // If the position has been stable for the required number of frames, we're done.
+        if (stabilityCounter >= STABILITY_THRESHOLD) {
+          initialHash.current = '';
+          return; // Exit the loop
+        }
+
+        // Request the next frame to continue the loop.
+        animationFrameId = requestAnimationFrame(correctScrollPosition);
+      };
+
+      // Start the correction loop.
+      animationFrameId = requestAnimationFrame(correctScrollPosition);
+      
+      // Cleanup function to cancel the loop if the component unmounts.
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      };
+    }, 100);
 
     return () => clearTimeout(timer);
+
   }, [isInitialLoading, filteredWorkingGroups, filteredContentGroups]); // Rerun when data changes
 
   useEffect(() => {
@@ -265,9 +340,13 @@ export default function OutputsPage({ params }: Props) {
                   {group.articles && group.articles.length > 0 ? (
                     group.articles.map((article) => (
                       <div key={article._id}>
-                        <Link href={`#article-${article._id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 underline decoration-from-font">
+                        <a 
+                          href={`#article-${article._id}`} 
+                          onClick={(e) => handleAnchorClick(e, `#article-${article._id}`)}
+                          className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 underline decoration-from-font cursor-pointer"
+                        >
                           {article.title}
-                        </Link>
+                        </a>
                         <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
                           {formatAuthorsForContents(article.authors)}
                         </p>
@@ -312,16 +391,24 @@ export default function OutputsPage({ params }: Props) {
                     <>
                       {group.doors?.map((door) => (
                         <div key={door._id}>
-                          <Link href={`#door-${door._id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font">
+                          <a 
+                            href={`#door-${door._id}`} 
+                            onClick={(e) => handleAnchorClick(e, `#door-${door._id}`)}
+                            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font cursor-pointer"
+                          >
                             {door.title}
-                          </Link>
+                          </a>
                         </div>
                       ))}
                       {group.articles?.map((article) => (
                         <div key={article._id}>
-                          <Link href={`#article-${article._id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font">
+                          <a 
+                            href={`#article-${article._id}`} 
+                            onClick={(e) => handleAnchorClick(e, `#article-${article._id}`)}
+                            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font cursor-pointer"
+                          >
                             {article.title}
-                          </Link>
+                          </a>
                           <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
                             {formatAuthorsForContents(article.authors)}
                           </p>
