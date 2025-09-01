@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Link from 'next/link';
@@ -96,6 +96,7 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
   const [availableYears, setAvailableYears] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
 
   // Dynamically set carousel options based on the number of slides
   const [options, setOptions] = useState<EmblaOptionsType>({ loop: true, align: 'center', containScroll: 'trimSnaps' });
@@ -112,6 +113,11 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  // For custom scrollbar
+  const scrollbarRef = useRef<HTMLDivElement>(null);
+  const scrollbarThumbRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchFeaturedArticles = async () => {
@@ -159,14 +165,81 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
 
-  useEffect(() => {
+  const onDotButtonClick = useCallback((index: number) => {
     if (!emblaApi) return;
+    emblaApi.scrollTo(index);
+  }, [emblaApi]);
+
+  // Effect for carousel events and custom scrollbar
+  useEffect(() => {
+    if (!emblaApi || !scrollbarRef.current || !scrollbarThumbRef.current) return;
+
+    const scrollbar = scrollbarRef.current;
+    const thumb = scrollbarThumbRef.current;
+    let isDragging = false;
+
+    const onInit = () => {
+      setScrollSnaps(emblaApi.scrollSnapList());
+    };
+
+    const onScroll = () => {
+      const scrollProgress = emblaApi.scrollProgress();
+      const thumbPosition = scrollProgress * (scrollbar.offsetWidth - thumb.offsetWidth);
+      thumb.style.transform = `translateX(${thumbPosition}px)`;
+    };
+
+    const handleWheelScroll = (event: WheelEvent) => {
+      event.preventDefault();
+      if (event.deltaY < 0) {
+        emblaApi.scrollPrev();
+      } else {
+        emblaApi.scrollNext();
+      }
+    };
+
+    const handleThumbMouseDown = (event: MouseEvent) => {
+      event.preventDefault();
+      isDragging = true;
+      document.addEventListener('mousemove', handleDocumentMouseMove);
+      document.addEventListener('mouseup', handleDocumentMouseUp);
+    };
+
+    const handleDocumentMouseMove = (event: MouseEvent) => {
+      if (!isDragging) return;
+      const scrollbarRect = scrollbar.getBoundingClientRect();
+      const clickPosition = event.clientX - scrollbarRect.left;
+      const progress = clickPosition / scrollbarRect.width;
+      const targetIndex = Math.floor(progress * emblaApi.scrollSnapList().length);
+      emblaApi.scrollTo(targetIndex);
+    };
+
+    const handleDocumentMouseUp = () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', handleDocumentMouseMove);
+      document.removeEventListener('mouseup', handleDocumentMouseUp);
+    };
+
     emblaApi.on('select', onSelect);
-    // Re-initialize when slides change
-    emblaApi.on('reInit', onSelect);
-    return () => { 
+    emblaApi.on('reInit', onInit);
+    emblaApi.on('reInit', onScroll);
+    emblaApi.on('scroll', onScroll);
+
+    scrollbar.addEventListener('wheel', handleWheelScroll);
+    thumb.addEventListener('mousedown', handleThumbMouseDown);
+
+    onInit();
+    onScroll();
+
+    return () => {
       emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
+      emblaApi.off('reInit', onInit);
+      emblaApi.off('reInit', onScroll);
+      emblaApi.off('scroll', onScroll);
+      scrollbar.removeEventListener('wheel', handleWheelScroll);
+      thumb.removeEventListener('mousedown', handleThumbMouseDown);
+      // Clean up global listeners just in case
+      document.removeEventListener('mousemove', handleDocumentMouseMove);
+      document.removeEventListener('mouseup', handleDocumentMouseUp);
     };
   }, [emblaApi, onSelect]);
 
@@ -179,7 +252,11 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
   }, [emblaApi]);
 
   return (
-    <div className="relative w-full py-16 z-10">
+    <div 
+      className="relative w-full py-16 z-10"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <div className="text-center mb-8">
         <h2 className="text-3xl md:text-4xl font-bold">
           {title}
@@ -223,21 +300,49 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
           <p>Loading featured articles...</p>
         </div>
       ) : filteredArticles.length > 0 ? (
-        <div className="embla w-full overflow-hidden" ref={emblaRef}>
-          <div className={`embla__container flex items-center h-[500px] -ml-4 ${!options.loop ? 'justify-center' : ''}`}>
-            {filteredArticles.map((article, i) => (
-              <div key={article._id} className="embla__slide flex-[0_0_60%] md:flex-[0_0_30%] min-w-0 pl-4">
-                <div className="h-[400px]">
-                  <ArticleCard
-                    article={article}
-                    isCenter={i === selectedIndex}
-                    onClick={(e) => handleCardClick(i, i === selectedIndex, e)}
-                  />
+        <>
+          <div className="embla w-full overflow-hidden" ref={emblaRef}>
+            <div className={`embla__container flex items-center h-[500px] -ml-4 ${!options.loop ? 'justify-center' : ''}`}>
+              {filteredArticles.map((article, i) => (
+                <div key={article._id} className="embla__slide flex-[0_0_60%] md:flex-[0_0_30%] min-w-0 pl-4">
+                  <div className="h-[400px]">
+                    <ArticleCard
+                      article={article}
+                      isCenter={i === selectedIndex}
+                      onClick={(e) => handleCardClick(i, i === selectedIndex, e)}
+                    />
+                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dots Navigation */}
+          <div className="flex justify-center items-center gap-2 mt-4">
+            {scrollSnaps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => onDotButtonClick(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === selectedIndex ? 'bg-orange-500 w-6' : 'bg-gray-300 dark:bg-gray-600'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
             ))}
           </div>
-        </div>
+
+          {/* Custom Scrollbar */}
+          <div 
+            className={`relative w-1/2 mx-auto mt-4 h-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-opacity duration-300 ${isHovering && scrollSnaps.length > 3 ? 'opacity-100' : 'opacity-0'}`}
+            ref={scrollbarRef}
+          >
+            <div 
+              className="absolute top-0 left-0 h-full bg-orange-500 rounded-full cursor-grab"
+              ref={scrollbarThumbRef}
+              style={{ width: `${100 / scrollSnaps.length}%` }}
+            />
+          </div>
+        </>
       ) : (
         <div className="w-full h-[200px] flex items-center justify-center text-center px-4">
           <p className="text-gray-600 dark:text-gray-400">
