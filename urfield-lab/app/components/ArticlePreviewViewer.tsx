@@ -88,9 +88,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, isCenter, onClick })
 type ArticlePreviewViewerProps = {
   title: string;
   subtitle?: string;
+  isMobile?: boolean;
+  textScale?: number;
 };
 
-const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subtitle }) => {
+const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subtitle, isMobile = false, textScale = 1.0 }) => {
   const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [availableYears, setAvailableYears] = useState<string[]>([]);
@@ -252,13 +254,19 @@ const ArticlePreviewViewer: React.FC<ArticlePreviewViewerProps> = ({ title, subt
   }, [emblaApi]);
 
   return (
-    <div 
+    <div
       className="relative w-full py-16 z-10"
+      style={{ '--text-scale': textScale } as React.CSSProperties}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold">
+        <h2
+          className="font-bold"
+          style={{
+            fontSize: isMobile ? 'clamp(32px, 8vw, 48px)' : `calc(4vw * var(--text-scale))`,
+          }}
+        >
           {title}
         </h2>
         {subtitle && <>

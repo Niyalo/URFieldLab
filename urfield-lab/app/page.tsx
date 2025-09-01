@@ -344,7 +344,7 @@ const TextBlock: React.FC<TextBlockProps> = ({ config, content, isHero, scrollY,
                         : (content.cta ? [{ cta: content.cta, ctaUrl: content.ctaUrl || '#' }] : []);
                       if (buttons.length === 0) return null;
                       return (
-                        <div className="flex flex-wrap gap-4 mt-[2vw]">
+                        <div className="flex sm:flex-wrap gap-4 mt-[2vw]">
                           {buttons.map((b, idx) => {
                             const isVideo = b.ctaUrl === 'video';
                             const isPdf = b.ctaUrl && b.ctaUrl.endsWith('.pdf');
@@ -601,7 +601,7 @@ export default function AnimatedPage() {
           ],
         },
         desktopConfig: { top: 1800, left: '65%', right: '5%', textAlign: 'right' as CSSProperties['textAlign'], parallaxFactor: 0.8, textScale: 1.2, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.0 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps },
-        mobileConfig: { top: 2600, left: '5%', right: '5%', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
+        mobileConfig: { top: 2600, left: '10', right: '10', textAlign: 'center' as CSSProperties['textAlign'], parallaxFactor: 0, textScale: 2.5, textColor: '#ffffffff', animation: { initial: { opacity: 0, y: 13 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 1.6, ease: "easeOut" } } as MotionProps }
       },
       {
         id: 'locations',
@@ -619,7 +619,7 @@ export default function AnimatedPage() {
         type: 'percentageDataViewer' as const,
         content: {
           title: "Exit Survey 2024",
-          subtitle: "Results of the exit survey from the 2024 Kathmandu Field Lab participants, to which 50 people responded.",
+          subtitle: "Results of the anonymous exit survey from the 2024 Kathmandu Field Lab participants, to which 50 people responded.",
           statements: [
             {
               id: 's1',
