@@ -188,6 +188,7 @@ export default function OutputsPage({ params }: Props) {
           // Reset the stability counter because we made an adjustment.
           stabilityCounter = 0;
         } else {
+          
           // The position is correct, so we increment the stability counter.
           stabilityCounter++;
         }
