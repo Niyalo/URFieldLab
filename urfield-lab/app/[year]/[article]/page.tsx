@@ -35,7 +35,7 @@ export default async function ArticlePage({ params }: Props) {
   return (
     <div className="font-sans">
       {/* Hero Section */}
-      <div className="relative h-80 bg-gray-800">
+      <div className="relative h-80 bg-gray-800 -top-[80px] -mb-[80px]">
         {article.mainImage && (
           <Image
             src={urlFor(article.mainImage).url()}

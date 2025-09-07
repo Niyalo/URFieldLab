@@ -28,7 +28,7 @@ export default async function PeoplePage({ params }: Props) {
   return (
     <div className="font-sans">
       {/* Hero Section */}
-      <div className="relative h-64 sm:h-80 bg-gray-800">
+      <div className="relative h-64 sm:h-80 bg-gray-800 -top-[80px] -mb-[80px]">
         <Image
           src={yearData.heroImageURL || (yearData.heroImage ? urlFor(yearData.heroImage).url() : "/cropped-Week-4-6-copy3-2.jpg")}
           alt="Group of participants"

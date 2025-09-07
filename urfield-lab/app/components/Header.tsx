@@ -43,6 +43,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
       <header className={`${headerClasses} ${gradientClass}`}>
         <div className="flex justify-between items-center h-[70px] max-w-full mx-auto px-[30px]">
           {/* Desktop Navigation */}
+          {/* Page Links */}
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/chiangmai2019" className="text-sm tracking-wider font-futura-passata link-animated is-active">
               {navLink1Text}
@@ -52,6 +53,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
             </Link>
           </nav>
 
+          {/* Site Logo */} 
           <div className="hidden md:block absolute left-1/2 -translate-x-1/2">
             <Link href="/">
               <Image
@@ -99,6 +101,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
 
           {/* Mobile Header */}
           <div className="md:hidden flex justify-between items-center w-full">
+            {/* Site Logo */}
             <Link href="/" className="z-10">
                <Image
                  src="/images/icons/logo-patagonia.svg"
@@ -122,6 +125,7 @@ const Header: React.FC<HeaderProps> = ({ isLight }) => {
         <div className="fixed inset-0 bg-black/90 z-40 flex flex-col items-center justify-center md:hidden">
           <button onClick={toggleMobileMenu} className="absolute top-5 right-5 text-white text-4xl" aria-label="Close menu">&times;</button>
           <nav className="flex flex-col items-center gap-8">
+            {/* Mobile Page Links */}
             <Link href="/chiangmai2019" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink1Text}</Link>
             <Link href="/UR2024" className="text-white text-xl" onClick={toggleMobileMenu}>{navLink2Text}</Link>
             {/* Mobile Year Selector */}

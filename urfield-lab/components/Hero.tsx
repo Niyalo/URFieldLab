@@ -15,7 +15,7 @@ export default function Hero({
 }: HeroProps) {
   return (
     <div 
-      className="relative min-h-[50vh] bg-cover bg-center bg-no-repeat"
+      className="relative min-h-[50vh] bg-cover bg-center bg-no-repeat -top-[80px]"
       style={{
         backgroundImage: `url('${backgroundImage}')`,
         backgroundColor: backgroundColor,
