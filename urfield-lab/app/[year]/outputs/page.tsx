@@ -277,8 +277,8 @@ export default function OutputsPage({ params }: Props) {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/20 flex items-center">
-          <div className="text-left text-white p-8 sm:p-12 md:p-16">
+        <div className="absolute inset-0 bg-black/20 flex items-center w-full">
+          <div className="container mx-auto flex text-left text-white p-8 sm:p-12 md:p-16 pl-0 sm:pl-0 md:pl-0">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold" style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(0, 0, 0, 0.3), 2px -2px 4px rgba(0, 0, 0, 0.3), -2px 2px 4px rgba(0, 0, 0, 0.3)'
               }}>Outputs</h1>

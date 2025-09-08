@@ -58,7 +58,7 @@ const Header = ({ year }: HeaderProps) => {
   return (
     <header className={`sticky top-0 z-50 transition-colors duration-500 ${isLight ? 'text-white' : 'text-gray-800'}`}>
       {/* Gradient background: white -> transparent */}
-      <nav className={`${!isLight? 'before:bg-gradient-to-b before:from-white/80 before:to-white/60':''} relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-[80px] before:z-[-1] before:pointer-events-none before:transition-all before:duration-500`}>
+      <nav className={`${!isLight? 'before:bg-gradient-to-b before:from-white/80 before:to-white/60':'before:bg-gradient-to-b before:from-black/80 before:to-black/10'} relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-[80px] before:z-[-1] before:pointer-events-none before:transition-all before:duration-500`}>
         <div className="container mx-auto flex justify-between items-center py-1 px-1 min-h-[70px]">
           {/* Left links (desktop) */}
           <div className="hidden md:flex items-center gap-6">
@@ -69,7 +69,7 @@ const Header = ({ year }: HeaderProps) => {
                 className={
                   isActive(match)
                     ? "text-blue-500 font-bold text-sm tracking-wider"
-                    : `${isLight ? 'text-white' : 'text-gray-600'} text-sm tracking-wider hover:text-blue-500`
+                    : `${isLight ? 'text-white' : 'text-gray-600'} text-sm tracking-wider hover:text-blue-500 drop-shadow-md  drop-shadow-white`
                 }
               >
                 {label}
@@ -78,7 +78,7 @@ const Header = ({ year }: HeaderProps) => {
           </div>
 
           {/* Centered Logo */}
-          <div className="absolute left-1/2 -translate-x-1/2">
+          <div className="">
             <Link href="/" className="flex items-center">
               {year?.logo ? (
                 <div className="h-12 py-0 flex items-center transition-all duration-500">
@@ -96,7 +96,7 @@ const Header = ({ year }: HeaderProps) => {
                       maxWidth: "180px",
                       objectFit: "contain",
                     }}
-                    className={`rounded transition-transform duration-500 ${isLight ? 'invert' : 'invert-0'}`}
+                    className={`rounded transition-transform duration-500 ${isLight ? 'invert' : 'invert-0'} drop-shadow-md`}
                     priority
                   />
                 </div>
@@ -108,7 +108,7 @@ const Header = ({ year }: HeaderProps) => {
 
           {/* Right side: studio/action button for desktop */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href={getHref('/dashboard')} className="font-futura-passata text-sm font-bold text-white bg-[#FF8C00] px-4 py-2 rounded-full tracking-wider uppercase shadow-md transition-all hover:bg-white hover:text-[#FF8C00] hover:border-[#FF8C00] border-2 border-transparent hover:shadow-lg hover:-translate-y-px">
+            <Link href={getHref('/dashboard')} className="font-futura-passata text-sm font-bold text-white bg-[#FF8C00] px-4 py-2 rounded-full tracking-wider uppercase shadow-md transition-all hover:bg-white hover:text-[#FF8C00] hover:border-[#FF8C00] border-2 border-transparent hover:shadow-lg hover:-translate-y-px drop-shadow-md">
               DASHBOARD
             </Link>
           </div>
@@ -135,7 +135,7 @@ const Header = ({ year }: HeaderProps) => {
                   key={href}
                   href={getHref(href)}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`text-2xl ${isActive(match) ? 'text-blue-500 font-bold' : 'text-white'}`}
+                  className={`text-2xl ${isActive(match) ? 'text-blue-500 font-bold drop-shadow-md' : 'text-white drop-shadow-sm'}`}
                 >
                   {label}
                 </Link>
