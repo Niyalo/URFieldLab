@@ -15,92 +15,53 @@ const getYouTubeVideoId = (url: string) => {
 type Props = {
   article: import('@/sanity/sanity-utils').Article;
   yearSlug: string;
-  imageOrder: string;
-  textOrder: string;
 };
 
-export default function ArticlePreview({ article, yearSlug, imageOrder, textOrder }: Props) {
+export default function ArticlePreview({ article, yearSlug }: Props) {
   const videoId = article.youtubeVideoUrl ? getYouTubeVideoId(article.youtubeVideoUrl) : null;
   const imageUrl = article.mainImage ? (typeof article.mainImage === 'string' ? article.mainImage : urlFor(article.mainImage).width(800).url()) : null;
 
   return (
     <>
-      <div id={`article-${article.slug?.current}`} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div className={textOrder}>
-          <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-            {article.title}
-          </h4>
-          
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="text-md text-gray-600 dark:text-gray-400 italic">
-              {article.authorListPrefix || 'By'}
-            </span>
+      <article id={`article-${article.slug?.current}`} className="group relative overflow-hidden rounded-lg shadow-lg bg-white dark:bg-gray-800">
+        <div className="relative h-48 sm:h-56 md:h-44 lg:h-40 w-full overflow-hidden">
+          {videoId ? (
+            <a href={article.youtubeVideoUrl} target="_blank" rel="noopener noreferrer" className="block absolute inset-0">
+              <Image src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={article.title} fill className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" />
+            </a>
+          ) : imageUrl ? (
+            <Image src={imageUrl} alt={article.title} fill className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" />
+          ) : (
+            <div className="bg-gray-200 dark:bg-gray-700 w-full h-full" />
+          )}
+        </div>
+
+        <div className="p-4">
+          <h4 className="text-lg font-bold text-gray-900 dark:text-white">{article.title}</h4>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
             {article.authors?.map((author, index) => (
-              <div key={author.name + index} className="flex items-center gap-2">
+              <span key={author.name + index} className="inline-flex items-center gap-2">
                 {'pictureURL' in author && author.pictureURL && (
-                  <Image
-                    src={author.pictureURL}
-                    alt={author.name}
-                    width={24}
-                    height={24}
-                    className="rounded-full"
-                  />
+                  <Image src={author.pictureURL} alt={author.name} width={20} height={20} className="rounded-full" />
                 )}
-                <span className="text-md text-gray-600 dark:text-gray-400 italic">{author.name}</span>
-              </div>
+                <span className="italic">{author.name}</span>
+              </span>
             ))}
           </div>
+        </div>
 
-          <p className="mt-4 text-gray-700 dark:text-gray-300">
-            {article.summary}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3 items-center">
-            {article.externalLinks?.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-cyan-500 text-white font-bold py-2 px-5 rounded-md hover:bg-cyan-600 transition-colors"
-              >
-                {link.buttonText}
-              </a>
-            ))}
+        {/* Hover overlay */}
+        <div className="absolute left-0 right-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-white dark:from-gray-900/95 p-4">
+          <p className="text-sm text-gray-700 dark:text-gray-300">{article.summary}</p>
+          <div className="mt-3">
             {article.hasBody && article.slug && (
-              <Link href={`/${yearSlug}/${article.slug.current}`} className="inline-block bg-cyan-500 text-white font-bold py-2 px-5 rounded-md hover:bg-cyan-600 transition-colors">
+              <Link href={`/${yearSlug}/${article.slug.current}`} className="inline-block bg-cyan-500 text-white font-bold py-2 px-4 rounded-md hover:bg-cyan-600 transition-colors">
                 {article.buttonText || 'Read More'}
               </Link>
             )}
           </div>
         </div>
-        <div className={imageOrder}>
-          {videoId ? (
-            <a href={article.youtubeVideoUrl} target="_blank" rel="noopener noreferrer" className="block relative group aspect-video rounded-lg shadow-lg overflow-hidden">
-              <Image
-                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
-                alt={`Video thumbnail for ${article.title}`}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <svg className="h-16 w-16 text-white/80 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-            </a>
-          ) : imageUrl && (
-            <Image
-              src={imageUrl}
-              alt={`Cover image for ${article.title}`}
-              width={800}
-              height={0}
-              sizes="100vw"
-              style={{ width: '100%', height: 'auto' }}
-              className="rounded-lg shadow-lg"
-            />
-          )}
-        </div>
-      </div>
+      </article>
     </>
   );
 }

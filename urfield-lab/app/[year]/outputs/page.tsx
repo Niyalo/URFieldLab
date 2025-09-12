@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { getContentGroups, getWorkingGroups, getYearBySlug, urlFor, getAuthorsForFilter } from "@/sanity/sanity-utils";
-import { Author, WorkingGroup, ContentGroup, Year } from "@/sanity/sanity-utils";
+import { WorkingGroup, ContentGroup, Year } from "@/sanity/sanity-utils";
 import ArticlePreview from "@/components/ArticlePreview";
 import CollapsibleSection from '@/components/CollapsibleSection';
 import Select from 'react-select';
@@ -16,17 +16,6 @@ type Props = {
   params: Promise<{ year: string }>;
 };
 
-// Helper for acronyms in Contents section
-const formatAuthorsForContents = (authors: Pick<Author, 'name'>[] | undefined) => {
-  if (!authors || authors.length === 0) return '';
-  return authors.map(author => {
-    const parts = author.name.split(' ');
-    if (parts.length === 1) return author.name;
-    const lastName = parts.pop();
-    const initials = parts.map(part => `${part.charAt(0)}.`).join(' ');
-    return `${initials} ${lastName}`;
-  }).join(', ');
-};
 
 // Metadata generation needs to be moved to a generateMetadata function if this page remains a server component.
 // Since we are converting to a client component for state, we can't use generateMetadata directly here.
@@ -51,34 +40,16 @@ export default function OutputsPage({ params }: Props) {
   const [yearData, setYearData] = useState<Year | null>(null);
   const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
   const [contentGroups, setContentGroups] = useState<ContentGroup[]>([]);
-  const [openContents, setOpenContents] = useState<Record<string, boolean>>({});
   const [openDetails, setOpenDetails] = useState<Record<string, boolean>>({});
+  const [selectedWorkingGroupIds, setSelectedWorkingGroupIds] = useState<string[]>([]);
+  const [selectedContentGroupIds, setSelectedContentGroupIds] = useState<string[]>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [allAuthors, setAllAuthors] = useState<{ value: string; label: string }[]>([]);
   const [selectedAuthors, setSelectedAuthors] = useState<{ value: string; label: string }[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const initialHash = useRef<string>('');
 
-  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
-    e.preventDefault();
-    const element = document.querySelector(hash) as HTMLElement;
-    if (element) {
-      // Find the main header to dynamically get its height for an accurate offset.
-      const header = document.querySelector('header');
-      const headerHeight = header ? header.offsetHeight : 96; // Fallback to 6rem/96px
-      const safetyPadding = 16; // 1rem of extra space for visual comfort
-
-      const elementTop = element.getBoundingClientRect().top + window.scrollY;
-      
-      window.scrollTo({
-        top: elementTop - headerHeight - safetyPadding,
-        behavior: 'smooth'
-      });
-      
-      // Update URL without triggering a page reload
-      window.history.pushState(null, '', hash);
-    }
-  };
+  // Anchor scrolling handled by native anchors; helper removed to avoid unused warnings.
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -229,13 +200,20 @@ export default function OutputsPage({ params }: Props) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleContent = (id: string) => {
-    setOpenContents(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
   const toggleDetail = (id: string) => {
     setOpenDetails(prev => ({ ...prev, [id]: !prev[id] }));
   };
+
+  // Compute visible groups: if no checkboxes selected, show all; otherwise only selected ones
+  const visibleWorkingGroups = useMemo(() => {
+    if (selectedWorkingGroupIds.length === 0) return filteredWorkingGroups;
+    return filteredWorkingGroups.filter(g => selectedWorkingGroupIds.includes(g._id));
+  }, [selectedWorkingGroupIds, filteredWorkingGroups]);
+
+  const visibleContentGroups = useMemo(() => {
+    if (selectedContentGroupIds.length === 0) return filteredContentGroups;
+    return filteredContentGroups.filter(g => selectedContentGroupIds.includes(g._id));
+  }, [selectedContentGroupIds, filteredContentGroups]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -311,118 +289,67 @@ export default function OutputsPage({ params }: Props) {
                 className="text-sm"
               />
             </div>
-            {/* Working Groups Contents */}
-            {filteredWorkingGroups.map((group) => (
-              <CollapsibleSection
-                key={group._id}
-                isOpen={!!openContents[group._id]}
-                onToggle={() => toggleContent(group._id)}
-                titleClassName="py-4 px-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-md"
-                contentClassName="pt-2 pb-4"
-                title={
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 bg-cyan-500 rounded-full h-8 w-8 flex items-center justify-center mr-4">
-                      {group.icon?.asset?.url ? (
-                        <Image src={group.icon.asset.url} alt={`${group.title} icon`} width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                      )}
-                    </div>
-                    <h3 className="text-base font-semibold uppercase tracking-wide">
-                      {group.title}
-                    </h3>
-                  </div>
-                }
-              >
-                <div className="space-y-4 pl-14">
-                  {group.articles && group.articles.length > 0 ? (
-                    group.articles.map((article) => (
-                      <div key={article._id}>
-                        <a 
-                          href={`#article-${article._id}`} 
-                          onClick={(e) => handleAnchorClick(e, `#article-${article._id}`)}
-                          className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 underline decoration-from-font cursor-pointer"
-                        >
-                          {article.title}
-                        </a>
-                        <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
-                          {formatAuthorsForContents(article.authors)}
-                        </p>
+            {/* Working Groups Checkbox Filters */}
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Working Groups</h3>
+              <div className="space-y-2">
+                {filteredWorkingGroups.map((group) => (
+                  <label key={group._id} className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700/50">
+                    <input
+                      type="checkbox"
+                      checked={selectedWorkingGroupIds.includes(group._id)}
+                      onChange={(e) => {
+                        setSelectedWorkingGroupIds(prev => e.target.checked ? [...prev, group._id] : prev.filter(id => id !== group._id));
+                      }}
+                      className="form-checkbox h-4 w-4 text-cyan-600"
+                    />
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 bg-cyan-500 rounded-full h-6 w-6 flex items-center justify-center mr-3">
+                        {group.icon?.asset?.url ? (
+                          <Image src={group.icon.asset.url} alt={`${group.title} icon`} width={16} height={16} style={{ filter: 'brightness(0) invert(1)' }} />
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        )}
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 pl-14">
-                      No articles for this group.
-                    </p>
-                  )}
-                </div>
-              </CollapsibleSection>
-            ))}
-
-            {/* Content Groups Contents */}
-            {filteredContentGroups.map((group) => (
-              <CollapsibleSection
-                key={group._id}
-                isOpen={!!openContents[group._id]}
-                onToggle={() => toggleContent(group._id)}
-                titleClassName="py-4 px-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-md"
-                contentClassName="pt-2 pb-4"
-                title={
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 bg-purple-500 rounded-full h-8 w-8 flex items-center justify-center mr-4">
-                      {group.icon?.asset?.url ? (
-                        <Image src={group.icon.asset.url} alt={`${group.title} icon`} width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                      )}
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{group.title}</span>
                     </div>
-                    <h3 className="text-base font-semibold uppercase tracking-wide">
-                      {group.title}
-                    </h3>
-                  </div>
-                }
-              >
-                <div className="space-y-4 pl-14">
-                  {(group.doors && group.doors.length > 0) || (group.articles && group.articles.length > 0) ? (
-                    <>
-                      {group.doors?.map((door) => (
-                        <div key={door._id}>
-                          <a 
-                            href={`#door-${door._id}`} 
-                            onClick={(e) => handleAnchorClick(e, `#door-${door._id}`)}
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font cursor-pointer"
-                          >
-                            {door.title}
-                          </a>
-                        </div>
-                      ))}
-                      {group.articles?.map((article) => (
-                        <div key={article._id}>
-                          <a 
-                            href={`#article-${article._id}`} 
-                            onClick={(e) => handleAnchorClick(e, `#article-${article._id}`)}
-                            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 underline decoration-from-font cursor-pointer"
-                          >
-                            {article.title}
-                          </a>
-                          <p className="text-xs text-gray-500 dark:text-gray-400/80 italic mt-1">
-                            {formatAuthorsForContents(article.authors)}
-                          </p>
-                        </div>
-                      ))}
-                    </>
-                  ) : (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 pl-14">
-                      No content for this group.
-                    </p>
-                  )}
-                </div>
-              </CollapsibleSection>
-            ))}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Content Groups Checkbox Filters */}
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Content Groups</h3>
+              <div className="space-y-2">
+                {filteredContentGroups.map((group) => (
+                  <label key={group._id} className="flex items-center gap-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700/50">
+                    <input
+                      type="checkbox"
+                      checked={selectedContentGroupIds.includes(group._id)}
+                      onChange={(e) => {
+                        setSelectedContentGroupIds(prev => e.target.checked ? [...prev, group._id] : prev.filter(id => id !== group._id));
+                      }}
+                      className="form-checkbox h-4 w-4 text-purple-600"
+                    />
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 bg-purple-500 rounded-full h-6 w-6 flex items-center justify-center mr-3">
+                        {group.icon?.asset?.url ? (
+                          <Image src={group.icon.asset.url} alt={`${group.title} icon`} width={16} height={16} style={{ filter: 'brightness(0) invert(1)' }} />
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{group.title}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
           </div>
         </aside>
 
@@ -430,7 +357,7 @@ export default function OutputsPage({ params }: Props) {
         <div className="lg:col-span-8 xl:col-span-9 py-16">
           {/* Output Details Section - Working Groups */}
           <div className="space-y-8">
-            {filteredWorkingGroups.map((group, groupIndex) => (
+            {visibleWorkingGroups.map((group) => (
               group.articles && group.articles.length > 0 && (
                 <section key={group._id} id={`wg-${group.slug.current}`} className="bg-white dark:bg-gray-900/95 rounded-lg shadow-sm overflow-hidden">
                   <CollapsibleSection
@@ -441,28 +368,23 @@ export default function OutputsPage({ params }: Props) {
                     contentClassName="px-4 sm:px-6 lg:px-8 pt-8 pb-12"
                     title={
                       <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200 tracking-tight">
-                        {group.title}
+                        {group.title} <span className="text-sm text-gray-500 dark:text-gray-400">({group.articles?.length ?? 0})</span>
                       </h3>
                     }
                   >
                     <div className="max-w-7xl mx-auto">
-                      <div className="space-y-20">
-                        {group.articles.map((article) => {
-                          const isEvenGroup = (groupIndex + 1) % 2 === 0;
-                          const textOrder = isEvenGroup ? "md:order-2" : "md:order-1";
-                          const imageOrder = isEvenGroup ? "md:order-1" : "md:order-2";
-                          
-                          return (
-                            <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
-                              <ArticlePreview
-                                article={article}
-                                yearSlug={yearSlug}
-                                imageOrder={imageOrder}
-                                textOrder={textOrder}
-                              />
-                            </div>
-                          );
-                        })}
+                      {/* Render articles as responsive grid of cards */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {group.articles.map((article) => (
+                          <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
+                            <ArticlePreview
+                              article={article}
+                              yearSlug={yearSlug}
+                              imageOrder={""}
+                              textOrder={""}
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </CollapsibleSection>
@@ -473,7 +395,7 @@ export default function OutputsPage({ params }: Props) {
 
           {/* Output Details Section - Content Groups */}
           <div className="mt-16 space-y-8">
-            {filteredContentGroups.map((group) => (
+            {visibleContentGroups.map((group) => (
               (group.articles && group.articles.length > 0) || (group.doors && group.doors.length > 0) ? (
                 <div key={group._id} id={`cg-${group.slug.current}`} className="bg-white dark:bg-gray-900/95 rounded-lg shadow-sm overflow-hidden">
                   <CollapsibleSection
@@ -484,7 +406,7 @@ export default function OutputsPage({ params }: Props) {
                     contentClassName="pt-8 pb-12"
                     title={
                       <h2 className="text-2xl sm:text-3xl font-bold text-white dark:text-purple-100 tracking-tight">
-                        {group.title}
+                        {group.title} <span className="text-sm text-purple-200">({group.articles?.length ?? 0})</span>
                       </h2>
                     }
                   >
@@ -524,24 +446,18 @@ export default function OutputsPage({ params }: Props) {
                           </div>
                         )}
 
-                        {/* Articles Section */}
-                        <div className="space-y-20">
-                          {group.articles && group.articles.map((article, articleIndex) => {
-                            const isEvenArticle = (articleIndex + 1) % 2 === 0;
-                            const textOrder = isEvenArticle ? "md:order-2" : "md:order-1";
-                            const imageOrder = isEvenArticle ? "md:order-1" : "md:order-2";
-
-                            return (
-                              <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
-                                <ArticlePreview
-                                  article={article}
-                                  yearSlug={yearSlug}
-                                  imageOrder={imageOrder}
-                                  textOrder={textOrder}
-                                />
-                              </div>
-                            );
-                          })}
+                        {/* Articles Section rendered as grid of cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                          {group.articles && group.articles.map((article) => (
+                            <div key={article._id} id={`article-${article._id}`} className="scroll-mt-24">
+                              <ArticlePreview
+                                article={article}
+                                yearSlug={yearSlug}
+                                imageOrder={""}
+                                textOrder={""}
+                              />
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </section>

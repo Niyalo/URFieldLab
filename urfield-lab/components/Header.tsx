@@ -58,7 +58,7 @@ const Header = ({ year }: HeaderProps) => {
   return (
     <header className={`sticky top-0 z-50 transition-colors duration-500 ${isLight ? 'text-white' : 'text-gray-800'}`}>
       {/* Gradient background: white -> transparent */}
-      <nav className={`${!isLight? 'before:bg-gradient-to-b before:from-white/80 before:to-white/60':'before:bg-gradient-to-b before:from-black/80 before:to-black/10'} relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-[80px] before:z-[-1] before:pointer-events-none before:transition-all before:duration-500`}>
+      <nav className={`${!isLight? 'before:from-white/80 before:to-white/60':'before:from-black/80 before:to-black/10'} relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-[80px] before:z-[-1] before:pointer-events-none before:transition-all before:duration-500`}>
         <div className="container mx-auto flex justify-between items-center py-1 px-1 min-h-[70px]">
           {/* Left links (desktop) */}
           <div className="hidden md:flex items-center gap-6">
